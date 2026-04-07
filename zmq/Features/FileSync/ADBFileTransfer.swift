@@ -9,26 +9,26 @@ class ADBFileTransfer {
         self.shell = shell
     }
 
-    func pushFile(localURL: URL, remotePath: String, progress: ((Float) -> Void)? = nil) async -> Bool {
-        await fileSync.push(localURL: localURL, remotePath: remotePath, progress: progress)
+    func pushFile(localURL: URL, remotePath: String, progress: ((Float) -> Void)? = nil) -> Bool {
+        return fileSync.push(localURL: localURL, remotePath: remotePath, progress: progress)
     }
 
-    func pullFile(remotePath: String, localURL: URL, progress: ((Float) -> Void)? = nil) async -> Bool {
-        await fileSync.pull(remotePath: remotePath, localURL: localURL, progress: progress)
+    func pullFile(remotePath: String, localURL: URL, progress: ((Float) -> Void)? = nil) -> Bool {
+        return fileSync.pull(remotePath: remotePath, localURL: localURL, progress: progress)
     }
 
-    func deleteFile(path: String) async -> Bool {
-        let result = await shell.executeCommand("rm -rf '\(path)'")
+    func deleteFile(path: String) -> Bool {
+        let result = shell.executeCommand("rm -rf '\(path)'")
         return result?.isEmpty ?? true
     }
 
-    func createDirectory(path: String) async -> Bool {
-        let result = await shell.executeCommand("mkdir -p '\(path)'")
+    func createDirectory(path: String) -> Bool {
+        let result = shell.executeCommand("mkdir -p '\(path)'")
         return result?.isEmpty ?? true
     }
 
-    func rename(oldPath: String, newPath: String) async -> Bool {
-        let result = await shell.executeCommand("mv '\(oldPath)' '\(newPath)'")
+    func rename(oldPath: String, newPath: String) -> Bool {
+        let result = shell.executeCommand("mv '\(oldPath)' '\(newPath)'")
         return result?.isEmpty ?? true
     }
 
@@ -42,16 +42,16 @@ class ADBFileTransfer {
         return docsDir.appendingPathComponent(relativePath)
     }
 
-    func pushToSandbox(localURL: URL, remotePath: String, progress: ((Float) -> Void)? = nil) async -> Bool {
-        await fileSync.push(localURL: localURL, remotePath: remotePath, progress: progress)
+    func pushToSandbox(localURL: URL, remotePath: String, progress: ((Float) -> Void)? = nil) -> Bool {
+        return fileSync.push(localURL: localURL, remotePath: remotePath, progress: progress)
     }
 
-    func pullFromSandbox(remotePath: String, progress: ((Float) -> Void)? = nil) async -> URL? {
+    func pullFromSandbox(remotePath: String, progress: ((Float) -> Void)? = nil) -> URL? {
         let localURL = localPathForRemote(remotePath)
         let directory = localURL.deletingLastPathComponent()
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 
-        let success = await fileSync.pull(remotePath: remotePath, localURL: localURL, progress: progress)
+        let success = fileSync.pull(remotePath: remotePath, localURL: localURL, progress: progress)
         return success ? localURL : nil
     }
 }

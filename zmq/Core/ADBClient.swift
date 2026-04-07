@@ -9,14 +9,13 @@ enum ADBClientState {
     case failed(String)
 }
 
-@MainActor
 class ADBClient: ObservableObject {
     @Published var state: ADBClientState = .disconnected
     @Published var deviceInfo: ADBDevice?
 
     private let tcpClient = TCPClient()
     private let dataBuffer = ADBDataBuffer()
-    private let channelManager = ADBChannelManager()
+    let channelManager = ADBChannelManager()
     private let keyManager = ADBKeyManager()
     private var authRetries = 0
     private let maxAuthRetries = 3
@@ -28,9 +27,7 @@ class ADBClient: ObservableObject {
 
     init() {
         tcpClient.onStateChanged = { [weak self] tcpState in
-            Task { @MainActor in
-                self?.handleTCPStateChange(tcpState)
-            }
+            self?.handleTCPStateChange(tcpState)
         }
         tcpClient.onDataReceived = { [weak self] data in
             self?.handleIncomingData(data)
@@ -38,9 +35,18 @@ class ADBClient: ObservableObject {
     }
 
     func connect(host: String, port: UInt16 = 5555) {
-        guard case .disconnected = state || case .failed = state else { return }
+        guard canConnect else { return }
         updateState(.connecting)
         tcpClient.connect(host: host, port: port)
+    }
+
+    private var canConnect: Bool {
+        switch state {
+        case .disconnected, .failed:
+            return true
+        default:
+            return false
+        }
     }
 
     func disconnect() {
@@ -75,7 +81,9 @@ class ADBClient: ObservableObject {
     }
 
     private func updateState(_ newState: ADBClientState) {
-        state = newState
+        DispatchQueue.main.async { [weak self] in
+            self?.state = newState
+        }
     }
 
     private func handleTCPStateChange(_ tcpState: TCPClientState) {

@@ -124,7 +124,7 @@ class ADBFileSync {
         return entries
     }
 
-    func push(localURL: URL, remotePath: String, mode: String = "0666", timeout: TimeInterval = 60) -> Bool {
+    func push(localURL: URL, remotePath: String, mode: String = "0666", progress: ((Float) -> Void)? = nil, timeout: TimeInterval = 60) -> Bool {
         guard let channel = openSyncChannel() else { return false }
         guard let fileData = try? Data(contentsOf: localURL) else { return false }
 
@@ -144,6 +144,7 @@ class ADBFileSync {
             let dataHeader = ADBProtocol.packSyncHeader(id: ADBSyncCommand.DATA, size: UInt32(chunk.count))
             client.writeChannel(channel, data: dataHeader + Data(chunk))
             offset = end
+            progress?(Float(offset) / Float(totalSize))
         }
 
         let mtime = UInt32(Date().timeIntervalSince1970)
@@ -172,7 +173,7 @@ class ADBFileSync {
         return result
     }
 
-    func pull(remotePath: String, localURL: URL, timeout: TimeInterval = 60) -> Bool {
+    func pull(remotePath: String, localURL: URL, progress: ((Float) -> Void)? = nil, timeout: TimeInterval = 60) -> Bool {
         guard let channel = openSyncChannel() else { return false }
 
         var pathData = remotePath.data(using: .utf8) ?? Data()

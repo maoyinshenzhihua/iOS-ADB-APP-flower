@@ -33,13 +33,13 @@ class H264Decoder {
             return
         }
 
-        var flags: VTDecodeInfoFlags = []
+        var flags: VTDecodeInfoFlags = VTDecodeInfoFlags()
         let decodeStatus = VTDecompressionSessionDecodeFrame(
             session,
-            sampleBuffer,
-            [],
-            nil,
-            &flags
+            sampleBuffer: sampleBuffer,
+            flags: [],
+            frameRefcon: nil,
+            infoFlagsOut: &flags
         )
 
         if decodeStatus != noErr {
@@ -65,7 +65,7 @@ class H264Decoder {
             let status = CMVideoFormatDescriptionCreateFromH264ParameterSets(
                 allocator: nil,
                 parameterSetCount: 1,
-                parameterSetPointers: [spsArray.withUnsafeBytes { $0.baseAddress! }],
+                parameterSetPointers: [UnsafePointer<UInt8>(bitPattern: spsArray.withUnsafeBufferPointer { $0.baseAddress! })!],
                 parameterSetSizes: [spsArray.count],
                 nalUnitHeaderLength: 4,
                 formatDescriptionOut: &newFormatDesc
@@ -101,18 +101,22 @@ class H264Decoder {
             decompressionOutputRefCon: Unmanaged.passUnretained(self).toOpaque()
         )
 
-        var callbackPtr: UnsafePointer<VTDecompressionOutputCallbackRecord>? = nil
+        var callbackPtr: UnsafeMutablePointer<VTDecompressionOutputCallbackRecord>? = UnsafeMutablePointer<VTDecompressionOutputCallbackRecord>.allocate(capacity: 1)
+        callbackPtr?.pointee = callback
 
+        var newSession: VTDecompressionSession?
         let status = VTDecompressionSessionCreate(
             allocator: nil,
             formatDescription: formatDescription,
             decoderSpecification: nil,
             imageBufferAttributes: destinationAttributes as CFDictionary,
             outputCallback: callbackPtr,
-            decompressionSessionOut: &session
+            decompressionSessionOut: &newSession
         )
 
-        if status != noErr {
+        if status == noErr, let sess = newSession {
+            session = sess
+        } else {
             Logger.error("创建解码会话失败: \(status)", category: "H264Decoder")
         }
     }
