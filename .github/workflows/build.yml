@@ -24,9 +24,7 @@ jobs:
           <plist version="1.0">
           <dict>
               <key>method</key>
-              <string>adhoc</string>
-              <key>teamID</key>
-              <string>XXXXXXXXXX</string>
+              <string>debugging</string>
           </dict>
           </plist>
           PLISTEOF
