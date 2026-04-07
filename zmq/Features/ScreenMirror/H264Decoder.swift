@@ -95,7 +95,7 @@ class H264Decoder {
             kCVPixelBufferOpenGLESCompatibilityKey as String: true
         ]
 
-        let callback: VTDecompressionOutputCallbackRecord = { outputCallbackRefCon, _, _, _, imageBuffer, _, _ in
+        let callback: @convention(c) (UnsafeMutableRawPointer?, UnsafeRawPointer?, OSStatus, VTDecodeInfoFlags, CVImageBuffer?, CMTime, CMTime) -> Void = { outputCallbackRefCon, _, _, imageBuffer, _, _ in
             guard let refCon = outputCallbackRefCon else { return }
             let decoder = Unmanaged<H264Decoder>.fromOpaque(refCon).takeUnretainedValue()
             if let imageBuffer = imageBuffer {
@@ -109,7 +109,7 @@ class H264Decoder {
             formatDescription: formatDescription,
             decoderSpecification: nil,
             imageBufferAttributes: destinationAttributes as CFDictionary,
-            outputCallback: nil,
+            outputCallback: callback,
             decompressionSessionOut: &newSession
         )
 
