@@ -1,0 +1,539 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10001 /* zmqApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20001; };
+		A10002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20002; };
+		A10003 /* ADBConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20003; };
+		A10004 /* ADBMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20004; };
+		A10005 /* ADBProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20005; };
+		A10006 /* ADBAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20006; };
+		A10007 /* ADBChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20007; };
+		A10008 /* TCPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20008; };
+		A10009 /* DataBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20009; };
+		A10010 /* DeviceScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20010; };
+		A10011 /* ADBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20011; };
+		A10012 /* ADBKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20012; };
+		A10013 /* ADBShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20013; };
+		A10014 /* ADBDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20014; };
+		A10015 /* ADBAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20015; };
+		A10016 /* ADBRemoteControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20016; };
+		A10017 /* ADBFileSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20017; };
+		A10018 /* ADBFileTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20018; };
+		A10019 /* ScrcpyServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20019; };
+		A10020 /* H264Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20020; };
+		A10021 /* ScreenRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20021; };
+		A10022 /* TouchMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20022; };
+		A10023 /* DeviceConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20023; };
+		A10024 /* DeviceInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20024; };
+		A10025 /* ScreenMirrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20025; };
+		A10026 /* FileManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20026; };
+		A10027 /* ConsoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20027; };
+		A10028 /* DeviceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20028; };
+		A10029 /* FileListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20029; };
+		A10030 /* TouchOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20030; };
+		A10031 /* ADBDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20031; };
+		A10032 /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20032; };
+		A10033 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20033; };
+		A10034 /* LittleEndian.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20034; };
+		A10035 /* CRC32.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20035; };
+		A10036 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20036; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A30001 /* zmq.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = zmq.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20001 /* zmqApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = zmqApp.swift; sourceTree = "<group>"; };
+		A20002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A20003 /* ADBConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBConstants.swift; sourceTree = "<group>"; };
+		A20004 /* ADBMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBMessage.swift; sourceTree = "<group>"; };
+		A20005 /* ADBProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBProtocol.swift; sourceTree = "<group>"; };
+		A20006 /* ADBAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBAuth.swift; sourceTree = "<group>"; };
+		A20007 /* ADBChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBChannel.swift; sourceTree = "<group>"; };
+		A20008 /* TCPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPClient.swift; sourceTree = "<group>"; };
+		A20009 /* DataBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBuffer.swift; sourceTree = "<group>"; };
+		A20010 /* DeviceScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceScanner.swift; sourceTree = "<group>"; };
+		A20011 /* ADBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBClient.swift; sourceTree = "<group>"; };
+		A20012 /* ADBKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBKeyManager.swift; sourceTree = "<group>"; };
+		A20013 /* ADBShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBShell.swift; sourceTree = "<group>"; };
+		A20014 /* ADBDeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBDeviceInfo.swift; sourceTree = "<group>"; };
+		A20015 /* ADBAppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBAppManager.swift; sourceTree = "<group>"; };
+		A20016 /* ADBRemoteControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBRemoteControl.swift; sourceTree = "<group>"; };
+		A20017 /* ADBFileSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBFileSync.swift; sourceTree = "<group>"; };
+		A20018 /* ADBFileTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBFileTransfer.swift; sourceTree = "<group>"; };
+		A20019 /* ScrcpyServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrcpyServer.swift; sourceTree = "<group>"; };
+		A20020 /* H264Decoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = H264Decoder.swift; sourceTree = "<group>"; };
+		A20021 /* ScreenRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenRenderer.swift; sourceTree = "<group>"; };
+		A20022 /* TouchMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchMapper.swift; sourceTree = "<group>"; };
+		A20023 /* DeviceConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceConnectView.swift; sourceTree = "<group>"; };
+		A20024 /* DeviceInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoView.swift; sourceTree = "<group>"; };
+		A20025 /* ScreenMirrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenMirrorView.swift; sourceTree = "<group>"; };
+		A20026 /* FileManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerView.swift; sourceTree = "<group>"; };
+		A20027 /* ConsoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleView.swift; sourceTree = "<group>"; };
+		A20028 /* DeviceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCard.swift; sourceTree = "<group>"; };
+		A20029 /* FileListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileListItem.swift; sourceTree = "<group>"; };
+		A20030 /* TouchOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchOverlay.swift; sourceTree = "<group>"; };
+		A20031 /* ADBDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBDevice.swift; sourceTree = "<group>"; };
+		A20032 /* FileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileInfo.swift; sourceTree = "<group>"; };
+		A20033 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
+		A20034 /* LittleEndian.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LittleEndian.swift; sourceTree = "<group>"; };
+		A20035 /* CRC32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRC32.swift; sourceTree = "<group>"; };
+		A20036 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		A20037 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A20038 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A40001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A50001 = {
+			isa = PBXGroup;
+			children = (
+				A50002 /* zmq */,
+				A50020 /* zmqTests */,
+				A50021 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A50002 /* zmq */ = {
+			isa = PBXGroup;
+			children = (
+				A50003 /* App */,
+				A50006 /* Core */,
+				A50012 /* Features */,
+				A50020_1 /* UI */,
+				A50020_2 /* Models */,
+				A50020_3 /* Utils */,
+				A20037 /* Info.plist */,
+				A20038 /* Assets.xcassets */,
+			);
+			path = zmq;
+			sourceTree = "<group>";
+		};
+		A50003 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A20001 /* zmqApp.swift */,
+				A20002 /* ContentView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A50006 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A50007 /* ADBProtocol */,
+				A50008 /* Network */,
+				A20011 /* ADBClient.swift */,
+				A20012 /* ADBKeyManager.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A50007 /* ADBProtocol */ = {
+			isa = PBXGroup;
+			children = (
+				A20003 /* ADBConstants.swift */,
+				A20004 /* ADBMessage.swift */,
+				A20005 /* ADBProtocol.swift */,
+				A20006 /* ADBAuth.swift */,
+				A20007 /* ADBChannel.swift */,
+			);
+			path = ADBProtocol;
+			sourceTree = "<group>";
+		};
+		A50008 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				A20008 /* TCPClient.swift */,
+				A20009 /* DataBuffer.swift */,
+				A20010 /* DeviceScanner.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		A50012 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				A50013 /* Shell */,
+				A50014 /* DeviceInfo */,
+				A50015 /* AppManager */,
+				A50016 /* RemoteControl */,
+				A50017 /* FileSync */,
+				A50018 /* ScreenMirror */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		A50013 /* Shell */ = {
+			isa = PBXGroup;
+			children = (
+				A20013 /* ADBShell.swift */,
+			);
+			path = Shell;
+			sourceTree = "<group>";
+		};
+		A50014 /* DeviceInfo */ = {
+			isa = PBXGroup;
+			children = (
+				A20014 /* ADBDeviceInfo.swift */,
+			);
+			path = DeviceInfo;
+			sourceTree = "<group>";
+		};
+		A50015 /* AppManager */ = {
+			isa = PBXGroup;
+			children = (
+				A20015 /* ADBAppManager.swift */,
+			);
+			path = AppManager;
+			sourceTree = "<group>";
+		};
+		A50016 /* RemoteControl */ = {
+			isa = PBXGroup;
+			children = (
+				A20016 /* ADBRemoteControl.swift */,
+			);
+			path = RemoteControl;
+			sourceTree = "<group>";
+		};
+		A50017 /* FileSync */ = {
+			isa = PBXGroup;
+			children = (
+				A20017 /* ADBFileSync.swift */,
+				A20018 /* ADBFileTransfer.swift */,
+			);
+			path = FileSync;
+			sourceTree = "<group>";
+		};
+		A50018 /* ScreenMirror */ = {
+			isa = PBXGroup;
+			children = (
+				A20019 /* ScrcpyServer.swift */,
+				A20020 /* H264Decoder.swift */,
+				A20021 /* ScreenRenderer.swift */,
+				A20022 /* TouchMapper.swift */,
+			);
+			path = ScreenMirror;
+			sourceTree = "<group>";
+		};
+		A50020_1 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				A50022 /* Pages */,
+				A50023 /* Components */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		A50022 /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				A20023 /* DeviceConnectView.swift */,
+				A20024 /* DeviceInfoView.swift */,
+				A20025 /* ScreenMirrorView.swift */,
+				A20026 /* FileManagerView.swift */,
+				A20027 /* ConsoleView.swift */,
+			);
+			path = Pages;
+			sourceTree = "<group>";
+		};
+		A50023 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A20028 /* DeviceCard.swift */,
+				A20029 /* FileListItem.swift */,
+				A20030 /* TouchOverlay.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		A50020_2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20031 /* ADBDevice.swift */,
+				A20032 /* FileInfo.swift */,
+				A20033 /* AppInfo.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A50020_3 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A20034 /* LittleEndian.swift */,
+				A20035 /* CRC32.swift */,
+				A20036 /* Logger.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		A50020 /* zmqTests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = zmqTests;
+			sourceTree = "<group>";
+		};
+		A50021 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A30001 /* zmq.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A60001 /* zmq */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A70003 /* Build configuration list for PBXNativeTarget "zmq" */;
+			buildPhases = (
+				A40002 /* Sources */,
+				A40001 /* Frameworks */,
+				A40003 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = zmq;
+			productName = zmq;
+			productReference = A30001 /* zmq.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A70001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					A60001 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = A70001_BL /* Build configuration list for PBXProject "zmq" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = "zh-Hans";
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				"zh-Hans",
+			);
+			mainGroup = A50001;
+			productRefGroup = A50021 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A60001 /* zmq */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A40003 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A40002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10001 /* zmqApp.swift in Sources */,
+				A10002 /* ContentView.swift in Sources */,
+				A10003 /* ADBConstants.swift in Sources */,
+				A10004 /* ADBMessage.swift in Sources */,
+				A10005 /* ADBProtocol.swift in Sources */,
+				A10006 /* ADBAuth.swift in Sources */,
+				A10007 /* ADBChannel.swift in Sources */,
+				A10008 /* TCPClient.swift in Sources */,
+				A10009 /* DataBuffer.swift in Sources */,
+				A10010 /* DeviceScanner.swift in Sources */,
+				A10011 /* ADBClient.swift in Sources */,
+				A10012 /* ADBKeyManager.swift in Sources */,
+				A10013 /* ADBShell.swift in Sources */,
+				A10014 /* ADBDeviceInfo.swift in Sources */,
+				A10015 /* ADBAppManager.swift in Sources */,
+				A10016 /* ADBRemoteControl.swift in Sources */,
+				A10017 /* ADBFileSync.swift in Sources */,
+				A10018 /* ADBFileTransfer.swift in Sources */,
+				A10019 /* ScrcpyServer.swift in Sources */,
+				A10020 /* H264Decoder.swift in Sources */,
+				A10021 /* ScreenRenderer.swift in Sources */,
+				A10022 /* TouchMapper.swift in Sources */,
+				A10023 /* DeviceConnectView.swift in Sources */,
+				A10024 /* DeviceInfoView.swift in Sources */,
+				A10025 /* ScreenMirrorView.swift in Sources */,
+				A10026 /* FileManagerView.swift in Sources */,
+				A10027 /* ConsoleView.swift in Sources */,
+				A10028 /* DeviceCard.swift in Sources */,
+				A10029 /* FileListItem.swift in Sources */,
+				A10030 /* TouchOverlay.swift in Sources */,
+				A10031 /* ADBDevice.swift in Sources */,
+				A10032 /* FileInfo.swift in Sources */,
+				A10033 /* AppInfo.swift in Sources */,
+				A10034 /* LittleEndian.swift in Sources */,
+				A10035 /* CRC32.swift in Sources */,
+				A10036 /* Logger.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A80001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A80002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A80003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = zmq/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zmq.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A80004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = zmq/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zmq.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A70001_BL /* Build configuration list for PBXProject "zmq" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A80001 /* Debug */,
+				A80002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A70003 /* Build configuration list for PBXNativeTarget "zmq" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A80003 /* Debug */,
+				A80004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A70001 /* Project object */;
+}
