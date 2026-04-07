@@ -23,14 +23,20 @@ jobs:
             -scheme zmq \
             -configuration Debug \
             -destination 'generic/platform=iOS' \
+            -derivedDataPath ./build \
             CODE_SIGNING_ALLOWED=NO \
-            ASSETCATALOG_COMPILER_NO_CRASH_ON_ERROR=YES
+            ASSETCATALOG_COMPILER_NO_CRASH_ON_ERROR=YES \
+            ASSETCATALOG_COMPILER_APPICON_NAME=AppIcon \
+            GENERATE_INFOPLIST_FILE=YES
+
+      - name: Verify Assets.car
+        run: |
+          find ./build -name "Assets.car" -type f 2>/dev/null || echo "No Assets.car found"
+          ls -la ./build/Build/Products/Debug-iphoneos/zmq.app/ 2>/dev/null || echo "App bundle not found"
 
       - name: Create IPA
         run: |
-          PRODUCT_PATH=$(xcodebuild -project zmq.xcodeproj -scheme zmq -configuration Debug -destination 'generic/platform=iOS' -showBuildSettings | grep -m1 "BUILT_PRODUCTS_DIR" | awk '{print $3}')
-          echo "Product path: $PRODUCT_PATH"
-          cd "$PRODUCT_PATH"
+          cd build/Build/Products/Debug-iphoneos
           mkdir -p Payload
           cp -r *.app Payload/
           cd Payload
