@@ -23,7 +23,7 @@ class H264Decoder {
 
         guard let session = session else { return }
 
-        var avccNalu = convertAnnexBToAVCC(nalu)
+        let avccNalu = convertAnnexBToAVCC(nalu)
         guard !avccNalu.isEmpty else { return }
 
         var sampleBuffer: CMSampleBuffer?
@@ -59,33 +59,26 @@ class H264Decoder {
 
         if nalType == 7 {
             let spsWithoutStartCode = nalu[4...]
-            var spsData = Data(spsWithoutStartCode)
+
             var newFormatDesc: CMVideoFormatDescription?
+            let status = spsWithoutStartCode.withUnsafeBytes { (spsBuffer: UnsafeRawBufferPointer) -> OSStatus in
+                var formatDescriptionOut: CMVideoFormatDescription?
+                let params = spsBuffer.bindMemory(to: UInt8.self)
+                let pointer = params.baseAddress!
 
-            spsData.withUnsafeMutableBytes { (spsBuffer: UnsafeMutableRawBufferPointer) in
-                guard let spsBaseAddress = spsBuffer.baseAddress else { return }
-                let spsPtr = spsBaseAddress.assumingMemoryBound(to: UInt8.self)
-                let constPtr = UnsafePointer(spsPtr)
-                let pointers: [UnsafePointer<UInt8>] = [constPtr]
-                let sizes: [Int] = [spsData.count]
+                return CMVideoFormatDescriptionCreateFromH264ParameterSets(
+                    allocator: nil,
+                    parameterSetCount: 1,
+                    parameterSetPointers: [pointer],
+                    parameterSetSizes: [params.count],
+                    nalUnitHeaderLength: 4,
+                    formatDescriptionOut: &formatDescriptionOut
+                )
+            }
 
-                withUnsafePointer(to: &pointers) { pointersPtr in
-                    withUnsafePointer(to: &sizes) { sizesPtr in
-                        let status = CMVideoFormatDescriptionCreateFromH264ParameterSets(
-                            allocator: nil,
-                            parameterSetCount: 1,
-                            parameterSetPointers: UnsafePointer(pointersPtr),
-                            parameterSetSizes: sizesPtr,
-                            nalUnitHeaderLength: 4,
-                            formatDescriptionOut: &newFormatDesc
-                        )
-
-                        if status == noErr, let desc = newFormatDesc {
-                            self.formatDescription = desc
-                            self.createDecompressionSession(formatDescription: desc)
-                        }
-                    }
-                }
+            if status == noErr, let desc = newFormatDesc {
+                formatDescription = desc
+                createDecompressionSession(formatDescription: desc)
             }
         }
     }
@@ -102,19 +95,13 @@ class H264Decoder {
             kCVPixelBufferOpenGLESCompatibilityKey as String: true
         ]
 
-        var callback = VTDecompressionOutputCallbackRecord(
-            decompressionOutputCallback: { (outputCallbackRefCon, _, _, _, imageBuffer, _, _) in
-                guard let refCon = outputCallbackRefCon else { return }
-                let decoder = Unmanaged<H264Decoder>.fromOpaque(refCon).takeUnretainedValue()
-                if let imageBuffer = imageBuffer {
-                    decoder.onFrameDecoded?(imageBuffer)
-                }
-            },
-            decompressionOutputRefCon: Unmanaged.passUnretained(self).toOpaque()
-        )
-
-        var callbackPtr: UnsafeMutablePointer<VTDecompressionOutputCallbackRecord>? = UnsafeMutablePointer<VTDecompressionOutputCallbackRecord>.allocate(capacity: 1)
-        callbackPtr?.pointee = callback
+        let callback: VTDecompressionOutputCallbackRecord = { outputCallbackRefCon, _, _, _, imageBuffer, _, _ in
+            guard let refCon = outputCallbackRefCon else { return }
+            let decoder = Unmanaged<H264Decoder>.fromOpaque(refCon).takeUnretainedValue()
+            if let imageBuffer = imageBuffer {
+                decoder.onFrameDecoded?(imageBuffer)
+            }
+        }
 
         var newSession: VTDecompressionSession?
         let status = VTDecompressionSessionCreate(
@@ -122,7 +109,7 @@ class H264Decoder {
             formatDescription: formatDescription,
             decoderSpecification: nil,
             imageBufferAttributes: destinationAttributes as CFDictionary,
-            outputCallback: callbackPtr,
+            outputCallback: nil,
             decompressionSessionOut: &newSession
         )
 
