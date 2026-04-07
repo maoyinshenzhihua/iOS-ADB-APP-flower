@@ -2,7 +2,7 @@ import Foundation
 
 struct ADBDevice: Identifiable {
     let id = UUID()
-    var host: String
+    var host: String = ""
     var port: UInt16 = 5555
     var name: String = ""
     var model: String = ""
