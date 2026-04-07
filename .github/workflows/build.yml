@@ -2,9 +2,9 @@ name: Build iOS App
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ master, main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ master, main ]
 
 jobs:
   build:
@@ -16,20 +16,35 @@ jobs:
       - name: Select Xcode version
         run: sudo xcode-select -s /Applications/Xcode_16.0.app
 
-      - name: Build
+      - name: Build Archive
         run: |
-          xcodebuild build \
+          xcodebuild archive \
             -project zmq.xcodeproj \
             -scheme zmq \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
             -configuration Debug \
+            -archivePath build/zmq.xcarchive \
             CODE_SIGNING_ALLOWED=NO
 
-      - name: Run Tests
+      - name: Export IPA
         run: |
-          xcodebuild test \
-            -project zmq.xcodeproj \
-            -scheme zmq \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
-            -configuration Debug \
-            CODE_SIGNING_ALLOWED=NO
+          xcodebuild -exportArchive \
+            -archivePath build/zmq.xcarchive \
+            -exportPath output \
+            -exportOptionsPlist << 'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>none</string>
+              <key>skipSignatureValidation</key>
+              <true/>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: zmq-unsigned-ipa
+          path: output/zmq.ipa
