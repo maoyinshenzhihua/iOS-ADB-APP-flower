@@ -65,7 +65,8 @@ class H264Decoder {
             spsData.withUnsafeMutableBytes { (spsBuffer: UnsafeMutableRawBufferPointer) in
                 guard let spsBaseAddress = spsBuffer.baseAddress else { return }
                 let spsPtr = spsBaseAddress.assumingMemoryBound(to: UInt8.self)
-                let pointers: [UnsafePointer<UInt8>] = [spsPtr]
+                let constPtr = UnsafePointer(spsPtr)
+                let pointers: [UnsafePointer<UInt8>] = [constPtr]
                 let sizes: [Int] = [spsData.count]
 
                 withUnsafePointer(to: &pointers) { pointersPtr in
