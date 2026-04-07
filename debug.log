@@ -6,7 +6,7 @@ User defaults from command line:
 Build settings from command line:
     CODE_SIGNING_ALLOWED = NO
 --- xcodebuild: WARNING: Using the first of multiple matching destinations:
-{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:a088cef87c29ee6096b3b41fd430f8800b11b2dd, name:My Mac }
+{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:25b9e368d185b6de34cfba2d5b5782fb51619c5f, name:My Mac }
 { platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device }
 { platform:iOS Simulator, id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }
 Prepare packages
@@ -19,8 +19,8 @@ CreateBuildDescription
 ExecuteExternalTool /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
 ExecuteExternalTool /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode_16.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk -x c -c /dev/null
 ExecuteExternalTool /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
-Build description signature: 01dcd55519d1cc46ed36ff1fba08939a
-Build description path: /Users/runner/Library/Developer/Xcode/DerivedData/zmq-bmnnmpodhpqsbabgpvegoaxwjeiy/Build/Intermediates.noindex/ArchiveIntermediates/zmq/IntermediateBuildFilesPath/XCBuildData/01dcd55519d1cc46ed36ff1fba08939a.xcbuilddata
+Build description signature: 753bec83c55f966ef7ac7507863dbaf0
+Build description path: /Users/runner/Library/Developer/Xcode/DerivedData/zmq-bmnnmpodhpqsbabgpvegoaxwjeiy/Build/Intermediates.noindex/ArchiveIntermediates/zmq/IntermediateBuildFilesPath/XCBuildData/753bec83c55f966ef7ac7507863dbaf0.xcbuilddata
 CreateBuildDirectory /Users/runner/Library/Developer/Xcode/DerivedData/zmq-bmnnmpodhpqsbabgpvegoaxwjeiy/Build/Intermediates.noindex/ArchiveIntermediates/zmq/IntermediateBuildFilesPath
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
     builtin-create-build-directory /Users/runner/Library/Developer/Xcode/DerivedData/zmq-bmnnmpodhpqsbabgpvegoaxwjeiy/Build/Intermediates.noindex/ArchiveIntermediates/zmq/IntermediateBuildFilesPath
@@ -132,19 +132,6 @@ SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flow
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:41:45: error: expected expression after operator
-        guard case .disconnected = state || case .failed = state else { return }
-                                            ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:41:45: error: expected 'else' after 'guard' condition
-        guard case .disconnected = state || case .failed = state else { return }
-                                            ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:41:44: error: consecutive statements on a line must be separated by ';'
-        guard case .disconnected = state || case .failed = state else { return }
-                                           ^
-                                           ;
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:41:45: error: 'case' label can only appear inside a 'switch' statement
-        guard case .disconnected = state || case .failed = state else { return }
-                                            ^
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBKeyManager.swift (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
@@ -154,32 +141,6 @@ SwiftCompile normal arm64 Compiling\ ADBShell.swift,\ ADBDeviceInfo.swift,\ ADBA
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/Shell/ADBShell.swift (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DataBuffer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DeviceScanner.swift /
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/Shell/ADBShell.swift:12:36: error: call to main actor-isolated instance method 'openChannel(destination:)' in a synchronous nonisolated context
-        guard let channel = client.openChannel(destination: destination) else { return nil }
-                                   ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:54:10: note: calls to instance method 'openChannel(destination:)' from outside of its actor context are implicitly asynchronous
-    func openChannel(destination: String) -> ADBChannel? {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/Shell/ADBShell.swift:10:10: note: add '@MainActor' to make instance method 'executeCommand(_:timeout:)' part of global actor 'MainActor'
-    func executeCommand(_ command: String, timeout: TimeInterval = 30) -> String? {
-         ^
-    @MainActor 
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/Shell/ADBShell.swift:32:29: warning: call to main actor-isolated instance method 'closeChannel' in a synchronous nonisolated context; this is an error in the Swift 6 language mode
-                self.client.closeChannel(channel)
-                            ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:71:10: note: calls to instance method 'closeChannel' from outside of its actor context are implicitly asynchronous
-    func closeChannel(_ channel: ADBChannel) {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/Shell/ADBShell.swift:44:23: error: call to main actor-isolated instance method 'openChannel(destination:)' in a synchronous nonisolated context
-        return client.openChannel(destination: destination)
-                      ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:54:10: note: calls to instance method 'openChannel(destination:)' from outside of its actor context are implicitly asynchronous
-    func openChannel(destination: String) -> ADBChannel? {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/Shell/ADBShell.swift:42:10: note: add '@MainActor' to make instance method 'openInteractiveShell()' part of global actor 'MainActor'
-    func openInteractiveShell() -> ADBChannel? {
-         ^
-    @MainActor 
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/DeviceInfo/ADBDeviceInfo.swift (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DataBuffer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DeviceScanner.swift /
@@ -243,194 +204,40 @@ SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flow
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DataBuffer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DeviceScanner.swift /
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:11:16: error: call to main actor-isolated instance method 'openChannel(destination:)' in a synchronous nonisolated context
-        client.openChannel(destination: "sync:\0")
-               ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:54:10: note: calls to instance method 'openChannel(destination:)' from outside of its actor context are implicitly asynchronous
-    func openChannel(destination: String) -> ADBChannel? {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:10:10: note: add '@MainActor' to make instance method 'openSyncChannel()' part of global actor 'MainActor'
-    func openSyncChannel() -> ADBChannel? {
-         ^
-    @MainActor 
 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:17:13: warning: variable 'pathData' was never mutated; consider changing to 'let' constant
         var pathData = path.data(using: .utf8) ?? Data()
         ~~~ ^
         let
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:19:16: error: call to main actor-isolated instance method 'writeChannel(_:data:)' in a synchronous nonisolated context
-        client.writeChannel(channel, data: header + pathData)
-               ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:65:10: note: calls to instance method 'writeChannel(_:data:)' from outside of its actor context are implicitly asynchronous
-    func writeChannel(_ channel: ADBChannel, data: Data) {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:14:10: note: add '@MainActor' to make instance method 'stat(path:timeout:)' part of global actor 'MainActor'
-    func stat(path: String, timeout: TimeInterval = 10) -> FileInfo? {
-         ^
-    @MainActor 
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:53:29: warning: call to main actor-isolated instance method 'closeChannel' in a synchronous nonisolated context; this is an error in the Swift 6 language mode
-                self.client.closeChannel(channel)
-                            ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:71:10: note: calls to instance method 'closeChannel' from outside of its actor context are implicitly asynchronous
-    func closeChannel(_ channel: ADBChannel) {
-         ^
 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:63:13: warning: variable 'pathData' was never mutated; consider changing to 'let' constant
         var pathData = path.data(using: .utf8) ?? Data()
         ~~~ ^
         let
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:65:16: error: call to main actor-isolated instance method 'writeChannel(_:data:)' in a synchronous nonisolated context
-        client.writeChannel(channel, data: header + pathData)
-               ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:65:10: note: calls to instance method 'writeChannel(_:data:)' from outside of its actor context are implicitly asynchronous
-    func writeChannel(_ channel: ADBChannel, data: Data) {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:60:10: note: add '@MainActor' to make instance method 'listDirectory(path:timeout:)' part of global actor 'MainActor'
-    func listDirectory(path: String, timeout: TimeInterval = 15) -> [FileInfo] {
-         ^
-    @MainActor 
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:120:29: warning: call to main actor-isolated instance method 'closeChannel' in a synchronous nonisolated context; this is an error in the Swift 6 language mode
-                self.client.closeChannel(channel)
-                            ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:71:10: note: calls to instance method 'closeChannel' from outside of its actor context are implicitly asynchronous
-    func closeChannel(_ channel: ADBChannel) {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:135:16: error: call to main actor-isolated instance method 'writeChannel(_:data:)' in a synchronous nonisolated context
-        client.writeChannel(channel, data: sendHeader + sendPathData)
-               ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:65:10: note: calls to instance method 'writeChannel(_:data:)' from outside of its actor context are implicitly asynchronous
-    func writeChannel(_ channel: ADBChannel, data: Data) {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:127:10: note: add '@MainActor' to make instance method 'push(localURL:remotePath:mode:timeout:)' part of global actor 'MainActor'
-    func push(localURL: URL, remotePath: String, mode: String = "0666", timeout: TimeInterval = 60) -> Bool {
-         ^
-    @MainActor 
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:145:20: error: call to main actor-isolated instance method 'writeChannel(_:data:)' in a synchronous nonisolated context
-            client.writeChannel(channel, data: dataHeader + Data(chunk))
-                   ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:65:10: note: calls to instance method 'writeChannel(_:data:)' from outside of its actor context are implicitly asynchronous
-    func writeChannel(_ channel: ADBChannel, data: Data) {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:127:10: note: add '@MainActor' to make instance method 'push(localURL:remotePath:mode:timeout:)' part of global actor 'MainActor'
-    func push(localURL: URL, remotePath: String, mode: String = "0666", timeout: TimeInterval = 60) -> Bool {
-         ^
-    @MainActor 
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:153:16: error: call to main actor-isolated instance method 'writeChannel(_:data:)' in a synchronous nonisolated context
-        client.writeChannel(channel, data: doneHeader + doneData)
-               ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:65:10: note: calls to instance method 'writeChannel(_:data:)' from outside of its actor context are implicitly asynchronous
-    func writeChannel(_ channel: ADBChannel, data: Data) {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:127:10: note: add '@MainActor' to make instance method 'push(localURL:remotePath:mode:timeout:)' part of global actor 'MainActor'
-    func push(localURL: URL, remotePath: String, mode: String = "0666", timeout: TimeInterval = 60) -> Bool {
-         ^
-    @MainActor 
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:168:29: warning: call to main actor-isolated instance method 'closeChannel' in a synchronous nonisolated context; this is an error in the Swift 6 language mode
-                self.client.closeChannel(channel)
-                            ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:71:10: note: calls to instance method 'closeChannel' from outside of its actor context are implicitly asynchronous
-    func closeChannel(_ channel: ADBChannel) {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:178:13: warning: variable 'pathData' was never mutated; consider changing to 'let' constant
+/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:179:13: warning: variable 'pathData' was never mutated; consider changing to 'let' constant
         var pathData = remotePath.data(using: .utf8) ?? Data()
         ~~~ ^
         let
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:180:16: error: call to main actor-isolated instance method 'writeChannel(_:data:)' in a synchronous nonisolated context
-        client.writeChannel(channel, data: recvHeader + pathData)
-               ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:65:10: note: calls to instance method 'writeChannel(_:data:)' from outside of its actor context are implicitly asynchronous
-    func writeChannel(_ channel: ADBChannel, data: Data) {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:175:10: note: add '@MainActor' to make instance method 'pull(remotePath:localURL:timeout:)' part of global actor 'MainActor'
-    func pull(remotePath: String, localURL: URL, timeout: TimeInterval = 60) -> Bool {
-         ^
-    @MainActor 
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift:221:29: warning: call to main actor-isolated instance method 'closeChannel' in a synchronous nonisolated context; this is an error in the Swift 6 language mode
-                self.client.closeChannel(channel)
-                            ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:71:10: note: calls to instance method 'closeChannel' from outside of its actor context are implicitly asynchronous
-    func closeChannel(_ channel: ADBChannel) {
-         ^
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileTransfer.swift (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DataBuffer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DeviceScanner.swift /
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileTransfer.swift:13:83: error: extra argument 'progress' in call
-        await fileSync.push(localURL: localURL, remotePath: remotePath, progress: progress)
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileTransfer.swift:17:83: error: extra argument 'progress' in call
-        await fileSync.pull(remotePath: remotePath, localURL: localURL, progress: progress)
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileTransfer.swift:21:22: warning: no 'async' operations occur within 'await' expression
-        let result = await shell.executeCommand("rm -rf '\(path)'")
-                     ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileTransfer.swift:26:22: warning: no 'async' operations occur within 'await' expression
-        let result = await shell.executeCommand("mkdir -p '\(path)'")
-                     ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileTransfer.swift:31:22: warning: no 'async' operations occur within 'await' expression
-        let result = await shell.executeCommand("mv '\(oldPath)' '\(newPath)'")
-                     ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileTransfer.swift:46:83: error: extra argument 'progress' in call
-        await fileSync.push(localURL: localURL, remotePath: remotePath, progress: progress)
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileTransfer.swift:54:97: error: extra argument 'progress' in call
-        let success = await fileSync.pull(remotePath: remotePath, localURL: localURL, progress: progress)
-                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/ScrcpyServer.swift (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DataBuffer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DeviceScanner.swift /
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/ScrcpyServer.swift:56:36: error: call to main actor-isolated instance method 'openChannel(destination:)' in a synchronous nonisolated context
-        guard let channel = client.openChannel(destination: "shell:\(serverCommand)") else {
-                                   ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:54:10: note: calls to instance method 'openChannel(destination:)' from outside of its actor context are implicitly asynchronous
-    func openChannel(destination: String) -> ADBChannel? {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/ScrcpyServer.swift:47:10: note: add '@MainActor' to make instance method 'start(maxSize:maxFps:bitRate:)' part of global actor 'MainActor'
-    func start(maxSize: UInt32 = 1920, maxFps: UInt32 = 30, bitRate: UInt32 = 8000000) -> Bool {
-         ^
-    @MainActor 
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/ScrcpyServer.swift:80:20: error: call to main actor-isolated instance method 'closeChannel' in a synchronous nonisolated context
-            client.closeChannel(channel)
-                   ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:71:10: note: calls to instance method 'closeChannel' from outside of its actor context are implicitly asynchronous
-    func closeChannel(_ channel: ADBChannel) {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/ScrcpyServer.swift:77:10: note: add '@MainActor' to make instance method 'stop()' part of global actor 'MainActor'
-    func stop() {
-         ^
-    @MainActor 
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/ScrcpyServer.swift:84:20: error: call to main actor-isolated instance method 'closeChannel' in a synchronous nonisolated context
-            client.closeChannel(channel)
-                   ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:71:10: note: calls to instance method 'closeChannel' from outside of its actor context are implicitly asynchronous
-    func closeChannel(_ channel: ADBChannel) {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/ScrcpyServer.swift:77:10: note: add '@MainActor' to make instance method 'stop()' part of global actor 'MainActor'
-    func stop() {
-         ^
-    @MainActor 
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/ScrcpyServer.swift:95:16: error: call to main actor-isolated instance method 'writeChannel(_:data:)' in a synchronous nonisolated context
-        client.writeChannel(channel, data: packet)
-               ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:65:10: note: calls to instance method 'writeChannel(_:data:)' from outside of its actor context are implicitly asynchronous
-    func writeChannel(_ channel: ADBChannel, data: Data) {
-         ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/ScrcpyServer.swift:90:10: note: add '@MainActor' to make instance method 'sendControlEvent(type:data:)' part of global actor 'MainActor'
-    func sendControlEvent(type: ScrcpyControlType, data: Data) {
-         ^
-    @MainActor 
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/H264Decoder.swift (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DataBuffer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DeviceScanner.swift /
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/H264Decoder.swift:37:61: error: missing argument labels 'sampleBuffer:flags:frameRefcon:infoFlagsOut:' in call
-        let decodeStatus = VTDecompressionSessionDecodeFrame(
-                                                            ^
+/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/H264Decoder.swift:26:13: warning: variable 'avccNalu' was never mutated; consider changing to 'let' constant
+        var avccNalu = convertAnnexBToAVCC(nalu)
+        ~~~ ^
+        let
 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/H264Decoder.swift:65:26: error: type of expression is ambiguous without a type annotation
             let status = CMVideoFormatDescriptionCreateFromH264ParameterSets(
                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/H264Decoder.swift:93:13: warning: initialization of variable 'callback' was never used; consider replacing with assignment to '_' or removing it
+/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/H264Decoder.swift:93:13: warning: variable 'callback' was never mutated; consider changing to 'let' constant
         var callback = VTDecompressionOutputCallbackRecord(
-        ~~~~^~~~~~~~
-        _
+        ~~~ ^
+        let
 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/H264Decoder.swift:104:13: warning: variable 'callbackPtr' was never mutated; consider changing to 'let' constant
-        var callbackPtr: UnsafePointer<VTDecompressionOutputCallbackRecord>? = nil
+        var callbackPtr: UnsafeMutablePointer<VTDecompressionOutputCallbackRecord>? = UnsafeMutablePointer<VTDecompressionOutputCallbackRecord>.allocate(capacity: 1)
         ~~~ ^
         let
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/ScreenRenderer.swift (in target 'zmq' from project 'zmq')
@@ -449,21 +256,16 @@ SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flow
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Pages/DeviceInfoView.swift (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DataBuffer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DeviceScanner.swift /
+SwiftDriverJobDiscovery normal arm64 Emitting module for zmq (in target 'zmq' from project 'zmq')
 SwiftCompile normal arm64 Compiling\ ScreenMirrorView.swift,\ FileManagerView.swift,\ ConsoleView.swift,\ DeviceCard.swift,\ FileListItem.swift,\ TouchOverlay.swift,\ ADBDevice.swift,\ FileInfo.swift,\ AppInfo.swift,\ LittleEndian.swift,\ CRC32.swift,\ Logger.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Pages/ScreenMirrorView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Pages/FileManagerView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Pages/ConsoleView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/DeviceCard.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/FileListItem.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/TouchOverlay.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Models/ADBDevice.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Models/FileInfo.swift /Users/runner/work/iOS-ADB-APP-flower/
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     builtin-swiftTaskExecution -- /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -c /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DataBuffer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flowe
 Command SwiftCompile failed with a nonzero exit code
 ** ARCHIVE FAILED **
 The following build commands failed:
-	SwiftCompile normal arm64 Compiling\ zmqApp.swift,\ ContentView.swift,\ ADBConstants.swift,\ ADBMessage.swift,\ ADBProtocol.swift,\ ADBAuth.swift,\ ADBChannel.swift,\ TCPClient.swift,\ DataBuffer.swift,\ DeviceScanner.swift,\ ADBClient.swift,\ ADBKeyManager.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-fl
-	SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift (in target 'zmq' from project 'zmq')
-	SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/Shell/ADBShell.swift (in target 'zmq' from project 'zmq')
-	SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift (in target 'zmq' from project 'zmq')
-	SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileTransfer.swift (in target 'zmq' from project 'zmq')
-	SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/ScrcpyServer.swift (in target 'zmq' from project 'zmq')
-	SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/H264Decoder.swift (in target 'zmq' from project 'zmq')
 	SwiftCompile normal arm64 Compiling\ ADBShell.swift,\ ADBDeviceInfo.swift,\ ADBAppManager.swift,\ ADBRemoteControl.swift,\ ADBFileSync.swift,\ ADBFileTransfer.swift,\ ScrcpyServer.swift,\ H264Decoder.swift,\ ScreenRenderer.swift,\ TouchMapper.swift,\ DeviceConnectView.swift,\ DeviceInfoView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/Shell/ADBShell.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/DeviceInfo/ADBDeviceInfo.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/AppManager/ADBAppManager.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/RemoteControl/ADBRemoteControl.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileTransfer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/ScrcpyServer.swift /Users/runner/work/iOS-AD
+	SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/H264Decoder.swift (in target 'zmq' from project 'zmq')
 	SwiftCompile normal arm64 Compiling\ ScreenMirrorView.swift,\ FileManagerView.swift,\ ConsoleView.swift,\ DeviceCard.swift,\ FileListItem.swift,\ TouchOverlay.swift,\ ADBDevice.swift,\ FileInfo.swift,\ AppInfo.swift,\ LittleEndian.swift,\ CRC32.swift,\ Logger.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Pages/ScreenMirrorView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Pages/FileManagerView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Pages/ConsoleView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/DeviceCard.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/FileListItem.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/TouchOverlay.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Models/ADBDevice.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Models/FileInfo.swift /Users/runner/work/iOS-ADB-APP-flower
 	Archiving project zmq with scheme zmq
-(10 failures)
+(4 failures)
 Error: Process completed with exit code 65.

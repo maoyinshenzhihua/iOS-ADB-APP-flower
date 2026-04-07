@@ -59,21 +59,32 @@ class H264Decoder {
 
         if nalType == 7 {
             let spsWithoutStartCode = nalu[4...]
-            let spsArray = Array(spsWithoutStartCode)
-
+            var spsData = Data(spsWithoutStartCode)
             var newFormatDesc: CMVideoFormatDescription?
-            let status = CMVideoFormatDescriptionCreateFromH264ParameterSets(
-                allocator: nil,
-                parameterSetCount: 1,
-                parameterSetPointers: [UnsafePointer<UInt8>(bitPattern: spsArray.withUnsafeBufferPointer { $0.baseAddress! })!],
-                parameterSetSizes: [spsArray.count],
-                nalUnitHeaderLength: 4,
-                formatDescriptionOut: &newFormatDesc
-            )
 
-            if status == noErr, let desc = newFormatDesc {
-                formatDescription = desc
-                createDecompressionSession(formatDescription: desc)
+            spsData.withUnsafeMutableBytes { (spsBuffer: UnsafeMutableRawBufferPointer) in
+                guard let spsBaseAddress = spsBuffer.baseAddress else { return }
+                let spsPtr = spsBaseAddress.assumingMemoryBound(to: UInt8.self)
+                let pointers: [UnsafePointer<UInt8>] = [spsPtr]
+                let sizes: [Int] = [spsData.count]
+
+                withUnsafePointer(to: &pointers) { pointersPtr in
+                    withUnsafePointer(to: &sizes) { sizesPtr in
+                        let status = CMVideoFormatDescriptionCreateFromH264ParameterSets(
+                            allocator: nil,
+                            parameterSetCount: 1,
+                            parameterSetPointers: UnsafePointer(pointersPtr),
+                            parameterSetSizes: sizesPtr,
+                            nalUnitHeaderLength: 4,
+                            formatDescriptionOut: &newFormatDesc
+                        )
+
+                        if status == noErr, let desc = newFormatDesc {
+                            self.formatDescription = desc
+                            self.createDecompressionSession(formatDescription: desc)
+                        }
+                    }
+                }
             }
         }
     }
