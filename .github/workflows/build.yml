@@ -22,7 +22,7 @@ jobs:
             -project zmq.xcodeproj \
             -scheme zmq \
             -configuration Debug \
-            -destination 'generic/platform=iOS' \
+            -destination 'generic/platform=iOS Simulator' \
             -derivedDataPath ./build \
             CODE_SIGNING_ALLOWED=NO \
             IPHONEOS_DEPLOYMENT_TARGET=16.0
