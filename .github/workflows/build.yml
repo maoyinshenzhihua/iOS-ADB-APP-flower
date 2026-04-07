@@ -22,12 +22,10 @@ jobs:
             -project zmq.xcodeproj \
             -scheme zmq \
             -configuration Debug \
-            -destination 'generic/platform=iOS' \
+            -destination 'platform=iOS' \
             -derivedDataPath ./build \
             CODE_SIGNING_ALLOWED=NO \
-            ASSETCATALOG_COMPILER_NO_CRASH_ON_ERROR=YES \
-            ASSETCATALOG_COMPILER_APPICON_NAME=AppIcon \
-            GENERATE_INFOPLIST_FILE=YES
+            ASSETCATALOG_COMPILER_NO_CRASH_ON_ERROR=YES
 
       - name: Verify Assets.car
         run: |
