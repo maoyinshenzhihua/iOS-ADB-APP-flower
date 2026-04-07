@@ -168,4 +168,9 @@ The following build commands failed:
 	SwiftCompile normal arm64 Compiling\ FileManagerView.swift,\ ConsoleView.swift,\ DeviceCard.swift,\ FileListItem.swift,\ TouchOverlay.swift,\ ADBDevice.swift,\ FileInfo.swift,\ AppInfo.swift,\ LittleEndian.swift,\ CRC32.swift,\ Logger.swift,\ GeneratedAssetSymbols.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Pages/FileManagerView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Pages/ConsoleView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/DeviceCard.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/FileListItem.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/TouchOverlay.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Models/ADBDevice.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Models/FileInfo.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Models/AppInfo.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-A
 	Building project zmq with scheme zmq and configuration Debug
 (3 failures)
-Error: Process completed with exit code 65.
+Error: Process completed with exit code 65.[14312:14564:0408/055735.742:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
+[14312:14564:0408/055735.742:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
+[14312:14564:0408/055735.742:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
+[17364:100:0408/055737.955:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
+[17364:100:0408/055737.956:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
+[17364:100:0408/055737.956:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
