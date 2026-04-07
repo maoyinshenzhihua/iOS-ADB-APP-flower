@@ -7,10 +7,13 @@ class H264Decoder {
     private var formatDescription: CMVideoFormatDescription?
     var onFrameDecoded: ((CVImageBuffer) -> Void)?
 
+    private var callbackRecord: UnsafeMutablePointer<VTDecompressionOutputCallbackRecord>?
+
     deinit {
         if let session = session {
             VTDecompressionSessionInvalidate(session)
         }
+        callbackRecord?.deallocate()
     }
 
     func decodeNalu(_ nalu: Data) {
@@ -34,19 +37,13 @@ class H264Decoder {
         }
 
         var flags: VTDecodeInfoFlags = VTDecodeInfoFlags()
-        var imageBuffer: CVImageBuffer?
-        let decodeStatus = VTDecompressionSessionDecodeFrame(
+        _ = VTDecompressionSessionDecodeFrame(
             session,
             sampleBuffer: sampleBuffer,
             flags: [],
             frameRefcon: nil,
-            infoFlagsOut: &flags,
-            outputImageBuffer: &imageBuffer
+            infoFlagsOut: &flags
         )
-
-        if decodeStatus == noErr, let buffer = imageBuffer {
-            onFrameDecoded?(buffer)
-        }
     }
 
     func decodeNALUs(from data: Data) {
@@ -64,9 +61,8 @@ class H264Decoder {
 
             var newFormatDesc: CMVideoFormatDescription?
             let status = spsWithoutStartCode.withUnsafeBytes { (spsBuffer: UnsafeRawBufferPointer) -> OSStatus in
-                var formatDescriptionOut: CMVideoFormatDescription?
                 let params = spsBuffer.bindMemory(to: UInt8.self)
-                let pointer = params.baseAddress!
+                guard let pointer = params.baseAddress else { return errSecParam }
 
                 return CMVideoFormatDescriptionCreateFromH264ParameterSets(
                     allocator: nil,
@@ -74,7 +70,7 @@ class H264Decoder {
                     parameterSetPointers: [pointer],
                     parameterSetSizes: [params.count],
                     nalUnitHeaderLength: 4,
-                    formatDescriptionOut: &formatDescriptionOut
+                    formatDescriptionOut: &newFormatDesc
                 )
             }
 
@@ -90,6 +86,7 @@ class H264Decoder {
             VTDecompressionSessionInvalidate(existingSession)
             session = nil
         }
+        callbackRecord?.deallocate()
 
         let destinationAttributes: [String: Any] = [
             kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange,
@@ -97,13 +94,27 @@ class H264Decoder {
             kCVPixelBufferOpenGLESCompatibilityKey as String: true
         ]
 
+        let record = VTDecompressionOutputCallbackRecord(
+            decompressionOutputCallback: { outputCallbackRefCon, _, _, _, imageBuffer, _, _ in
+                guard let refCon = outputCallbackRefCon else { return }
+                let decoder = Unmanaged<H264Decoder>.fromOpaque(refCon).takeUnretainedValue()
+                if let imageBuffer = imageBuffer {
+                    decoder.onFrameDecoded?(imageBuffer)
+                }
+            },
+            decompressionOutputRefCon: Unmanaged.passUnretained(self).toOpaque()
+        )
+
+        callbackRecord = UnsafeMutablePointer<VTDecompressionOutputCallbackRecord>.allocate(capacity: 1)
+        callbackRecord!.pointee = record
+
         var newSession: VTDecompressionSession?
         let status = VTDecompressionSessionCreate(
             allocator: nil,
             formatDescription: formatDescription,
             decoderSpecification: nil,
             imageBufferAttributes: destinationAttributes as CFDictionary,
-            outputCallback: nil,
+            outputCallback: callbackRecord,
             decompressionSessionOut: &newSession
         )
 
