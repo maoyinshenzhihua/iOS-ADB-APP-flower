@@ -18,19 +18,14 @@ jobs:
 
       - name: Build
         run: |
-          xcodebuild -sdk iphoneos \
+          xcodebuild build \
             -project zmq.xcodeproj \
             -scheme zmq \
             -configuration Debug \
             -destination 'generic/platform=iOS' \
             -derivedDataPath ./build \
             CODE_SIGNING_ALLOWED=NO \
-            ASSETCATALOG_COMPILER_NO_CRASH_ON_ERROR=YES
-
-      - name: Verify Assets.car
-        run: |
-          find ./build -name "Assets.car" -type f 2>/dev/null || echo "No Assets.car found"
-          ls -laR ./build/Build/Products/Debug-iphoneos/zmq.app/ 2>/dev/null || echo "App bundle not found"
+            IPHONEOS_DEPLOYMENT_TARGET=16.0
 
       - name: Create IPA
         run: |
