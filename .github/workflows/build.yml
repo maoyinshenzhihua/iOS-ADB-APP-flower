@@ -16,37 +16,28 @@ jobs:
       - name: Select Xcode version
         run: sudo xcode-select -s /Applications/Xcode_16.0.app
 
-      - name: Create export options plist
+      - name: Build
         run: |
-          cat > exportOptions.plist << 'PLISTEOF'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>method</key>
-              <string>app-store</string>
-          </dict>
-          </plist>
-          PLISTEOF
-
-      - name: Build Archive
-        run: |
-          xcodebuild archive \
+          xcodebuild build \
             -project zmq.xcodeproj \
             -scheme zmq \
             -configuration Debug \
-            -archivePath build/zmq.xcarchive \
+            -sdk iphoneos \
+            -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO
 
-      - name: Export IPA
+      - name: Create IPA
         run: |
-          xcodebuild -exportArchive \
-            -archivePath build/zmq.xcarchive \
-            -exportPath output \
-            -exportOptionsPlist exportOptions.plist
+          cd build/Build/Products/Debug-iphoneos
+          mkdir -p Payload
+          cp -r *.app Payload/
+          cd Payload
+          zip -r ../zmq.ipa *
+          cd ..
+          ls -la zmq.ipa
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
-          name: zmq-ipa
-          path: output/zmq.ipa
+          name: zmq-unsigned-ipa
+          path: build/Build/Products/Debug-iphoneos/zmq.ipa
