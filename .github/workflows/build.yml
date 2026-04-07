@@ -16,6 +16,21 @@ jobs:
       - name: Select Xcode version
         run: sudo xcode-select -s /Applications/Xcode_16.0.app
 
+      - name: Create export options plist
+        run: |
+          cat > exportOptions.plist << 'PLISTEOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>none</string>
+              <key>skipSignatureValidation</key>
+              <true/>
+          </dict>
+          </plist>
+          PLISTEOF
+
       - name: Build Archive
         run: |
           xcodebuild archive \
@@ -30,18 +45,7 @@ jobs:
           xcodebuild -exportArchive \
             -archivePath build/zmq.xcarchive \
             -exportPath output \
-            -exportOptionsPlist << 'EOF'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>method</key>
-              <string>none</string>
-              <key>skipSignatureValidation</key>
-              <true/>
-          </dict>
-          </plist>
-          EOF
+            -exportOptionsPlist exportOptions.plist
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
