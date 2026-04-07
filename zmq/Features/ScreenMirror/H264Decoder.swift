@@ -59,33 +59,22 @@ class H264Decoder {
 
         if nalType == 7 {
             let spsWithoutStartCode = nalu[4...]
-            let spsArray = [Array(spsWithoutStartCode)] as [[UInt8]]
-            let spsSizes = [UInt32(spsWithoutStartCode.count)] as [Int]
+            let spsArray = Array(spsWithoutStartCode)
 
             var newFormatDesc: CMVideoFormatDescription?
-            let status = spsArray.withUnsafeBufferPointer { spsPtr in
-                spsSizes.withUnsafeBufferPointer { sizesPtr in
-                    let pointers = spsPtr.baseAddress!.withUnsafeMemoryRebound(to: UnsafePointer<UInt8>.self, capacity: 1) { ptr in
-                        ptr.pointee
-                    }
-                    return CMVideoFormatDescriptionCreateFromH264ParameterSets(
-                        allocator: nil,
-                        parameterSetCount: 1,
-                        parameterSetPointers: pointers,
-                        parameterSetSizes: sizesPtr.baseAddress!,
-                        nalUnitHeaderLength: 4,
-                        formatDescriptionOut: &newFormatDesc
-                    )
-                }
-            }
+            let status = CMVideoFormatDescriptionCreateFromH264ParameterSets(
+                allocator: nil,
+                parameterSetCount: 1,
+                parameterSetPointers: [spsArray.withUnsafeBytes { $0.baseAddress! }],
+                parameterSetSizes: [spsArray.count],
+                nalUnitHeaderLength: 4,
+                formatDescriptionOut: &newFormatDesc
+            )
 
             if status == noErr, let desc = newFormatDesc {
                 formatDescription = desc
+                createDecompressionSession(formatDescription: desc)
             }
-        }
-
-        if let formatDesc = formatDescription {
-            createDecompressionSession(formatDescription: formatDesc)
         }
     }
 
@@ -102,7 +91,7 @@ class H264Decoder {
         ]
 
         var callback = VTDecompressionOutputCallbackRecord(
-            decompressionOutputCallback: { (outputCallbackRefCon, _, _, _, imageBuffer, pts, duration) in
+            decompressionOutputCallback: { (outputCallbackRefCon, _, _, _, imageBuffer, _, _) in
                 guard let refCon = outputCallbackRefCon else { return }
                 let decoder = Unmanaged<H264Decoder>.fromOpaque(refCon).takeUnretainedValue()
                 if let imageBuffer = imageBuffer {
@@ -112,12 +101,14 @@ class H264Decoder {
             decompressionOutputRefCon: Unmanaged.passUnretained(self).toOpaque()
         )
 
+        var callbackPtr: UnsafePointer<VTDecompressionOutputCallbackRecord>? = nil
+
         let status = VTDecompressionSessionCreate(
             allocator: nil,
             formatDescription: formatDescription,
             decoderSpecification: nil,
             imageBufferAttributes: destinationAttributes as CFDictionary,
-            outputCallback: &callback,
+            outputCallback: callbackPtr,
             decompressionSessionOut: &session
         )
 

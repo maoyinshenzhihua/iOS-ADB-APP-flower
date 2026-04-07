@@ -7,36 +7,39 @@ class ADBShell {
         self.client = client
     }
 
-    func executeCommand(_ command: String) async -> String? {
-        guard client.isConnected else { return nil }
-
+    func executeCommand(_ command: String, timeout: TimeInterval = 30) -> String? {
         let destination = "shell:\(command)\0"
         guard let channel = client.openChannel(destination: destination) else { return nil }
 
-        return await withCheckedContinuation { continuation in
-            var output = Data()
+        var output = Data()
+        var result: String?
+        let lock = NSLock()
 
-            channel.onDataReceived = { data in
-                output.append(data)
-            }
+        channel.onDataReceived = { data in
+            lock.lock()
+            output.append(data)
+            lock.unlock()
+        }
 
-            channel.onClosed = {
-                let result = String(data: output, encoding: .utf8)
-                continuation.resume(returning: result)
-            }
+        channel.onClosed = {
+            lock.lock()
+            result = String(data: output, encoding: .utf8)
+            lock.unlock()
+        }
 
-            DispatchQueue.global().asyncAfter(deadline: .now() + 30) {
-                if !channel.isClosed {
-                    client.closeChannel(channel)
-                    let result = String(data: output, encoding: .utf8)
-                    continuation.resume(returning: result)
-                }
+        DispatchQueue.global().asyncAfter(deadline: .now() + timeout) {
+            if !channel.isClosed {
+                self.client.closeChannel(channel)
+                lock.lock()
+                result = String(data: output, encoding: .utf8)
+                lock.unlock()
             }
         }
+
+        return result
     }
 
     func openInteractiveShell() -> ADBChannel? {
-        guard client.isConnected else { return nil }
         let destination = "shell:\0"
         return client.openChannel(destination: destination)
     }

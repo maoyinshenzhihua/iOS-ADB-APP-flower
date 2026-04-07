@@ -35,7 +35,7 @@ struct DeviceConnectView: View {
                             Spacer()
                         }
                     }
-                    .disabled(host.isEmpty || !adbClient.isConnected && case .connecting = adbClient.state)
+                    .disabled(host.isEmpty || isConnecting)
                 }
 
                 Section(header: Text("局域网扫描")) {
@@ -84,6 +84,11 @@ struct DeviceConnectView: View {
             }
             .navigationTitle("设备连接")
         }
+    }
+
+    private var isConnecting: Bool {
+        if case .connecting = adbClient.state { return true }
+        return false
     }
 
     private var statusColor: Color {

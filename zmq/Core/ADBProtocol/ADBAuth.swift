@@ -20,27 +20,19 @@ enum ADBAuth {
     }
 
     static func generateRSAKeyPair(keySize: Int = 2048) -> (privateKey: SecKey, publicKey: SecKey)? {
+        let privateKeyAttr: [String: Any] = [
+            kSecAttrIsPermanent as String: true,
+            kSecAttrApplicationTag as String: "com.zmq.adb.privatekey".data(using: .utf8)!,
+        ]
+
         let attributes: [String: Any] = [
             kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
             kSecAttrKeySizeInBits as String: keySize,
-            kSecPrivateKeyAttrs as String: [
-                kSecAttrIsPermanent as String: true,
-                kSecAttrApplicationTag as String: "com.zmq.adb.privatekey",
-                kSecAttrAccessControl as String: SecAccessControlCreateWithFlags(
-                    nil,
-                    kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-                    .privateKeyUsage,
-                    nil
-                )!
-            ],
-            kSecPublicKeyAttrs as String: [
-                kSecAttrIsPermanent as String: true,
-                kSecAttrApplicationTag as String: "com.zmq.adb.publickey",
-            ]
+            kSecPrivateKeyAttrs as String: privateKeyAttr
         ]
 
         var error: Unmanaged<CFError>?
-        guard let privateKey = SecKeyCreatePair(attributes as CFDictionary, &error) else {
+        guard let privateKey = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
             if let err = error?.takeRetainedValue() {
                 Logger.error("RSA密钥生成失败: \(err)", category: "ADBAuth")
             }
@@ -69,13 +61,13 @@ enum ADBAuth {
     static func deleteKeyPair() {
         let deleteQuery: [String: Any] = [
             kSecClass as String: kSecClassKey,
-            kSecAttrApplicationTag as String: "com.zmq.adb.privatekey"
+            kSecAttrApplicationTag as String: "com.zmq.adb.privatekey".data(using: .utf8)!
         ]
         SecItemDelete(deleteQuery as CFDictionary)
 
         let deleteQuery2: [String: Any] = [
             kSecClass as String: kSecClassKey,
-            kSecAttrApplicationTag as String: "com.zmq.adb.publickey"
+            kSecAttrApplicationTag as String: "com.zmq.adb.publickey".data(using: .utf8)!
         ]
         SecItemDelete(deleteQuery2 as CFDictionary)
     }
