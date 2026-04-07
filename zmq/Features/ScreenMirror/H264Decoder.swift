@@ -34,16 +34,18 @@ class H264Decoder {
         }
 
         var flags: VTDecodeInfoFlags = VTDecodeInfoFlags()
+        var imageBuffer: CVImageBuffer?
         let decodeStatus = VTDecompressionSessionDecodeFrame(
             session,
             sampleBuffer: sampleBuffer,
             flags: [],
             frameRefcon: nil,
-            infoFlagsOut: &flags
+            infoFlagsOut: &flags,
+            outputImageBuffer: &imageBuffer
         )
 
-        if decodeStatus != noErr {
-            Logger.error("解码帧失败: \(decodeStatus)", category: "H264Decoder")
+        if decodeStatus == noErr, let buffer = imageBuffer {
+            onFrameDecoded?(buffer)
         }
     }
 
@@ -95,21 +97,13 @@ class H264Decoder {
             kCVPixelBufferOpenGLESCompatibilityKey as String: true
         ]
 
-        let callback: @convention(c) (UnsafeMutableRawPointer?, UnsafeRawPointer?, OSStatus, VTDecodeInfoFlags, CVImageBuffer?, CMTime, CMTime) -> Void = { outputCallbackRefCon, _, _, imageBuffer, _, _ in
-            guard let refCon = outputCallbackRefCon else { return }
-            let decoder = Unmanaged<H264Decoder>.fromOpaque(refCon).takeUnretainedValue()
-            if let imageBuffer = imageBuffer {
-                decoder.onFrameDecoded?(imageBuffer)
-            }
-        }
-
         var newSession: VTDecompressionSession?
         let status = VTDecompressionSessionCreate(
             allocator: nil,
             formatDescription: formatDescription,
             decoderSpecification: nil,
             imageBufferAttributes: destinationAttributes as CFDictionary,
-            outputCallback: callback,
+            outputCallback: nil,
             decompressionSessionOut: &newSession
         )
 
