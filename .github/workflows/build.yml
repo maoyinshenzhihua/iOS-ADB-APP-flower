@@ -24,7 +24,7 @@ jobs:
           <plist version="1.0">
           <dict>
               <key>method</key>
-              <string>none</string>
+              <string>development</string>
               <key>skipSignatureValidation</key>
               <true/>
           </dict>
