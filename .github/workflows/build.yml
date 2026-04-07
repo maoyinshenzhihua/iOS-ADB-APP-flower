@@ -22,10 +22,12 @@ jobs:
             -project zmq.xcodeproj \
             -scheme zmq \
             -configuration Debug \
-            -destination 'platform=iOS' \
+            -destination 'generic/platform=iOS' \
             -derivedDataPath ./build \
             CODE_SIGNING_ALLOWED=NO \
-            ASSETCATALOG_COMPILER_NO_CRASH_ON_ERROR=YES
+            SDKROOT=iphoneos \
+            ASSETCATALOG_COMPILER_NO_CRASH_ON_ERROR=YES \
+            ENABLE_BITCODE=NO
 
       - name: Verify Assets.car
         run: |
