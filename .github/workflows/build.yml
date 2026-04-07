@@ -16,6 +16,19 @@ jobs:
       - name: Select Xcode version
         run: sudo xcode-select -s /Applications/Xcode_16.0.app
 
+      - name: Create export options plist
+        run: |
+          cat > exportOptions.plist << 'PLISTEOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>app-store</string>
+          </dict>
+          </plist>
+          PLISTEOF
+
       - name: Build Archive
         run: |
           xcodebuild archive \
@@ -23,11 +36,17 @@ jobs:
             -scheme zmq \
             -configuration Debug \
             -archivePath build/zmq.xcarchive \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_TEAM_ID=XXXXXXXXXX
+            CODE_SIGNING_ALLOWED=NO
 
-      - name: Upload xcarchive
+      - name: Export IPA
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath build/zmq.xcarchive \
+            -exportPath output \
+            -exportOptionsPlist exportOptions.plist
+
+      - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
-          name: zmq-xcarchive
-          path: build/zmq.xcarchive
+          name: zmq-ipa
+          path: output/zmq.ipa
