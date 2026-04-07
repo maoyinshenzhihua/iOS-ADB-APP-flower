@@ -1,184 +1,171 @@
-Run xcodebuild -exportArchive \
-  xcodebuild -exportArchive \
-    -archivePath build/zmq.xcarchive \
-    -exportPath output \
-    -exportOptionsPlist << 'EOF'
-  <?xml version="1.0" encoding="UTF-8"?>
-  <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-  <plist version="1.0">
-  <dict>
-      <key>method</key>
-      <string>none</string>
-      <key>skipSignatureValidation</key>
-      <true/>
-  </dict>
-  </plist>
-  EOF
-  shell: /bin/bash -e {0}
-  
-2026-04-07 21:42:13.669 xcodebuild[23538:67778] Writing error result bundle to /var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/ResultBundle_2026-07-04_21-42-0013.xcresult
-xcodebuild: error: option '-exportOptionsPlist' requires an argument
-Usage: xcodebuild [-project <projectname>] [[-target <targetname>]...|-alltargets] [-configuration <configurationname>] [-arch <architecture>]... [-sdk [<sdkname>|<sdkpath>]] [-showBuildSettings [-json]] [<buildsetting>=<value>]... [<buildaction>]...
-       xcodebuild [-project <projectname>] -scheme <schemeName> [-destination <destinationspecifier>]... [-configuration <configurationname>] [-arch <architecture>]... [-sdk [<sdkname>|<sdkpath>]] [-showBuildSettings [-json]] [-showdestinations] [<buildsetting>=<value>]... [<buildaction>]...
-       xcodebuild -workspace <workspacename> -scheme <schemeName> [-destination <destinationspecifier>]... [-configuration <configurationname>] [-arch <architecture>]... [-sdk [<sdkname>|<sdkpath>]] [-showBuildSettings] [-showdestinations] [<buildsetting>=<value>]... [<buildaction>]...
-       xcodebuild -version [-sdk [<sdkfullpath>|<sdkname>] [-json] [<infoitem>] ]
-       xcodebuild -list [[-project <projectname>]|[-workspace <workspacename>]] [-json]
-       xcodebuild -showsdks [-json]
-       xcodebuild -exportArchive -archivePath <xcarchivepath> [-exportPath <destinationpath>] -exportOptionsPlist <plistpath>
-       xcodebuild -exportNotarizedApp -archivePath <xcarchivepath> -exportPath <destinationpath>
-       xcodebuild -exportLocalizations -localizationPath <path> -project <projectname> [-defaultLanguage <language>] [-exportLanguage <targetlanguage>... [-includeScreenshots]]
-       xcodebuild -importLocalizations -localizationPath <path> -project <projectname> [-mergeImport]
-       xcodebuild -resolvePackageDependencies [-project <projectname>|-workspace <workspacename>] -clonedSourcePackagesDirPath <path>
-       xcodebuild -create-xcframework [-help] [-framework <path>] [-library <path> [-headers <path>]] -output <path>
-       xcodebuild -downloadPlatform <iOS|watchOS|tvOS|visionOS> [-exportPath <destinationpath>]
-       xcodebuild -downloadAllPlatforms [-exportPath <destinationpath>]
-Options:
-    -usage                                                   print brief usage
-    -help                                                    print complete usage
-    -verbose                                                 provide additional status output
-    -license                                                 show the Xcode and SDK license agreements
-    -checkFirstLaunchStatus                                  Check if any First Launch tasks need to be performed
-    -runFirstLaunch                                          install packages and agree to the license
-    -downloadAllPlatforms                                    downloads a matching simulator runtime for every platform in this Xcode
-    -downloadPlatform NAME                                   download the platform NAME
-    -importPlatform DMG_Path                                 import the platform NAME
-    -project NAME                                            build the project NAME
-    -target NAME                                             build the target NAME
-    -alltargets                                              build all targets
-    -workspace NAME                                          build the workspace NAME
-    -scheme NAME                                             build the scheme NAME
-    -configuration NAME                                      use the build configuration NAME for building each target
-    -xcconfig PATH                                           apply the build settings defined in the file at PATH as overrides
-    -arch ARCH                                               build each target for the architecture ARCH; this will override architectures defined in the project
-    -sdk SDK                                                 use SDK as the name or path of the base SDK when building the project
-    -toolchain NAME                                          use the toolchain with identifier or name NAME
-    -destination DESTINATIONSPECIFIER                        use the destination described by DESTINATIONSPECIFIER (a comma-separated set of key=value pairs describing the destination to use)
-    -destination-timeout TIMEOUT                             wait for TIMEOUT seconds while searching for the destination device
-    -parallelizeTargets                                      build independent targets in parallel
-    -jobs NUMBER                                             specify the maximum number of concurrent build operations
-    -maximum-concurrent-test-device-destinations NUMBER      the maximum number of device destinations to test on concurrently
-    -maximum-concurrent-test-simulator-destinations NUMBER   the maximum number of simulator destinations to test on concurrently
-    -parallel-testing-enabled YES|NO                         overrides the per-target setting in the scheme
-    -parallel-testing-worker-count NUMBER                    the exact number of test runners that will be spawned during parallel testing
-    -maximum-parallel-testing-workers NUMBER                 the maximum number of test runners that will be spawned during parallel testing
-    -dry-run                                                 do everything except actually running the commands
-    -quiet                                                   do not print any output except for warnings and errors
-    -hideShellScriptEnvironment                              don't show shell script environment variables in build log
-    -showsdks                                                display a compact list of the installed SDKs
-    -showdestinations                                        display a list of destinations
-    -showTestPlans                                           display a list of test plans
-    -showBuildSettings                                       display a list of build settings and values
-    -showBuildSettingsForIndex                               display build settings for the index service
-    -list                                                    lists the targets and configurations in a project, or the schemes in a workspace
-    -find-executable NAME                                    display the full path to executable NAME in the provided SDK and toolchain
-    -find-library NAME                                       display the full path to library NAME in the provided SDK and toolchain
-    -version                                                 display the version of Xcode; with -sdk will display info about one or all installed SDKs
-    -enableAddressSanitizer YES|NO                           turn the address sanitizer on or off
-    -enableThreadSanitizer YES|NO                            turn the thread sanitizer on or off
-    -enableUndefinedBehaviorSanitizer YES|NO                 turn the undefined behavior sanitizer on or off
-    -resultBundlePath PATH                                   specifies the directory where a result bundle describing what occurred will be placed
-    -resultStreamPath PATH                                   specifies the file where a result stream will be written to (the file must already exist)
-    -resultBundleVersion 3 [default]                         specifies which result bundle version should be used
-    -clonedSourcePackagesDirPath PATH                        specifies the directory to which remote source packages are fetch or expected to be found
-    -derivedDataPath PATH                                    specifies the directory where build products and other derived data will go
-    -archivePath PATH                                        specifies the directory where any created archives will be placed, or the archive that should be exported
-    -exportArchive                                           specifies that an archive should be exported
-    -exportNotarizedApp                                      export an archive that has been notarized by Apple
-    -exportOptionsPlist PATH                                 specifies a path to a plist file that configures archive exporting
-    -enableCodeCoverage YES|NO                               turn code coverage on or off when testing
-    -exportPath PATH                                         specifies the destination for the product exported from an archive
-    -skipUnavailableActions                                  specifies that scheme actions that cannot be performed should be skipped instead of causing a failure
-    -exportLocalizations                                     exports completed and outstanding project localizations
-    -importLocalizations                                     imports localizations for a project, assuming any necessary localized resources have been created in Xcode
-    -localizationPath                                        specifies a path to XLIFF localization files
-    -exportLanguage                                          specifies multiple optional ISO 639-1 languages included in a localization export
-    -defaultLanguage                                         specifies the default ISO 639-1 language to be used as the source language on export
-    -xctestrun                                               specifies a path to a test run specification
-    -testProductsPath                                        specifies a path for the test products
-    -enablePerformanceTestsDiagnostics YES|NO                enables performance trace and memgraph collection for performance XCTests
-    -testPlan                                                specifies the name of the test plan associated with the scheme to use for testing
-    -only-testing                                            constrains testing by specifying tests to include, and excluding other tests
-    -only-testing:TEST-IDENTIFIER                            constrains testing by specifying tests to include, and excluding other tests
-    -skip-testing                                            constrains testing by specifying tests to exclude, but including other tests
-    -skip-testing:TEST-IDENTIFIER                            constrains testing by specifying tests to exclude, but including other tests
-    -test-timeouts-enabled YES|NO                            enable or disable test timeout behavior
-    -default-test-execution-time-allowance SECONDS           the default execution time an individual test is given to execute, if test timeouts are enabled
-    -maximum-test-execution-time-allowance SECONDS           the maximum execution time an individual test is given to execute, regardless of the test's preferred allowance
-    -test-iterations <number>                                If specified, tests will run <number> times. May be used in conjunction with either -retry-tests-on-failure or -run-tests-until-failure, in which case this will become the maximum number of iterations.
-    -retry-tests-on-failure                                  If specified, tests will retry on failure. May be used in conjunction with -test-iterations <number>, in which case <number> will be the maximum number of iterations. Otherwise, a maximum of 3 is assumed. May not be used with -run-tests-until-failure.
-    -run-tests-until-failure                                 If specified, tests will run until they fail. May be used in conjunction with -test-iterations <number>, in which case <number> will be the maximum number of iterations. Otherwise, a maximum of 100 is assumed. May not be used with -retry-tests-on-failure.
-    -test-repetition-relaunch-enabled YES|NO                 Enable or disable, tests repeating in a new process for each repetition.  Must be used in conjunction with -test-iterations, -retry-tests-on-failure, or -run-tests-until-failure. If not specified, tests will repeat in the same process.
-    -only-test-configuration                                 constrains testing by specifying test configurations to include, and excluding other test configurations
-    -skip-test-configuration                                 constrains testing by specifying test configurations to exclude, but including other test configurations
-    -collect-test-diagnostics on-failure|never               Whether or not testing collects verbose diagnostics (like a sysdiagnose) when encountering a failure
-    -testLanguage                                            constrains testing by specifying ISO 639-1 language in which to run the tests
-    -testRegion                                              constrains testing by specifying ISO 3166-1 region in which to run the tests
-    -enumerate-tests                                         Enumerate the tests that would be executed by this command without actually executing them
-    -test-enumeration-style                                  The style in which to enumerate the tests. Valid styles: flat, hierarchical
-    -test-enumeration-format                                 The output format of the enumerated tests. Valid formats: text, json
-    -test-enumeration-output-path                            The path (relative or absolute) where the results of test enumeration should be written. If '-' is supplied, writes to standard out.
-    -resolvePackageDependencies                              resolves any Swift package dependencies referenced by the project or workspace
-    -disableAutomaticPackageResolution                       prevents packages from automatically being resolved to versions other than those recorded in the `Package.resolved` file
-    -onlyUsePackageVersionsFromResolvedFile                  prevents packages from automatically being resolved to versions other than those recorded in the `Package.resolved` file
-    -skipPackageUpdates                                      Skip updating package dependencies from their remote
-    -disablePackageRepositoryCache                           disable use of a local cache of remote package repositories
-    -skipPackagePluginValidation                             Skip validation of package plugins (this can be a security risk if they are not from trusted sources)
-    -skipMacroValidation                                     Skip validation of macros (this can be a security risk if they are not from trusted sources)
-    -packageCachePath                                        path of caches used for package support
-    -packageAuthorizationProvider keychain|netrc             Specify the credential store to be used when resolving packages
-    -defaultPackageRegistryURL                               URL of the default package registry
-    -packageDependencySCMToRegistryTransformation            specifies the transformation to apply to SCM-based package dependencies (none, useRegistryIdentity, or useRegistryIdentityAndSources)
-    -skipPackageSignatureValidation                          Skip validation of package signatures (this can be a security risk if they are not from trusted sources)
-    -packageFingerprintPolicy                                Package fingerprint checking policy (`warn` or `strict`)
-    -packageSigningEntityPolicy                              Package signing entity checking policy (`warn` or `strict`)
-    -json                                                    output as JSON (note: -json implies -quiet)
-    -allowProvisioningUpdates                                Allow xcodebuild to communicate with the Apple Developer website. For automatically signed targets, xcodebuild will create and update profiles, app IDs, and certificates. For manually signed targets, xcodebuild will download missing or updated provisioning profiles. Requires a developer account to have been added in Xcode's Accounts settings or an App Store Connect authentication key to be specified via the -authenticationKeyPath, -authenticationKeyID, and -authenticationKeyIssuerID parameters.
-    -allowProvisioningDeviceRegistration                     Allow xcodebuild to register your destination device on the developer portal if necessary. This flag only takes effect if -allowProvisioningUpdates is also passed.
-    -authenticationKeyPath                                   specifies the path to an authentication key issued by App Store Connect. If specified, xcodebuild will authenticate with the Apple Developer website using this credential. The -authenticationKeyID and -authenticationKeyIssuerID parameters are required.
-    -authenticationKeyID                                     specifies the key identifier associated with the App Store Conect authentication key at -authenticationKeyPath. This string can be located in the users and access details for your provider at "https://appstoreconnect.apple.com".
-    -authenticationKeyIssuerID                               specifies the App Store Connect issuer identifier associated with the authentication key at -authenticationKeyPath. This string can be located in the users and access details for your provider at "https://appstoreconnect.apple.com".
-    -scmProvider                                             which implementation to use for Git operations (system/xcode)
-    -showBuildTimingSummary                                  display a report of the timings of all the commands invoked during the build
-    -create-xcframework                                      create an xcframework from prebuilt libraries; -help for more information.
-Error: Process completed with exit code 64.[13204:11316:0408/054328.467:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
-[13204:11316:0408/054328.467:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
-[13204:11316:0408/054328.467:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
-[11208:4628:0408/054331.628:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
-[11208:4628:0408/054331.628:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
-[11208:4628:0408/054331.628:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
-[12160:11652:0408/054448.830:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
-[12160:11652:0408/054448.830:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
-[12160:11652:0408/054448.830:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
-[9076:11516:0408/054450.994:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
-[9076:11516:0408/054450.994:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
-[9076:11516:0408/054450.994:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
-[4628:14908:0408/054600.937:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
-[4628:14908:0408/054600.937:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
-[4628:14908:0408/054600.937:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
-[4792:272:0408/054603.121:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
-[4792:272:0408/054603.121:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
-[4792:272:0408/054603.121:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
-[16432:4076:0408/054710.285:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
-[16432:4076:0408/054710.285:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
-[16432:4076:0408/054710.285:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
-[12796:3776:0408/054712.408:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
-[12796:3776:0408/054712.408:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
-[12796:3776:0408/054712.408:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
-[10704:13124:0408/054814.053:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
-[10704:13124:0408/054814.053:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
-[10704:13124:0408/054814.053:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
-[4076:5644:0408/054816.348:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
-[4076:5644:0408/054816.348:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
-[4076:5644:0408/054816.348:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
-[13388:3316:0408/055117.264:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
-[13388:3316:0408/055117.264:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
-[13388:3316:0408/055117.264:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
-[10844:3592:0408/055119.478:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
-[10844:3592:0408/055119.478:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
-[10844:3592:0408/055119.478:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
-[10316:12100:0408/055330.039:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
-[10316:12100:0408/055330.039:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
-[10316:12100:0408/055330.039:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
-[15700:5896:0408/055332.230:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
-[15700:5896:0408/055332.230:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
-[15700:5896:0408/055332.230:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
+Run xcodebuild build \
+Command line invocation:
+    /Applications/Xcode_16.app/Contents/Developer/usr/bin/xcodebuild build -project zmq.xcodeproj -scheme zmq -configuration Debug -sdk iphoneos -derivedDataPath build CODE_SIGNING_ALLOWED=NO
+User defaults from command line:
+    IDEDerivedDataPathOverride = /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build
+    IDEPackageSupportUseBuiltinSCM = YES
+Build settings from command line:
+    CODE_SIGNING_ALLOWED = NO
+    SDKROOT = iphoneos18.0
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device }
+{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:a2d28d8c9d8d5398db6d24664e29dbe3c0c0fe69, name:My Mac }
+{ platform:iOS Simulator, id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }
+Prepare packages
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'zmq' in project 'zmq' (no dependencies)
+GatherProvisioningInputs
+CreateBuildDescription
+ExecuteExternalTool /Applications/Xcode_16.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Assets.xcassets
+ExecuteExternalTool /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode_16.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk -x c -c /dev/null
+ExecuteExternalTool /Applications/Xcode_16.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+ExecuteExternalTool /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+ExecuteExternalTool /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+Build description signature: 79a0a1d1aea13714a5d20645d93f623c
+Build description path: /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/XCBuildData/79a0a1d1aea13714a5d20645d93f623c.xcbuilddata
+ClangStatCache /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_16.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/SDKStatCaches.noindex/iphoneos18.0-22A3362-ecbf2746db86eb790eafe45896842e4a.sdkstatcache
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_16.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk -o /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/SDKStatCaches.noindex/iphoneos18.0-22A3362-ecbf2746db86eb790eafe45896842e4a.sdkstatcache
+CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
+    builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products
+CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
+    builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq-a0eed1532a83e735ea34751e7f02a2e1-VFS-iphoneos/all-product-headers.yaml
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq-a0eed1532a83e735ea34751e7f02a2e1-VFS-iphoneos/all-product-headers.yaml
+CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
+    builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos
+CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
+    builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq.hmap (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq.hmap
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq.DependencyMetadataFileList (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq.DependencyMetadataFileList
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq-project-headers.hmap (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq-project-headers.hmap
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq-own-target-headers.hmap (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq-own-target-headers.hmap
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq-generated-files.hmap (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq-generated-files.hmap
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq-all-target-headers.hmap (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq-all-target-headers.hmap
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq-all-non-framework-target-headers.hmap (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq-all-non-framework-target-headers.hmap
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq-DebugDylibPath-normal-arm64.txt (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq-DebugDylibPath-normal-arm64.txt
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq-DebugDylibInstallName-normal-arm64.txt (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/zmq-DebugDylibInstallName-normal-arm64.txt
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq_const_extract_protocols.json (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq_const_extract_protocols.json
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq.SwiftFileList (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq.SwiftFileList
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq.SwiftConstValuesFileList (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq.SwiftConstValuesFileList
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq.LinkFileList (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq.LinkFileList
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq-OutputFileMap.json (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq-OutputFileMap.json
+MkDir /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.app (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /bin/mkdir -p /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.app
+Ld /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.app/__preview.dylib normal (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios16.0 -dynamiclib -isysroot /Applications/Xcode_16.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk -O0 -L/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos -F/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos -install_name @rpath/zmq.debug.dylib -dead_strip -Xlinker -export_dynamic -Xlinker -no_deduplicate -o /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.app/__preview.dylib
+GenerateAssetSymbols /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Assets.xcassets (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/usr/bin/actool --output-format human-readable-text --notices --warnings --export-dependency-info /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/assetcatalog_dependencies --output-partial-info-plist /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/assetcatalog_generated_info.plist --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --development-region zh-Hans --target-device iphone --target-device ipad --minimum-deployment-target 16.0 --platform iphoneos --compile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.app /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Assets.xcassets --bundle-identifier com.zmq.app --generate-swift-asset-symbols /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/z
+/* com.apple.actool.compilation-results */
+/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/DerivedSources/GeneratedAssetSymbols.h
+/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/DerivedSources/GeneratedAssetSymbols.swift
+CompileAssetCatalog /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.app /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Assets.xcassets (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/usr/bin/actool --output-format human-readable-text --notices --warnings --export-dependency-info /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/assetcatalog_dependencies --output-partial-info-plist /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/assetcatalog_generated_info.plist --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --development-region zh-Hans --target-device iphone --target-device ipad --minimum-deployment-target 16.0 --platform iphoneos --compile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.app /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Assets.xcassets
+/* com.apple.actool.errors */
+/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Assets.xcassets: error: No simulator runtime version from [<DVTBuildVersion 22F77>, <DVTBuildVersion 22G86>, <DVTBuildVersion 23A8464>, <DVTBuildVersion 23B86>, <DVTBuildVersion 23C54>] available to use with iphonesimulator SDK version <DVTBuildVersion 22A3362>
+/* com.apple.actool.compilation-results */
+/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/assetcatalog_generated_info.plist
+/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.app/AppIcon60x60@2x.png
+/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.app/AppIcon76x76@2x~ipad.png
+SwiftDriver zmq normal arm64 com.apple.xcode.tools.swift.compiler (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    builtin-SwiftDriver -- /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name zmq -Onone -enforce-exclusivity\=checked @/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode_16.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk -target arm64-apple-ios16.0 -g -module-cache-path /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Index.noindex/DataStore -enable-experimental-feature OpaqueTypeErasure -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/B
+SwiftEmitModule normal arm64 Emitting\ module\ for\ zmq (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    builtin-swiftTaskExecution -- /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -emit-module -experimental-skip-non-inlinable-function-bodies-without-types /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network
+EmitSwiftModule normal arm64 (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -emit-module -experimental-skip-non-inlinable-function-bodies-without-types /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DataBuffer.swift /Users/runner/work/iOS
+SwiftCompile normal arm64 Compiling\ zmqApp.swift,\ ContentView.swift,\ ADBConstants.swift,\ ADBMessage.swift,\ ADBProtocol.swift,\ ADBAuth.swift,\ ADBChannel.swift,\ TCPClient.swift,\ DataBuffer.swift,\ DeviceScanner.swift,\ ADBClient.swift,\ ADBKeyManager.swift,\ ADBShell.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/wor
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    builtin-swiftTaskExecution -- /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/i
+SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
+SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
+SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
+SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
+SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
+SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
+SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
+SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
+SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DataBuffer.swift (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
+SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DeviceScanner.swift (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
+SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
+SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBKeyManager.swift (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
+SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/Shell/ADBShell.swift (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq
+SwiftCompile normal arm64 Compiling\ FileManagerView.swift,\ ConsoleView.swift,\ DeviceCard.swift,\ FileListItem.swift,\ TouchOverlay.swift,\ ADBDevice.swift,\ FileInfo.swift,\ AppInfo.swift,\ LittleEndian.swift,\ CRC32.swift,\ Logger.swift,\ GeneratedAssetSymbols.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Pages/FileManagerView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Pages/ConsoleView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/DeviceCard.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/FileListItem.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/TouchOverlay.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Models/ADBDevice.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Models/FileInfo.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Models/AppInfo.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-AD
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    builtin-swiftTaskExecution -- /Applications/Xcode_16.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -c /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DataBuffer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flowe
+Command SwiftCompile failed with a nonzero exit code
+** BUILD FAILED **
+The following build commands failed:
+	CompileAssetCatalog /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.app /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Assets.xcassets (in target 'zmq' from project 'zmq')
+	SwiftCompile normal arm64 Compiling\ FileManagerView.swift,\ ConsoleView.swift,\ DeviceCard.swift,\ FileListItem.swift,\ TouchOverlay.swift,\ ADBDevice.swift,\ FileInfo.swift,\ AppInfo.swift,\ LittleEndian.swift,\ CRC32.swift,\ Logger.swift,\ GeneratedAssetSymbols.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Pages/FileManagerView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Pages/ConsoleView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/DeviceCard.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/FileListItem.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/UI/Components/TouchOverlay.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Models/ADBDevice.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Models/FileInfo.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Models/AppInfo.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-A
+	Building project zmq with scheme zmq and configuration Debug
+(3 failures)
+Error: Process completed with exit code 65.
