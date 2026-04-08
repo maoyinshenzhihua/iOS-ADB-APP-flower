@@ -330,12 +330,20 @@ class ADBClient: ObservableObject {
             let fd = sockFd
             SSLSetIOFuncs(sslCtx,
                           { _, data, dataLength in
-                              let len = Int(truncatingIfNeeded: dataLength)
-                              return numericCast(Darwin.read(fd, data, len)) as OSStatus
+                              let bytesRead = Darwin.read(fd, data, dataLength.pointee)
+                              if bytesRead >= 0 {
+                                  dataLength.pointee = bytesRead
+                                  return errSecSuccess
+                              }
+                              return OSStatus(errno)
                           },
                           { _, data, dataLength in
-                              let len = Int(truncatingIfNeeded: dataLength)
-                              return numericCast(Darwin.write(fd, data, len)) as OSStatus
+                              let bytesWritten = Darwin.write(fd, data, dataLength.pointee)
+                              if bytesWritten >= 0 {
+                                  dataLength.pointee = bytesWritten
+                                  return errSecSuccess
+                              }
+                              return OSStatus(errno)
                           })
 
             SSLSetConnection(sslCtx, UnsafeMutableRawPointer(bitPattern: fd))
