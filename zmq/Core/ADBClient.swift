@@ -327,6 +327,7 @@ class ADBClient: ObservableObject {
             }
 
             SSLSetSessionOption(sslCtx, .breakOnServerAuth, true)
+            SSLSetEnableCertVerify(sslCtx, false)
 
             SSLSetIOFuncs(sslCtx,
                           { connection, data, dataLength in
