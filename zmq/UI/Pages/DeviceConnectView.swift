@@ -146,17 +146,3 @@ struct DeviceConnectView: View {
         }
     }
 }
-
-extension View {
-    @ViewBuilder
-    func dismissKeyboardOnTap() -> some View {
-        self.modifier(DismissKeyboardModifier())
-    }
-}
-
-struct DismissKeyboardModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .background(DismissKeyboardTap())
-    }
-}
