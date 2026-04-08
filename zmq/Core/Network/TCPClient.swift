@@ -49,11 +49,6 @@ class TCPClient {
 
         if useTLS {
             let tlsOptions = NWProtocolTLS.Options()
-
-            sec_protocol_options_set_verify_block(tlsOptions.secProtocolOptions, { _, _, completionHandler in
-                completionHandler(true)
-            }, queue)
-
             parameters.defaultProtocolStack.applicationProtocols.insert(tlsOptions, at: 0)
         }
 
