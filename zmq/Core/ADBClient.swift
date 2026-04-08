@@ -286,7 +286,8 @@ class ADBClient: ObservableObject {
             addr.sin_family = sa_family_t(AF_INET)
             addr.sin_port = port.bigEndian
 
-            guard let hostAddr = host.withCString({ inet_addr($0) }), hostAddr != UInt32.max else {
+            let hostAddr = host.withCString { inet_addr($0) }
+            guard hostAddr != UInt32.max else {
                 self.onLog?("[错误] 无效的IP地址")
                 completion(false, "无效的IP地址")
                 return
