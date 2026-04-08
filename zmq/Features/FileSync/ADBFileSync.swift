@@ -31,7 +31,7 @@ class ADBFileSync {
             return []
         }
 
-        var pathData = path.data(using: .utf8) ?? Data()
+        var pathData = (path + "\0").data(using: .utf8) ?? Data()
         let header = ADBProtocol.packSyncHeader(id: ADBSyncCommand.LIST, size: UInt32(pathData.count))
         client.writeChannel(channel, data: header + pathData)
         Logger.info("已发送LIST命令", category: "ADBFileSync")
@@ -63,23 +63,34 @@ class ADBFileSync {
                 let size = buffer.readLittleEndianUInt32(at: 8)
                 let time = buffer.readLittleEndianUInt32(at: 12)
 
-                if buffer.count >= 17 {
-                    let nameData = buffer[16...]
-                    if let nullIndex = nameData.firstIndex(of: 0) {
-                        let actualNullIndex = 16 + nullIndex
-                        let nameStr = String(data: buffer[16..<actualNullIndex], encoding: .utf8) ?? ""
-                        let entry = FileInfo(
-                            name: nameStr,
-                            path: path.hasSuffix("/") ? "\(path)\(nameStr)" : "\(path)/\(nameStr)",
-                            mode: mode,
-                            size: UInt64(size),
-                            modifiedTime: Date(timeIntervalSince1970: TimeInterval(time))
-                        )
-                        entries.append(entry)
-                        buffer = buffer.advanced(by: actualNullIndex + 1)
-                    } else {
+                let nameStartIndex = 16
+                var nameEndIndex: Int?
+
+                for i in nameStartIndex..<buffer.count {
+                    if buffer[i] == 0 {
+                        nameEndIndex = i
                         break
                     }
+                }
+
+                guard let endIndex = nameEndIndex else {
+                    break
+                }
+
+                let nameLength = endIndex - nameStartIndex
+                let entrySize = 16 + nameLength + 1
+
+                if buffer.count >= entrySize {
+                    let nameStr = String(data: buffer[nameStartIndex..<endIndex], encoding: .utf8) ?? ""
+                    let entry = FileInfo(
+                        name: nameStr,
+                        path: path.hasSuffix("/") ? "\(path)\(nameStr)" : "\(path)/\(nameStr)",
+                        mode: mode,
+                        size: UInt64(size),
+                        modifiedTime: Date(timeIntervalSince1970: TimeInterval(time))
+                    )
+                    entries.append(entry)
+                    buffer = buffer.advanced(by: entrySize)
                 } else {
                     break
                 }
@@ -147,7 +158,7 @@ class ADBFileSync {
             return false
         }
 
-        var pathData = remotePath.data(using: .utf8) ?? Data()
+        var pathData = (remotePath + "\0").data(using: .utf8) ?? Data()
         let recvHeader = ADBProtocol.packSyncHeader(id: ADBSyncCommand.RECV, size: UInt32(pathData.count))
         client.writeChannel(channel, data: recvHeader + pathData)
 
