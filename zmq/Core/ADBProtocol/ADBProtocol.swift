@@ -40,7 +40,7 @@ enum ADBProtocol {
     }
 
     static func packOPEN(localId: UInt32, destination: String) -> Data {
-        packMessage(command: ADBCommand.OPEN, arg0: localId, arg1: 0, string: destination)
+        packMessage(command: ADBCommand.OPEN, arg0: localId, arg1: 0, string: destination + "\0")
     }
 
     static func packOKAY(localId: UInt32, remoteId: UInt32) -> Data {

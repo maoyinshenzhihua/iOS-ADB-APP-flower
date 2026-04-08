@@ -17,18 +17,18 @@ class ADBFileTransfer {
         return fileSync.pull(remotePath: remotePath, localURL: localURL, progress: progress)
     }
 
-    func deleteFile(path: String) -> Bool {
-        let result = shell.executeCommand("rm -rf '\(path)'")
+    func deleteFile(path: String) async -> Bool {
+        let result = await shell.executeCommand("rm -rf '\(path)'")
         return result?.isEmpty ?? true
     }
 
-    func createDirectory(path: String) -> Bool {
-        let result = shell.executeCommand("mkdir -p '\(path)'")
+    func createDirectory(path: String) async -> Bool {
+        let result = await shell.executeCommand("mkdir -p '\(path)'")
         return result?.isEmpty ?? true
     }
 
-    func rename(oldPath: String, newPath: String) -> Bool {
-        let result = shell.executeCommand("mv '\(oldPath)' '\(newPath)'")
+    func rename(oldPath: String, newPath: String) async -> Bool {
+        let result = await shell.executeCommand("mv '\(oldPath)' '\(newPath)'")
         return result?.isEmpty ?? true
     }
 

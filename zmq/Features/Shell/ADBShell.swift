@@ -9,9 +9,12 @@ class ADBShell {
 
     func executeCommand(_ command: String) async -> String? {
         var receivedData = Data()
-        let commandData = "\(command)\n".data(using: .utf8)!
+        let destination = "shell: \(command)"
 
-        let channel = client.openChannel(destination: "shell: \(command)") { data in
+        Logger.info("执行shell命令: \(destination)", category: "ADBShell")
+
+        let channel = client.openChannel(destination: destination) { data in
+            Logger.info("收到shell数据: \(data.count) 字节", category: "ADBShell")
             receivedData.append(data)
         }
 
@@ -21,14 +24,18 @@ class ADBShell {
         }
 
         // 等待通道建立
+        Logger.info("等待shell通道打开...", category: "ADBShell")
         let opened = await channel.waitForOpen()
         if !opened {
             Logger.error("shell通道建立超时", category: "ADBShell")
             return nil
         }
+        Logger.info("shell通道已打开", category: "ADBShell")
 
-        // 等待数据接收完成（等待1秒让数据到达）
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        // 等待数据接收完成（等待2秒让数据到达）
+        try? await Task.sleep(nanoseconds: 2_000_000_000)
+
+        Logger.info("收到shell数据大小: \(receivedData.count)", category: "ADBShell")
 
         // 关闭通道
         channel.close()
