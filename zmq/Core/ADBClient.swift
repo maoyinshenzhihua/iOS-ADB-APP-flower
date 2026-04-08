@@ -278,7 +278,6 @@ class ADBClient: ObservableObject {
         onLog?("[信息] 开始无线配对 \(host):\(port) (TLS)")
 
         let pairQueue = DispatchQueue(label: "com.zmq.pairing", qos: .userInitiated)
-        var pairCompleted = false
 
         pairQueue.async { [weak self] in
             guard let self = self else { return }
@@ -304,144 +303,127 @@ class ADBClient: ObservableObject {
             CFReadStreamSetProperty(inputStream, CFStreamPropertyKey(rawValue: kCFStreamPropertySSLSettings), sslSettings as CFTypeRef)
             CFWriteStreamSetProperty(outputStream, CFStreamPropertyKey(rawValue: kCFStreamPropertySSLSettings), sslSettings as CFTypeRef)
 
-            let readDelegate = PairStreamDelegate()
-            let writeDelegate = PairStreamDelegate()
+            inputStream.open()
+            outputStream.open()
 
-            readDelegate.onOpen = {
-                self.onLog?("[信息] TLS输入流已打开")
-            }
+            var pairCompleted = false
+            let startTime = Date()
+            let timeout: TimeInterval = 30
 
-            writeDelegate.onOpen = {
-                self.onLog?("[信息] TLS输出流已打开，发送CNXN")
-                let packet = ADBProtocol.packCNXN()
-                let _ = packet.withUnsafeBytes { ptr in
-                    outputStream.write(ptr.bindMemory(to: UInt8.self).baseAddress!, maxLength: packet.count)
-                }
-                self.onLog?("[信息] 已发送配对CNXN握手")
-            }
-
-            readDelegate.onData = { data in
-                guard !pairCompleted else { return }
-                self.onLog?("[调试] 收到配对数据: \(data.map { String(format: "%02X", $0) }.joined(separator: " ").prefix(100))")
-
-                let tempBuffer = ADBDataBuffer()
-                tempBuffer.append(data)
-
-                while let message = tempBuffer.tryReadMessage() {
-                    switch message.command {
-                    case ADBCommand.CNXN:
-                        self.onLog?("[成功] 配对CNXN成功")
-                    case ADBCommand.AUTH:
-                        let authType = message.arg0
-                        self.onLog?("[调试] 配对AUTH类型: \(authType)")
-
-                        if authType == ADBAuthType.token.rawValue {
-                            self.onLog?("[信息] 收到配对TOKEN，准备验证配对码")
-
-                            if let signature = ADBAuth.signPairingCode(pairingCode) {
-                                let packet = ADBProtocol.packAUTH(type: .signature, data: signature)
-                                self.onLog?("[信息] 发送配对签名响应")
-                                let _ = packet.withUnsafeBytes { ptr in
-                                    outputStream.write(ptr.bindMemory(to: UInt8.self).baseAddress!, maxLength: packet.count)
-                                }
-                            } else {
-                                self.onLog?("[错误] 配对码签名失败")
-                                pairCompleted = true
-                                inputStream.close()
-                                outputStream.close()
-                                completion(false, "配对码签名失败")
-                            }
-                        } else if authType == ADBAuthType.signature.rawValue {
-                            self.onLog?("[成功] 配对成功！")
-                            pairCompleted = true
-                            inputStream.close()
-                            outputStream.close()
-                            completion(true, "配对成功")
-                        } else {
-                            if let keyPair = self.keyManager.loadOrCreateKeyPair(),
-                               let pemString = ADBAuth.exportPublicKeyPEM(keyPair.publicKey),
-                               var pemData = pemString.data(using: String.Encoding.utf8) {
-                                pemData.append(0)
-                                let packet = ADBProtocol.packAUTH(type: .rsaPublicKey, data: pemData)
-                                self.onLog?("[信息] 发送配对公钥")
-                                let _ = packet.withUnsafeBytes { ptr in
-                                    outputStream.write(ptr.bindMemory(to: UInt8.self).baseAddress!, maxLength: packet.count)
-                                }
-                            }
-                        }
-                    default:
-                        self.onLog?("[调试] 收到其他命令: \(String(format: "0x%08X", message.command))")
+            func sendData(_ data: Data) {
+                data.withUnsafeBytes { ptr in
+                    if let baseAddr = ptr.bindMemory(to: UInt8.self).baseAddress {
+                        outputStream.write(baseAddr, maxLength: data.count)
                     }
                 }
             }
 
-            readDelegate.onError = { error in
-                guard !pairCompleted else { return }
-                pairCompleted = true
-                self.onLog?("[错误] TLS流错误: \(error.localizedDescription)")
-                completion(false, error.localizedDescription)
+            while !pairCompleted && Date().timeIntervalSince(startTime) < timeout {
+                Thread.sleep(forTimeInterval: 0.05)
+                RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.01))
+
+                if inputStream.streamStatus == .open || inputStream.hasBytesAvailable {
+                    if inputStream.hasBytesAvailable {
+                        var buffer = [UInt8](repeating: 0, count: 65536)
+                        let bytesRead = inputStream.read(&buffer, maxLength: buffer.count)
+                        if bytesRead > 0 {
+                            let receivedData = Data(buffer[0..<bytesRead])
+                            self.onLog?("[调试] 收到配对数据(\(bytesRead)字节): \(receivedData.map { String(format: "%02X", $0) }.joined(separator: " ").prefix(100))")
+
+                            let tempBuffer = ADBDataBuffer()
+                            tempBuffer.append(receivedData)
+
+                            while let message = tempBuffer.tryReadMessage() {
+                                switch message.command {
+                                case ADBCommand.CNXN:
+                                    self.onLog?("[成功] 配对CNXN成功")
+                                    pairCompleted = true
+                                    completion(true, "配对成功")
+                                case ADBCommand.AUTH:
+                                    let authType = message.arg0
+                                    self.onLog?("[调试] 配对AUTH类型: \(authType)")
+
+                                    if authType == ADBAuthType.token.rawValue {
+                                        self.onLog?("[信息] 收到配对TOKEN，准备验证配对码")
+
+                                        if let signature = ADBAuth.signPairingCode(pairingCode) {
+                                            let packet = ADBProtocol.packAUTH(type: .signature, data: signature)
+                                            self.onLog?("[信息] 发送配对签名响应")
+                                            sendData(packet)
+                                        } else {
+                                            self.onLog?("[错误] 配对码签名失败")
+                                            pairCompleted = true
+                                            completion(false, "配对码签名失败")
+                                        }
+                                    } else if authType == ADBAuthType.signature.rawValue {
+                                        self.onLog?("[成功] 配对成功！")
+                                        pairCompleted = true
+                                        completion(true, "配对成功")
+                                    } else {
+                                        if let keyPair = self.keyManager.loadOrCreateKeyPair(),
+                                           let pemString = ADBAuth.exportPublicKeyPEM(keyPair.publicKey),
+                                           var pemData = pemString.data(using: String.Encoding.utf8) {
+                                            pemData.append(0)
+                                            let packet = ADBProtocol.packAUTH(type: .rsaPublicKey, data: pemData)
+                                            self.onLog?("[信息] 发送配对公钥")
+                                            sendData(packet)
+                                        }
+                                    }
+                                default:
+                                    self.onLog?("[调试] 收到其他命令: \(String(format: "0x%08X", message.command))")
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if outputStream.streamStatus == .open && !outputStream.hasSpaceAvailable {
+                    continue
+                }
+
+                if outputStream.streamStatus == .open && (inputStream.streamStatus == .open || inputStream.streamStatus == .reading) {
+                    if !pairCompleted {
+                        self.onLog?("[信息] TLS连接就绪，发送CNXN")
+                        let packet = ADBProtocol.packCNXN()
+                        sendData(packet)
+                        self.onLog?("[信息] 已发送配对CNXN握手 (\(packet.count)字节)")
+                        Thread.sleep(forTimeInterval: 0.2)
+                    }
+                }
+
+                if inputStream.streamError != nil {
+                    if let err = inputStream.streamError {
+                        self.onLog?("[错误] 输入流错误: \(err.localizedDescription)")
+                    }
+                    pairCompleted = true
+                    completion(false, "输入流错误")
+                    break
+                }
+
+                if outputStream.streamError != nil {
+                    if let err = outputStream.streamError {
+                        self.onLog?("[错误] 输出流错误: \(err.localizedDescription)")
+                    }
+                    pairCompleted = true
+                    completion(false, "输出流错误")
+                    break
+                }
+
+                if inputStream.streamStatus == .atEnd || outputStream.streamStatus == .atEnd || inputStream.streamStatus == .closed || outputStream.streamStatus == .closed {
+                    self.onLog?("[信息] 流已关闭/结束")
+                    pairCompleted = true
+                    completion(false, "连接关闭")
+                    break
+                }
             }
 
-            readDelegate.onEnd = {
-                guard !pairCompleted else { return }
-                pairCompleted = true
-                self.onLog?("[信息] TLS流结束")
-                completion(false, "连接关闭")
-            }
-
-            inputStream.delegate = readDelegate
-            outputStream.delegate = writeDelegate
-
-            let runLoop = RunLoop.current
-            inputStream.schedule(in: runLoop, forMode: .default)
-            outputStream.schedule(in: runLoop, forMode: .default)
-
-            inputStream.open()
-            outputStream.open()
-
-            pairQueue.asyncAfter(deadline: .now() + 30) {
-                guard !pairCompleted else { return }
-                pairCompleted = true
-                inputStream.close()
-                outputStream.close()
+            if !pairCompleted {
                 self.onLog?("[错误] 配对超时")
                 completion(false, "配对超时")
             }
 
-            runLoop.run(until: Date(timeIntervalSinceNow: 35))
-        }
-    }
-}
-
-private class PairStreamDelegate: NSObject, StreamDelegate {
-    static var readKey: UInt8 = 0
-    static var writeKey: UInt8 = 0
-
-    var onOpen: (() -> Void)?
-    var onData: ((Data) -> Void)?
-    var onError: ((Error) -> Void)?
-    var onEnd: (() -> Void)?
-
-    func stream(_ stream: Stream, handle eventCode: Stream.Event) {
-        switch eventCode {
-        case .openCompleted:
-            onOpen?()
-        case .hasBytesAvailable:
-            if let input = stream as? InputStream {
-                var buffer = [UInt8](repeating: 0, count: 65536)
-                let bytesRead = input.read(&buffer, maxLength: buffer.count)
-                if bytesRead > 0 {
-                    onData?(Data(buffer[0..<bytesRead]))
-                }
-            }
-        case .errorOccurred:
-            if let error = stream.streamError {
-                onError?(error)
-            }
-        case .endEncountered:
-            onEnd?()
-        default:
-            break
+            inputStream.close()
+            outputStream.close()
         }
     }
 }
