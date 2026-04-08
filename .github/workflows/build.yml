@@ -32,6 +32,12 @@ jobs:
       - name: Create IPA
         run: |
           cd build/Build/Products/Debug-iphoneos
+          echo "=== App bundle contents ==="
+          ls -la *.app/
+          echo "=== Frameworks ==="
+          ls -la *.app/Frameworks/ 2>/dev/null || echo "No Frameworks directory"
+          echo "=== SwiftSupport ==="
+          ls -la *.app/SwiftSupport/ 2>/dev/null || echo "No SwiftSupport directory"
           mkdir -p Payload
           cp -r *.app Payload/
           cd Payload
