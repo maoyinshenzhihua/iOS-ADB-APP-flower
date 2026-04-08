@@ -14,6 +14,9 @@ class ADBChannel {
     var destination: String = ""
     var onDataReceived: ((Data) -> Void)?
     var onClosed: (() -> Void)?
+    var onOpenCompleted: (() -> Void)?
+
+    private var openContinuations: [CheckedContinuation<Bool, Never>] = []
 
     init(localId: UInt32) {
         self.localId = localId
@@ -21,6 +24,31 @@ class ADBChannel {
 
     var isOpen: Bool { state == .open }
     var isClosed: Bool { state == .closed }
+
+    func waitForOpen() async -> Bool {
+        if state == .open {
+            return true
+        }
+        return await withCheckedContinuation { continuation in
+            openContinuations.append(continuation)
+        }
+    }
+
+    func notifyOpenCompleted() {
+        state = .open
+        for continuation in openContinuations {
+            continuation.resume(returning: true)
+        }
+        openContinuations.removeAll()
+        onOpenCompleted?()
+    }
+
+    func close() {
+        if state != .closed {
+            state = .closed
+            onClosed?()
+        }
+    }
 }
 
 class ADBChannelManager {

@@ -247,7 +247,7 @@ class ADBClient: ObservableObject {
         if let channel = channelManager.getChannel(localId: localId) {
             if channel.state == .opening {
                 channel.remoteId = remoteId
-                channel.state = .open
+                channel.notifyOpenCompleted()
                 Logger.info("通道已建立: localId=\(localId), remoteId=\(remoteId)", category: "ADBClient")
             }
         }
