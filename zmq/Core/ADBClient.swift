@@ -288,8 +288,8 @@ class ADBClient: ObservableObject {
             return
         }
 
-        let inputStream = cfRead
-        let outputStream = cfWrite
+        let inputStream: InputStream = cfRead
+        let outputStream: OutputStream = cfWrite
 
         let sslSettings: [String: Any] = [
             kCFStreamSSLValidatesCertificateChain as String: kCFBooleanFalse,
@@ -358,7 +358,7 @@ class ADBClient: ObservableObject {
                     } else {
                         if let keyPair = self?.keyManager.loadOrCreateKeyPair(),
                            let pemString = ADBAuth.exportPublicKeyPEM(keyPair.publicKey),
-                           var pemData = pemString.data(using: .utf8) {
+                           var pemData = pemString.data(using: String.Encoding.utf8) {
                             pemData.append(0)
                             let packet = ADBProtocol.packAUTH(type: .rsaPublicKey, data: pemData)
                             self?.onLog?("[信息] 发送配对公钥")
