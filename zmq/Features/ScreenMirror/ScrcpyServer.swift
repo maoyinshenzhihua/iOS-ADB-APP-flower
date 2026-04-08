@@ -45,7 +45,12 @@ class ScrcpyServer {
     }
 
     func start(maxSize: UInt32 = 1920, maxFps: UInt32 = 30, bitRate: UInt32 = 8000000) async -> Bool {
-        let pushSuccess = await fileSync.push(localURL: Bundle.main.url(forResource: "scrcpy-server", withExtension: "jar")!, remotePath: "/data/local/tmp/scrcpy-server.jar", mode: "0644")
+        guard let jarURL = Bundle.main.url(forResource: "scrcpy-server", withExtension: "jar") else {
+            Logger.error("找不到scrcpy-server.jar", category: "ScrcpyServer")
+            return false
+        }
+        
+        let pushSuccess = await fileSync.push(localURL: jarURL, remotePath: "/data/local/tmp/scrcpy-server.jar", mode: "0644")
         guard pushSuccess else {
             Logger.error("推送scrcpy-server失败", category: "ScrcpyServer")
             return false

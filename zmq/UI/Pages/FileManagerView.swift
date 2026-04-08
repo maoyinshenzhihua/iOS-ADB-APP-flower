@@ -46,17 +46,21 @@ struct FileManagerView: View {
     private var pathBreadcrumb: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 4) {
-                ForEach(pathComponents, id: \.self) { component in
+                Button("root") {
+                    navigateTo("/")
+                }
+                .foregroundColor(.primary)
+
+                ForEach(Array(pathComponents.enumerated()), id: \.offset) { index, component in
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
                     Button(component) {
-                        let idx = currentPath.components(separatedBy: "/").firstIndex(of: component) ?? 0
-                        let newPath = "/" + currentPath.components(separatedBy: "/")[1...idx].joined(separator: "/")
+                        let newPath = "/" + pathComponents[0...index].joined(separator: "/")
                         navigateTo(newPath)
                     }
-                    if component != pathComponents.last {
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
+                    .foregroundColor(.primary)
                 }
             }
             .padding(.horizontal)
@@ -69,10 +73,15 @@ struct FileManagerView: View {
     }
 
     private func navigateTo(_ path: String) {
+        var cleanPath = path
+        if cleanPath.hasSuffix("/") && cleanPath != "/" {
+            cleanPath.removeLast()
+        }
+
         if !pathHistory.contains(currentPath) {
             pathHistory.append(currentPath)
         }
-        currentPath = path
+        currentPath = cleanPath
         refreshList()
     }
 
