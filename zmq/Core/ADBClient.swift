@@ -130,6 +130,11 @@ class ADBClient: ObservableObject {
 
         while let message = dataBuffer.tryReadMessage() {
             onLog?("[调试] 读取到消息, command: \(String(format: "0x%08X", message.command))")
+            
+            // 详细的CRC调试
+            let computedCRC = CRC32.compute(data: message.data)
+            onLog?("[调试] 数据CRC: 计算值=0x\(String(format: "%08X", computedCRC)), 头部=0x\(String(format: "%08X", message.header.dataCRC32))")
+            
             guard ADBProtocol.validateMessage(message) else {
                 Logger.warning("收到无效ADB消息", category: "ADBClient")
                 onLog?("[警告] 收到无效ADB消息")
