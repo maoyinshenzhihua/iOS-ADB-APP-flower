@@ -277,84 +277,170 @@ class ADBClient: ObservableObject {
     func pairWireless(host: String, port: UInt16, pairingCode: String, completion: @escaping (Bool, String) -> Void) {
         onLog?("[信息] 开始无线配对 \(host):\(port) (TLS)")
 
-        let pairingTCPClient = TCPClient()
+        let pairQueue = DispatchQueue(label: "com.zmq.pairing", qos: .userInitiated)
 
-        pairingTCPClient.onStateChanged = { [weak self] tcpState in
-            switch tcpState {
-            case .connected:
-                self?.onLog?("[信息] 配对TLS连接成功")
-                self?.sendPairingCNXN(tcpClient: pairingTCPClient, pairingCode: pairingCode, completion: completion)
-            case .disconnected:
-                self?.onLog?("[信息] 配对连接断开")
-                completion(false, "连接断开")
-            case .failed(let error):
-                self?.onLog?("[错误] 配对连接失败: \(error.localizedDescription)")
-                completion(false, error.localizedDescription)
-            case .connecting:
-                break
+        pairQueue.async { [weak self] in
+            guard let self = self else { return }
+
+            var addr = sockaddr_in()
+            addr.sin_family = sa_family_t(AF_INET)
+            addr.sin_port = UInt16(port).bigEndian
+
+            guard let hostAddr = host.withCString({ inet_addr($0) }) else {
+                self.onLog?("[错误] 无效的IP地址")
+                completion(false, "无效的IP地址")
+                return
             }
-        }
+            addr.s_addr = hostAddr
 
-        pairingTCPClient.onDataReceived = { [weak self] data in
-            self?.handlePairingData(data, tcpClient: pairingTCPClient, pairingCode: pairingCode, completion: completion)
-        }
+            let sockFd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)
+            guard sockFd >= 0 else {
+                self.onLog?("[错误] 创建socket失败")
+                completion(false, "创建socket失败")
+                return
+            }
 
-        pairingTCPClient.onLog = { [weak self] msg in
-            self?.onLog?("[配对] \(msg)")
-        }
+            var optval: Int32 = 1
+            setsockopt(sockFd, SOL_SOCKET, SO_REUSEADDR, &optVal, socklen_t(MemoryLayout<Int32>.size))
 
-        pairingTCPClient.connect(host: host, port: port, useTLS: true)
-    }
+            let connectResult = withUnsafePointer(to: &addr) { ptr in
+                ptr.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockPtr in
+                    connect(sockFd, sockPtr, socklen_t(MemoryLayout<sockaddr_in>.size))
+                }
+            }
 
-    private func sendPairingCNXN(tcpClient: TCPClient, pairingCode: String, completion: @escaping (Bool, String) -> Void) {
-        let packet = ADBProtocol.packCNXN()
-        onLog?("[信息] 发送配对CNXN握手 (\(packet.count)字节)")
-        tcpClient.send(data: packet)
-    }
+            if connectResult < 0 {
+                self.onLog?("[错误] 连接失败: \(String(cString: strerror(errno)))")
+                close(sockFd)
+                completion(false, "连接失败")
+                return
+            }
 
-    private func handlePairingData(_ data: Data, tcpClient: TCPClient, pairingCode: String, completion: @escaping (Bool, String) -> Void) {
-        onLog?("[调试] 收到配对数据(\(data.count)字节): \(data.map { String(format: "%02X", $0) }.joined(separator: " ").prefix(100))")
+            self.onLog?("[信息] TCP连接成功，建立SSL上下文")
 
-        let tempBuffer = ADBDataBuffer()
-        tempBuffer.append(data)
+            guard let sslCtx = SSLCreateContext(kCFAllocatorDefault, .clientSide, nil) else {
+                self.onLog?("[错误] 创建SSL上下文失败")
+                close(sockFd)
+                completion(false, "创建SSL上下文失败")
+                return
+            }
 
-        while let message = tempBuffer.tryReadMessage() {
-            switch message.command {
-            case ADBCommand.CNXN:
-                onLog?("[成功] 配对CNXN成功")
-                completion(true, "配对成功")
-            case ADBCommand.AUTH:
-                let authType = message.arg0
-                onLog?("[调试] 配对AUTH类型: \(authType)")
+            SSLSetSessionOption(sslCtx, .breakOnServerAuth, true)
 
-                if authType == ADBAuthType.token.rawValue {
-                    onLog?("[信息] 收到配对TOKEN，准备验证配对码")
+            guard let sslConn = SSLCreateConnection(sslCtx, .clientSide, false) else {
+                self.onLog?("[错误] 创建SSL连接失败")
+                close(sockFd)
+                completion(false, "创建SSL连接失败")
+                return
+            }
 
-                    if let signature = ADBAuth.signPairingCode(pairingCode) {
-                        let packet = ADBProtocol.packAUTH(type: .signature, data: signature)
-                        onLog?("[信息] 发送配对签名响应 (\(signature.count)字节)")
-                        tcpClient.send(data: packet)
-                    } else {
-                        onLog?("[错误] 配对码签名失败")
-                        completion(false, "配对码签名失败")
-                    }
-                } else if authType == ADBAuthType.signature.rawValue {
-                    onLog?("[成功] 配对成功！")
-                    tcpClient.disconnect()
-                    completion(true, "配对成功")
-                } else {
-                    if let keyPair = keyManager.loadOrCreateKeyPair(),
-                       let pemString = ADBAuth.exportPublicKeyPEM(keyPair.publicKey),
-                       var pemData = pemString.data(using: String.Encoding.utf8) {
-                        pemData.append(0)
-                        let packet = ADBProtocol.packAUTH(type: .rsaPublicKey, data: pemData)
-                        onLog?("[信息] 发送配对公钥")
-                        tcpClient.send(data: packet)
+            SSLSetIOFuncs(sslConn, { connectionRef, data, dataLength in
+                let fd = SSLGetConnectionFD(connectionRef)
+                let bytesRead = read(fd, data, Int(dataLength))
+                return Int32(bytesRead)
+            }, { connectionRef, data, dataLength in
+                let fd = SSLGetConnectionFD(connectionRef)
+                let bytesWritten = write(fd, data, Int(dataLength))
+                return Int32(bytesWritten)
+            })
+
+            SSLSetConnection(sslConn, UnsafeMutableRawPointer(bitPattern: sockFd))
+
+            let handshakeResult = SSLHandshake(sslConn)
+            if handshakeResult != errSecSuccess {
+                let sslError = SSLErrorCode(sslConn)
+                self.onLog?("[错误] SSL握手失败: \(sslError)")
+                close(sockFd)
+                completion(false, "SSL握手失败: \(sslError)")
+                return
+            }
+
+            self.onLog?("[信息] SSL握手成功，发送CNXN")
+
+            func sendRaw(_ data: Data) -> Bool {
+                var processed: size_t = 0
+                let result = data.withUnsafeBytes { ptr in
+                    ptr.baseAddress.map { baseAddr in
+                        SSLWrite(sslConn, baseAddr, data.count, &processed)
+                    } ?? errSecParam
+                }
+                return result == errSecSuccess
+            }
+
+            func recvRaw() -> Data? {
+                var buffer = [UInt8](repeating: 0, count: 65536)
+                var processed: size_t = 0
+                let result = SSLRead(sslConn, &buffer, buffer.count, &processed)
+                if result == errSecSuccess && processed > 0 {
+                    return Data(buffer[0..<processed])
+                }
+                return nil
+            }
+
+            let cnxnPacket = ADBProtocol.packCNXN()
+            _ = sendRaw(cnxnPacket)
+            self.onLog?("[信息] 已发送CNXN (\(cnxnPacket.count)字节)")
+
+            let startTime = Date()
+            while Date().timeIntervalSince(startTime) < 30 {
+                Thread.sleep(forTimeInterval: 0.05)
+
+                if let data = recvRaw() {
+                    self.onLog?("[调试] 收到数据(\(data.count)字节): \(data.map { String(format: "%02X", $0) }.joined(separator: " ").prefix(100))")
+
+                    let tempBuffer = ADBDataBuffer()
+                    tempBuffer.append(data)
+
+                    while let message = tempBuffer.tryReadMessage() {
+                        switch message.command {
+                        case ADBCommand.CNXN:
+                            self.onLog?("[成功] 配对CNXN成功")
+                            SSLClose(sslConn)
+                            close(sockFd)
+                            completion(true, "配对成功")
+                            return
+                        case ADBCommand.AUTH:
+                            let authType = message.arg0
+                            self.onLog?("[调试] AUTH类型: \(authType)")
+
+                            if authType == ADBAuthType.token.rawValue {
+                                self.onLog?("[信息] 收到TOKEN，签名配对码")
+                                if let signature = ADBAuth.signPairingCode(pairingCode) {
+                                    let packet = ADBProtocol.packAUTH(type: .signature, data: signature)
+                                    _ = sendRaw(packet)
+                                    self.onLog?("[信息] 发送签名响应")
+                                } else {
+                                    SSLClose(sslConn)
+                                    close(sockFd)
+                                    completion(false, "签名失败")
+                                    return
+                                }
+                            } else if authType == ADBAuthType.signature.rawValue {
+                                self.onLog?("[成功] 配对成功！")
+                                SSLClose(sslConn)
+                                close(sockFd)
+                                completion(true, "配对成功")
+                                return
+                            } else {
+                                if let keyPair = self.keyManager.loadOrCreateKeyPair(),
+                                   let pemStr = ADBAuth.exportPublicKeyPEM(keyPair.publicKey),
+                                   var pemData = pemStr.data(using: String.Encoding.utf8) {
+                                    pemData.append(0)
+                                    let packet = ADBProtocol.packAUTH(type: .rsaPublicKey, data: pemData)
+                                    _ = sendRaw(packet)
+                                    self.onLog?("[信息] 发送公钥")
+                                }
+                            }
+                        default:
+                            self.onLog?("[调试] 其他命令: \(String(format: "0x%08X", message.command))")
+                        }
                     }
                 }
-            default:
-                onLog?("[调试] 收到其他命令: \(String(format: "0x%08X", message.command))")
             }
+
+            self.onLog?("[错误] 配对超时")
+            SSLClose(sslConn)
+            close(sockFd)
+            completion(false, "配对超时")
         }
     }
-}
