@@ -80,19 +80,23 @@ class TCPClient {
     func send(data: Data) {
         guard let connection = connection, isConnected else {
             Logger.error("发送失败：未连接", category: "TCPClient")
+            onLog?("[错误] 发送失败：未连接")
             return
         }
         
         // 打印发送的十六进制数据
         let hexString = data.map { String(format: "%02X", $0) }.joined(separator: " ")
         Logger.info("发送 \(data.count) 字节: \(hexString.prefix(100))...", category: "TCPClient")
+        onLog?("发送 \(data.count) 字节: \(hexString.prefix(200))")
 
         connection.send(content: data, completion: .contentProcessed { [weak self] error in
             if let error = error {
                 Logger.error("发送数据失败: \(error)", category: "TCPClient")
+                self?.onLog?("[错误] 发送失败: \(error.localizedDescription)")
                 self?.updateState(.failed(error))
             } else {
                 Logger.info("发送完成", category: "TCPClient")
+                self?.onLog?("发送完成")
             }
         })
     }

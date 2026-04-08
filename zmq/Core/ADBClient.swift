@@ -119,6 +119,7 @@ class ADBClient: ObservableObject {
         authRetries = 0
         let packet = ADBProtocol.packCNXN()
         onLog?("[信息] 发送CNXN握手")
+        onLog?("CNXN数据: \(packet.map { String(format: "%02X", $0) }.joined(separator: " "))")
         tcpClient.send(data: packet)
     }
 
