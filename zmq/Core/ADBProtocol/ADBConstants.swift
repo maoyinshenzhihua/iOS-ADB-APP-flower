@@ -37,6 +37,8 @@ let ADB_FEATURES = "host::features=cmd,shell_v2,ls_v2,stat_v2,fixed_push_mkdir,s
 
 let ADB_SYNC_MAX_BLOCK_SIZE: UInt32 = 65536
 
+let ADB_PAIRING_PORT: UInt16 = 5555
+
 enum ADBKeyCode: Int {
     case home = 3
     case back = 4

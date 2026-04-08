@@ -274,4 +274,83 @@ class ADBClient: ObservableObject {
         let shell = ADBShell(client: self)
         return await shell.executeCommand(command)
     }
+
+    func pairWireless(host: String, port: UInt16, pairingCode: String, completion: @escaping (Bool, String) -> Void) {
+        onLog?("[信息] 开始无线配对 \(host):\(port)")
+
+        let pairingTCPClient = TCPClient()
+
+        pairingTCPClient.onStateChanged = { [weak self] tcpState in
+            switch tcpState {
+            case .connected:
+                self?.onLog?("[信息] 配对TCP已连接")
+                self?.sendPairingCNXN(tcpClient: pairingTCPClient, host: host, port: port, pairingCode: pairingCode, completion: completion)
+            case .disconnected:
+                self?.onLog?("[信息] 配对TCP断开")
+                completion(false, "连接断开")
+            case .failed(let error):
+                self?.onLog?("[错误] 配对TCP失败: \(error.localizedDescription)")
+                completion(false, error.localizedDescription)
+            case .connecting:
+                break
+            }
+        }
+
+        pairingTCPClient.onDataReceived = { [weak self] data in
+            self?.handlePairingData(data, tcpClient: pairingTCPClient, pairingCode: pairingCode, completion: completion)
+        }
+
+        pairingTCPClient.onLog = { [weak self] msg in
+            self?.onLog?("[配对TCP] \(msg)")
+        }
+
+        pairingTCPClient.connect(host: host, port: port)
+    }
+
+    private func sendPairingCNXN(tcpClient: TCPClient, host: String, port: UInt16, pairingCode: String, completion: @escaping (Bool, String) -> Void) {
+        let packet = ADBProtocol.packCNXN()
+        onLog?("[信息] 发送配对CNXN握手")
+        tcpClient.send(data: packet)
+    }
+
+    private func handlePairingData(_ data: Data, tcpClient: TCPClient, pairingCode: String, completion: @escaping (Bool, String) -> Void) {
+        onLog?("[调试] 收到配对数据: \(data.map { String(format: "%02X", $0) }.joined(separator: " ").prefix(100))")
+
+        let tempBuffer = ADBDataBuffer()
+        tempBuffer.append(data)
+
+        guard let message = tempBuffer.tryReadMessage() else {
+            return
+        }
+
+        switch message.command {
+        case ADBCommand.CNXN:
+            onLog?("[成功] 配对CNXN成功")
+        case ADBCommand.AUTH:
+            let authType = message.arg0
+            onLog?("[调试] 配对AUTH类型: \(authType)")
+
+            if authType == ADBAuthType.token.rawValue {
+                let tokenData = message.data
+                onLog?("[信息] 收到配对TOKEN，准备验证配对码")
+
+                if let signature = ADBAuth.signPairingCode(pairingCode) {
+                    let packet = ADBProtocol.packAUTH(type: .signature, data: signature)
+                    onLog?("[信息] 发送配对签名响应")
+                    tcpClient.send(data: packet)
+                } else {
+                    onLog?("[错误] 配对码签名失败")
+                    completion(false, "配对码签名失败")
+                }
+            } else if authType == ADBAuthType.signature.rawValue {
+                onLog?("[成功] 配对成功！")
+                tcpClient.disconnect()
+                completion(true, "配对成功")
+            } else {
+                onLog?("[警告] 收到未知配对AUTH类型")
+            }
+        default:
+            onLog?("[调试] 收到其他命令: \(String(format: "0x%08X", message.command))")
+        }
+    }
 }

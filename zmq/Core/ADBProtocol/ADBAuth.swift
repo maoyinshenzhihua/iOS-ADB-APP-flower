@@ -1,5 +1,6 @@
 import Foundation
 import Security
+import CommonCrypto
 
 enum ADBAuth {
 
@@ -74,5 +75,38 @@ enum ADBAuth {
             kSecAttrApplicationTag as String: "com.zmq.adb.publickey".data(using: .utf8)!
         ]
         SecItemDelete(deleteQuery2 as CFDictionary)
+    }
+
+    static func signPairingCode(_ pairingCode: String) -> Data? {
+        guard let keyPair = ADBKeyManager().loadOrCreateKeyPair() else {
+            Logger.error("无法加载密钥对用于配对码签名", category: "ADBAuth")
+            return nil
+        }
+
+        let codeData = pairingCode.data(using: .utf8) ?? Data()
+        let hashedData = sha256(codeData)
+
+        var error: Unmanaged<CFError>?
+        guard let signature = SecKeyCreateSignature(
+            keyPair.privateKey,
+            .rsaSignatureRaw,
+            hashedData as CFData,
+            &error
+        ) else {
+            if let err = error?.takeRetainedValue() {
+                Logger.error("配对码签名失败: \(err)", category: "ADBAuth")
+            }
+            return nil
+        }
+
+        return signature as Data
+    }
+
+    private static func sha256(_ data: Data) -> Data {
+        var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        data.withUnsafeBytes { bytes in
+            _ = CC_SHA256(bytes.baseAddress, CC_LONG(data.count), &hash)
+        }
+        return Data(hash)
     }
 }

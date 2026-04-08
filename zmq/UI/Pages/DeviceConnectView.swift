@@ -9,6 +9,11 @@ struct DeviceConnectView: View {
     @State private var discoveredDevices: [(String, String)] = []
     @State private var connectionLog: [String] = []
     @State private var showLog = false
+    @State private var pairingHost = ""
+    @State private var pairingPort = "5555"
+    @State private var pairingCode = ""
+    @State private var isPairing = false
+    @State private var pairingResult: String = ""
 
     private let scanner = DeviceScanner()
 
@@ -83,6 +88,39 @@ struct DeviceConnectView: View {
                                 Image(systemName: "chevron.right")
                             }
                         }
+                    }
+                }
+
+                Section(header: Text("无线配对 (安卓11+)")) {
+                    HStack {
+                        TextField("IP地址", text: $pairingHost)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                            .keyboardType(.decimalPad)
+
+                        TextField("端口", text: $pairingPort)
+                            .frame(width: 70)
+                            .keyboardType(.numberPad)
+                    }
+
+                    HStack {
+                        TextField("配对码", text: $pairingCode)
+                            .keyboardType(.numberPad)
+
+                        Button(action: isPairing ? cancelPairing : startPairing) {
+                            if isPairing {
+                                ProgressView()
+                            } else {
+                                Text("配对")
+                            }
+                        }
+                        .disabled(pairingHost.isEmpty || pairingCode.isEmpty || isPairing)
+                    }
+
+                    if !pairingResult.isEmpty {
+                        Text(pairingResult)
+                            .font(.caption)
+                            .foregroundColor(pairingResult.contains("成功") ? .green : .orange)
                     }
                 }
 
@@ -248,9 +286,33 @@ struct DeviceConnectView: View {
     
     private func stopScan() {
         isScanning = false
-        // 这里可以添加停止扫描的逻辑
     }
-    
+
+    private func startPairing() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+
+        guard let portNum = UInt16(pairingPort) else { return }
+        isPairing = true
+        pairingResult = ""
+
+        adbClient.pairWireless(host: pairingHost, port: portNum, pairingCode: pairingCode) { [self] success, message in
+            DispatchQueue.main.async {
+                isPairing = false
+                pairingResult = message
+                if success {
+                    addLog("[成功] 配对成功！现在可以使用上面的 IP:端口 连接设备")
+                } else {
+                    addLog("[错误] 配对失败: \(message)")
+                }
+            }
+        }
+    }
+
+    private func cancelPairing() {
+        isPairing = false
+        pairingResult = "配对已取消"
+    }
+
     private func addLog(_ message: String) {
         let timestamp = DateFormatter.localizedString(from: Date(), dateStyle: .none, timeStyle: .medium)
         connectionLog.append("[\(timestamp)] \(message)")
