@@ -106,13 +106,33 @@ struct ScreenMirrorView: View {
 
     private func handleTouch(at point: CGPoint) {
         let mapped = touchMapper.mapTouch(iosPoint: point)
-        scrcpyServer?.sendTouchEvent(action: 0, x: Int32(mapped.x), y: Int32(mapped.y))
+        let x = Int(mapped.x)
+        let y = Int(mapped.y)
+        
+        Task {
+            let result = await adbClient.executeShellCommand("input tap \(x) \(y)")
+            Logger.info("tap result: \(result ?? "nil")", category: "ScreenMirror")
+        }
+    }
+    
+    private func handleSwipe(from start: CGPoint, to end: CGPoint, duration: Int = 300) {
+        let mappedStart = touchMapper.mapTouch(iosPoint: start)
+        let mappedEnd = touchMapper.mapTouch(iosPoint: end)
+        let x1 = Int(mappedStart.x)
+        let y1 = Int(mappedStart.y)
+        let x2 = Int(mappedEnd.x)
+        let y2 = Int(mappedEnd.y)
+        
+        Task {
+            let result = await adbClient.executeShellCommand("input swipe \(x1) \(y1) \(x2) \(y2) \(duration)")
+            Logger.info("swipe result: \(result ?? "nil")", category: "ScreenMirror")
+        }
     }
 
     private func sendKey(_ keyCode: ADBKeyCode) {
-        let shell = ADBShell(client: adbClient)
         Task {
-            _ = await shell.executeCommand("input keyevent \(keyCode.rawValue)")
+            let result = await adbClient.executeShellCommand("input keyevent \(keyCode.rawValue)")
+            Logger.info("keyevent result: \(result ?? "nil")", category: "ScreenMirror")
         }
     }
 }

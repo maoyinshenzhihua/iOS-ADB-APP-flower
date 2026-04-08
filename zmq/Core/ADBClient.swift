@@ -269,4 +269,9 @@ class ADBClient: ObservableObject {
         let localId = message.arg1
         channelManager.closeChannel(localId: localId)
     }
+
+    func executeShellCommand(_ command: String) async -> String? {
+        let shell = ADBShell(client: self)
+        return await shell.executeCommand(command)
+    }
 }
