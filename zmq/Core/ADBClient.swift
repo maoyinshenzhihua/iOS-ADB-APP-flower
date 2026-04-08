@@ -433,3 +433,4 @@ class ADBClient: ObservableObject {
             completion(false, "配对超时")
         }
     }
+}
