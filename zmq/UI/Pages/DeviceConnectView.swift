@@ -6,7 +6,7 @@ struct DeviceConnectView: View {
     @State private var port = "5555"
     @State private var isScanning = false
     @State private var discoveredDevices: [(String, String)] = []
-
+    
     private let scanner = DeviceScanner()
 
     var body: some View {
@@ -24,31 +24,30 @@ struct DeviceConnectView: View {
                             .keyboardType(.numberPad)
                     }
 
-                    Button(action: connectToDevice) {
+                    Button(action: adbClient.isConnected ? adbClient.disconnect : connectToDevice) {
                         HStack {
                             Spacer()
                             if case .connecting = adbClient.state {
                                 ProgressView()
                             } else {
-                                Text("连接")
+                                Text(adbClient.isConnected ? "断开连接" : "连接")
                             }
                             Spacer()
                         }
                     }
-                    .disabled(host.isEmpty || isConnecting)
+                    .disabled((host.isEmpty && !adbClient.isConnected) || isConnecting)
                 }
 
                 Section(header: Text("局域网扫描")) {
-                    Button(action: startScan) {
+                    Button(action: isScanning ? stopScan : startScan) {
                         HStack {
-                            Text(isScanning ? "扫描中..." : "扫描设备")
+                            Text(isScanning ? "停止扫描" : "扫描设备")
                             if isScanning {
                                 Spacer()
                                 ProgressView()
                             }
                         }
                     }
-                    .disabled(isScanning)
 
                     ForEach(discoveredDevices, id: \.0) { ip, name in
                         Button(action: { connectTo(ip: ip) }) {
@@ -76,6 +75,37 @@ struct DeviceConnectView: View {
                     }
 
                     if adbClient.isConnected {
+                        // 连接详细信息
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("连接地址:")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("\(host):\(port)")
+                                    .font(.caption)
+                            }
+                            
+                            HStack {
+                                Text("连接时间:")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("刚刚")
+                                    .font(.caption)
+                            }
+                            
+                            HStack {
+                                Text("ADB 版本:")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("1.0.41")
+                                    .font(.caption)
+                            }
+                        }
+                        .padding(.vertical, 8)
+                        
                         Button("断开连接", role: .destructive) {
                             adbClient.disconnect()
                         }
@@ -148,5 +178,10 @@ struct DeviceConnectView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
             self.isScanning = false
         }
+    }
+    
+    private func stopScan() {
+        isScanning = false
+        // 这里可以添加停止扫描的逻辑
     }
 }
