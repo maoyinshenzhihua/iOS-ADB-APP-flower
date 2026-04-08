@@ -18,6 +18,10 @@ jobs:
           xcode-select -p
           xcodebuild -version
 
+      - name: Clear derived data
+        run: |
+          rm -rf ~/Library/Developer/Xcode/DerivedData/*
+
       - name: Build
         run: |
           xcodebuild build \
