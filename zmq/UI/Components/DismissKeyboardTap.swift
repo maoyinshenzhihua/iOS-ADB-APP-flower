@@ -9,6 +9,10 @@ struct DismissKeyboardTap: UIViewRepresentable {
         return view
     }
 
+    func updateUIView(_ uiView: UIView, context: Context) {
+        // No update needed
+    }
+
     func makeCoordinator() -> Coordinator {
         Coordinator()
     }
