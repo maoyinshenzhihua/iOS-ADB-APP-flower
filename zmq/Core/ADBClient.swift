@@ -351,7 +351,7 @@ class ADBClient: ObservableObject {
             SSLSetConnection(sslCtx, UnsafeMutableRawPointer(bitPattern: UInt(sockFd)))
 
             var handshakeResult = SSLHandshake(sslCtx)
-            while handshakeResult == errSSLServerAuthCompleted {
+            while handshakeResult == -9841 {
                 self.onLog?("[信息] 服务器认证完成，继续握手")
                 handshakeResult = SSLHandshake(sslCtx)
             }
