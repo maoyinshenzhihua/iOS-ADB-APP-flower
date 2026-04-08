@@ -328,9 +328,9 @@ class ADBClient: ObservableObject {
 
             SSLSetSessionOption(sslCtx, .breakOnServerAuth, true)
 
-            let fd = sockFd
             SSLSetIOFuncs(sslCtx,
-                          { _, data, dataLength in
+                          { connection, data, dataLength in
+                              let fd = Int32(bitPattern: UInt(UInt(bitPattern: connection)))
                               let bytesRead = Darwin.read(fd, data, dataLength.pointee)
                               if bytesRead >= 0 {
                                   dataLength.pointee = bytesRead
@@ -338,7 +338,8 @@ class ADBClient: ObservableObject {
                               }
                               return OSStatus(errno)
                           },
-                          { _, data, dataLength in
+                          { connection, data, dataLength in
+                              let fd = Int32(bitPattern: UInt(UInt(bitPattern: connection)))
                               let bytesWritten = Darwin.write(fd, data, dataLength.pointee)
                               if bytesWritten >= 0 {
                                   dataLength.pointee = bytesWritten
@@ -347,7 +348,7 @@ class ADBClient: ObservableObject {
                               return OSStatus(errno)
                           })
 
-            SSLSetConnection(sslCtx, UnsafeMutableRawPointer(bitPattern: UInt(fd)))
+            SSLSetConnection(sslCtx, UnsafeMutableRawPointer(bitPattern: UInt(sockFd)))
             let handshakeResult = SSLHandshake(sslCtx)
             if handshakeResult != errSecSuccess {
                 self.onLog?("[错误] TLS握手失败")
