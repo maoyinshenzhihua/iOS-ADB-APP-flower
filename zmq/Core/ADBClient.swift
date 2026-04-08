@@ -330,10 +330,10 @@ class ADBClient: ObservableObject {
             let fd = sockFd
             SSLSetIOFuncs(sslCtx,
                           { _, data, dataLength in
-                              OSStatus(Darwin.read(fd, data, Int(dataLength)))
+                              Int32(Darwin.read(fd, data, Int(dataLength)))
                           },
                           { _, data, dataLength in
-                              OSStatus(Darwin.write(fd, data, Int(dataLength)))
+                              Int32(Darwin.write(fd, data, Int(dataLength)))
                           })
 
             SSLSetConnection(sslCtx, UnsafeMutableRawPointer(bitPattern: fd))
