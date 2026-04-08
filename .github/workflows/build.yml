@@ -34,9 +34,7 @@ jobs:
           cd build/Build/Products/Debug-iphoneos
           mkdir -p Payload
           cp -r *.app Payload/
-          cd Payload
-          zip -r ../zmq.ipa .
-          cd ..
+          zip -r zmq.ipa Payload
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
