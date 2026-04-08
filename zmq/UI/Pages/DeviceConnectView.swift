@@ -6,7 +6,9 @@ struct DeviceConnectView: View {
     @State private var port = "5555"
     @State private var isScanning = false
     @State private var discoveredDevices: [(String, String)] = []
-    
+    @State private var connectionLog: [String] = []
+    @State private var showLog = false
+
     private let scanner = DeviceScanner()
 
     var body: some View {
@@ -128,8 +130,44 @@ struct DeviceConnectView: View {
                         }
                     }
                 }
+                
+                // 日志显示
+                if showLog && !connectionLog.isEmpty {
+                    Section(header: HStack {
+                        Text("连接日志")
+                        Spacer()
+                        Button("清空") {
+                            connectionLog.removeAll()
+                        }
+                        .font(.caption)
+                    }) {
+                        ScrollView {
+                            LazyVStack(alignment: .leading, spacing: 4) {
+                                ForEach(Array(connectionLog.enumerated()), id: \.offset) { index, line in
+                                    Text(line)
+                                        .font(.system(.caption, design: .monospaced))
+                                        .foregroundColor(logColor(for: line))
+                                        .textSelection(.enabled)
+                                }
+                            }
+                        }
+                        .frame(maxHeight: 200)
+                    }
+                }
             }
             .navigationTitle("设备连接")
+            .toolbar {
+                Button(showLog ? "隐藏日志" : "显示日志") {
+                    showLog.toggle()
+                }
+            }
+            .onAppear {
+                adbClient.onLog = { [weak self] message in
+                    DispatchQueue.main.async {
+                        self?.addLog(message)
+                    }
+                }
+            }
         }
     }
 
@@ -200,5 +238,23 @@ struct DeviceConnectView: View {
     private func stopScan() {
         isScanning = false
         // 这里可以添加停止扫描的逻辑
+    }
+    
+    private func addLog(_ message: String) {
+        let timestamp = DateFormatter.localizedString(from: Date(), dateStyle: .none, timeStyle: .medium)
+        connectionLog.append("[\(timestamp)] \(message)")
+    }
+    
+    private func logColor(for line: String) -> Color {
+        if line.contains("[错误]") || line.contains("失败") {
+            return .red
+        } else if line.contains("[警告]") || line.contains("失败") {
+            return .orange
+        } else if line.contains("[成功]") || line.contains("已连接") {
+            return .green
+        } else if line.contains("[信息]") || line.contains("发送") || line.contains("收到") {
+            return .blue
+        }
+        return .primary
     }
 }
