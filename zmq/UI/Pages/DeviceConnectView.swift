@@ -83,11 +83,7 @@ struct DeviceConnectView: View {
                 }
             }
             .navigationTitle("设备连接")
-            .simultaneousGesture(
-                TapGesture().onEnded { _ in
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                }
-            )
+            .dismissKeyboardOnTap()
         }
     }
 
@@ -143,6 +139,40 @@ struct DeviceConnectView: View {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
             self.isScanning = false
+        }
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func dismissKeyboardOnTap() -> some View {
+        self.modifier(DismissKeyboardModifier())
+    }
+}
+
+struct DismissKeyboardModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .background(DismissKeyboardTap())
+    }
+}
+
+struct DismissKeyboardTap: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        let tapGesture = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.handleTap))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+        return view
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+    
+    class Coordinator: NSObject {
+        @objc func handleTap() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
 }
