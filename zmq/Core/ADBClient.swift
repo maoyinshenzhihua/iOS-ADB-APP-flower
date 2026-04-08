@@ -17,6 +17,8 @@ class ADBClient: ObservableObject {
     var onLog: ((String) -> Void)?
     // TCP客户端日志回调
     var onTCPLog: ((String) -> Void)?
+    
+    private var authLoopCount = 0
 
     private let tcpClient = TCPClient()
     private let dataBuffer = ADBDataBuffer()
@@ -45,6 +47,7 @@ class ADBClient: ObservableObject {
 
     func connect(host: String, port: UInt16 = 5555) {
         guard canConnect else { return }
+        authLoopCount = 0
         onLog?("[信息] 开始连接 \(host):\(port)")
         updateState(.connecting)
         tcpClient.connect(host: host, port: port)
@@ -60,6 +63,7 @@ class ADBClient: ObservableObject {
     }
 
     func disconnect() {
+        authLoopCount = 0
         onLog?("[信息] 断开连接")
         channelManager.removeAllChannels()
         tcpClient.disconnect()
@@ -166,6 +170,15 @@ class ADBClient: ObservableObject {
     }
 
     private func handleAUTH(_ message: ADBMessage) {
+        authLoopCount += 1
+        onLog?("[调试] handleAUTH被调用, authType=\(message.arg0), 循环次数=\(authLoopCount)")
+        
+        if authLoopCount > 10 {
+            onLog?("[错误] 检测到AUTH循环超过10次，强制断开")
+            updateState(.failed("认证循环超时"))
+            return
+        }
+        
         let authType = message.arg0
 
         switch authType {
@@ -186,17 +199,20 @@ class ADBClient: ObservableObject {
     }
 
     private func handleAuthToken(_ tokenData: Data) {
+        onLog?("[调试] handleAuthToken被调用, token大小=\(tokenData.count)")
         guard let keyPair = keyManager.loadOrCreateKeyPair() else {
             onLog?("[错误] 无法获取RSA密钥对")
             sendPublicKey()
             return
         }
+        onLog?("[调试] 获取到密钥对")
 
         guard let signature = ADBAuth.signToken(token: tokenData, privateKey: keyPair.privateKey) else {
             onLog?("[错误] 签名失败，发送公钥")
             sendPublicKey()
             return
         }
+        onLog?("[调试] 签名成功, 签名大小=\(signature.count)")
 
         let packet = ADBProtocol.packAUTH(type: .signature, data: signature)
         onLog?("[信息] 发送AUTH签名，长度: \(signature.count)")
@@ -204,18 +220,22 @@ class ADBClient: ObservableObject {
     }
 
     private func sendPublicKey() {
+        onLog?("[调试] sendPublicKey被调用")
         guard let pemString = keyManager.getPublicKeyPEM() else {
             onLog?("[错误] 无法导出公钥PEM")
             updateState(.failed("认证失败：无法导出公钥"))
             return
         }
+        onLog?("[调试] 获取到公钥PEM, 长度=\(pemString.count)")
 
         guard var pemData = pemString.data(using: .utf8) else { return }
         pemData.append(0)
 
         let packet = ADBProtocol.packAUTH(type: .rsaPublicKey, data: pemData)
         onLog?("[信息] 发送AUTH公钥，长度: \(pemData.count)")
+        onLog?("[调试] 公钥内容: \(pemString.prefix(50))...")
         tcpClient.send(data: packet)
+        onLog?("[调试] sendPublicKey发送完成")
     }
 
     private func handleOKAY(_ message: ADBMessage) {
