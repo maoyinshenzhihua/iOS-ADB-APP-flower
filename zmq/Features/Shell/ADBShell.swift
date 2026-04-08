@@ -13,14 +13,14 @@ class ADBShell {
 
         Logger.info("执行shell命令: \(destination)", category: "ADBShell")
 
-        let channel = client.openChannel(destination: destination) { data in
-            Logger.info("收到shell数据: \(data.count) 字节", category: "ADBShell")
-            receivedData.append(data)
-        }
-
-        guard let channel = channel else {
+        guard let channel = client.openChannel(destination: destination) else {
             Logger.error("无法打开shell通道", category: "ADBShell")
             return nil
+        }
+
+        channel.onDataReceived = { data in
+            Logger.info("收到shell数据: \(data.count) 字节", category: "ADBShell")
+            receivedData.append(data)
         }
 
         // 等待通道建立
