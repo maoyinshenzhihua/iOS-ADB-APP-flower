@@ -16,6 +16,7 @@ class TCPClient {
     private let maxReconnectDelay: TimeInterval = 30
     private var host: String = ""
     private var port: UInt16 = 5555
+    private var useTLS = false
 
     var onStateChanged: ((TCPClientState) -> Void)?
     var onDataReceived: ((Data) -> Void)?
@@ -26,9 +27,10 @@ class TCPClient {
         return false
     }
 
-    func connect(host: String, port: UInt16 = 5555) {
+    func connect(host: String, port: UInt16 = 5555, useTLS: Bool = false) {
         self.host = host
         self.port = port
+        self.useTLS = useTLS
         self.reconnectAttempts = 0
 
         guard let endpointPort = NWEndpoint.Port(rawValue: port) else {
@@ -44,6 +46,11 @@ class TCPClient {
         let parameters = NWParameters.tcp
         parameters.defaultProtocolStack.transportProtocol = tcpOptions
 
+        if useTLS {
+            let tlsOptions = NWProtocolTLS.Options()
+            parameters.defaultProtocolStack.applicationProtocols.insert(tlsOptions, at: 0)
+        }
+
         connection = NWConnection(host: endpointHost, port: endpointPort, using: parameters)
         connection?.stateUpdateHandler = { [weak self] newState in
             self?.handleStateUpdate(newState)
@@ -51,7 +58,7 @@ class TCPClient {
         connection?.start(queue: queue)
 
         updateState(.connecting)
-        Logger.info("正在连接 \(host):\(port)", category: "TCPClient")
+        Logger.info("正在连接 \(host):\(port) TLS=\(useTLS)", category: "TCPClient")
         onLog?("正在连接 \(host):\(port)")
     }
 
@@ -64,7 +71,7 @@ class TCPClient {
 
         DispatchQueue.global().asyncAfter(deadline: .now() + delay) { [weak self] in
             guard let self = self, self.reconnectAttempts >= 0 else { return }
-            self.connect(host: self.host, port: self.port)
+            self.connect(host: self.host, port: self.port, useTLS: self.useTLS)
         }
     }
     

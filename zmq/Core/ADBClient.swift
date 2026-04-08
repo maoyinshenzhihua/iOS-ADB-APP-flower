@@ -276,7 +276,7 @@ class ADBClient: ObservableObject {
     }
 
     func pairWireless(host: String, port: UInt16, pairingCode: String, completion: @escaping (Bool, String) -> Void) {
-        onLog?("[信息] 开始无线配对 \(host):\(port)")
+        onLog?("[信息] 开始无线配对 \(host):\(port) (TLS)")
 
         let pairingTCPClient = TCPClient()
 
@@ -304,7 +304,7 @@ class ADBClient: ObservableObject {
             self?.onLog?("[配对TCP] \(msg)")
         }
 
-        pairingTCPClient.connect(host: host, port: port)
+        pairingTCPClient.connect(host: host, port: port, useTLS: true)
     }
 
     private func sendPairingCNXN(tcpClient: TCPClient, host: String, port: UInt16, pairingCode: String, completion: @escaping (Bool, String) -> Void) {
