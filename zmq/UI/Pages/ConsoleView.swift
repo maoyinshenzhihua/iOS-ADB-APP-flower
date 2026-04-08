@@ -19,67 +19,71 @@ struct ConsoleView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        LazyVStack(alignment: .leading, spacing: 2) {
-                            ForEach(Array(output.enumerated()), id: \.offset) { index, line in
-                                Text(line)
-                                    .font(.system(.caption, design: .monospaced))
-                                    .textSelection(.enabled)
-                                    .id(index)
-                            }
-                        }
-                        .padding(.horizontal, 8)
-                    }
-                    .onChange(of: output.count) { _ in
-                        proxy.scrollTo(output.count - 1, anchor: .bottom)
-                    }
-                }
-
-                Divider()
-
-                VStack(spacing: 8) {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 8) {
-                            ForEach(quickCommands, id: \.0) { name, cmd in
-                                Button(name) {
-                                    executeCommand(cmd)
+            ZStack {
+                VStack {
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            LazyVStack(alignment: .leading, spacing: 2) {
+                                ForEach(Array(output.enumerated()), id: \.offset) { index, line in
+                                    Text(line)
+                                        .font(.system(.caption, design: .monospaced))
+                                        .textSelection(.enabled)
+                                        .id(index)
                                 }
-                                .buttonStyle(.bordered)
-                                .controlSize(.small)
                             }
+                            .padding(.horizontal, 8)
+                        }
+                        .onChange(of: output.count) { _ in
+                            proxy.scrollTo(output.count - 1, anchor: .bottom)
+                        }
+                    }
+
+                    Divider()
+
+                    VStack(spacing: 8) {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(quickCommands, id: \.0) { name, cmd in
+                                    Button(name) {
+                                        executeCommand(cmd)
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .controlSize(.small)
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+
+                        HStack {
+                            TextField("输入ADB命令", text: $command)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                                .font(.system(.body, design: .monospaced))
+                                .onSubmit { executeCurrentCommand() }
+
+                            Button(action: executeCurrentCommand) {
+                                Image(systemName: "arrow.right.circle.fill")
+                            }
+                            .disabled(command.isEmpty || isExecuting)
                         }
                         .padding(.horizontal)
+                        .padding(.bottom, 4)
                     }
-
-                    HStack {
-                        TextField("输入ADB命令", text: $command)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                            .font(.system(.body, design: .monospaced))
-                            .onSubmit { executeCurrentCommand() }
-
-                        Button(action: executeCurrentCommand) {
-                            Image(systemName: "arrow.right.circle.fill")
-                        }
-                        .disabled(command.isEmpty || isExecuting)
+                }
+                .navigationTitle("控制台")
+                .toolbar {
+                    Button("清空") {
+                        output.removeAll()
                     }
-                    .padding(.horizontal)
-                    .padding(.bottom, 4)
                 }
+                
+                // 透明覆盖层，用于捕获点击事件
+                Color.clear
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    }
             }
-            .navigationTitle("控制台")
-            .toolbar {
-                Button("清空") {
-                    output.removeAll()
-                }
-            }
-            .simultaneousGesture(
-                TapGesture().onEnded { _ in
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                }
-            )
         }
     }
 

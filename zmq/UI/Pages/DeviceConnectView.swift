@@ -11,83 +11,87 @@ struct DeviceConnectView: View {
 
     var body: some View {
         NavigationView {
-            Form {
-                Section(header: Text("手动连接")) {
-                    HStack {
-                        TextField("IP地址", text: $host)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                            .keyboardType(.decimalPad)
-
-                        TextField("端口", text: $port)
-                            .frame(width: 70)
-                            .keyboardType(.numberPad)
-                    }
-
-                    Button(action: connectToDevice) {
+            ZStack {
+                Form {
+                    Section(header: Text("手动连接")) {
                         HStack {
-                            Spacer()
-                            if case .connecting = adbClient.state {
-                                ProgressView()
-                            } else {
-                                Text("连接")
-                            }
-                            Spacer()
-                        }
-                    }
-                    .disabled(host.isEmpty || isConnecting)
-                }
+                            TextField("IP地址", text: $host)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                                .keyboardType(.decimalPad)
 
-                Section(header: Text("局域网扫描")) {
-                    Button(action: startScan) {
-                        HStack {
-                            Text(isScanning ? "扫描中..." : "扫描设备")
-                            if isScanning {
-                                Spacer()
-                                ProgressView()
-                            }
+                            TextField("端口", text: $port)
+                                .frame(width: 70)
+                                .keyboardType(.numberPad)
                         }
-                    }
-                    .disabled(isScanning)
 
-                    ForEach(discoveredDevices, id: \.0) { ip, name in
-                        Button(action: { connectTo(ip: ip) }) {
+                        Button(action: connectToDevice) {
                             HStack {
-                                Image(systemName: "iphone.and.arrow.forward")
-                                VStack(alignment: .leading) {
-                                    Text(name)
-                                    Text(ip)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
+                                Spacer()
+                                if case .connecting = adbClient.state {
+                                    ProgressView()
+                                } else {
+                                    Text("连接")
                                 }
                                 Spacer()
-                                Image(systemName: "chevron.right")
+                            }
+                        }
+                        .disabled(host.isEmpty || isConnecting)
+                    }
+
+                    Section(header: Text("局域网扫描")) {
+                        Button(action: startScan) {
+                            HStack {
+                                Text(isScanning ? "扫描中..." : "扫描设备")
+                                if isScanning {
+                                    Spacer()
+                                    ProgressView()
+                                }
+                            }
+                        }
+                        .disabled(isScanning)
+
+                        ForEach(discoveredDevices, id: \.0) { ip, name in
+                            Button(action: { connectTo(ip: ip) }) {
+                                HStack {
+                                    Image(systemName: "iphone.and.arrow.forward")
+                                    VStack(alignment: .leading) {
+                                        Text(name)
+                                        Text(ip)
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                }
+                            }
+                        }
+                    }
+
+                    Section(header: Text("连接状态")) {
+                        HStack {
+                            Circle()
+                                .fill(statusColor)
+                                .frame(width: 12, height: 12)
+                            Text(statusText)
+                        }
+
+                        if adbClient.isConnected {
+                            Button("断开连接", role: .destructive) {
+                                adbClient.disconnect()
                             }
                         }
                     }
                 }
-
-                Section(header: Text("连接状态")) {
-                    HStack {
-                        Circle()
-                            .fill(statusColor)
-                            .frame(width: 12, height: 12)
-                        Text(statusText)
+                .navigationTitle("设备连接")
+                
+                // 透明覆盖层，用于捕获点击事件
+                Color.clear
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     }
-
-                    if adbClient.isConnected {
-                        Button("断开连接", role: .destructive) {
-                            adbClient.disconnect()
-                        }
-                    }
-                }
             }
-            .navigationTitle("设备连接")
-            .simultaneousGesture(
-                TapGesture().onEnded { _ in
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                }
-            )
         }
     }
 
