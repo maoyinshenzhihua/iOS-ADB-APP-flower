@@ -66,21 +66,17 @@ class ADBFileSync {
                 if buffer.count >= 17 {
                     let nameData = buffer[16...]
                     if let nullIndex = nameData.firstIndex(of: 0) {
-                        let nameLength = nullIndex - 16 + 1
-                        if buffer.count >= 16 + nameLength {
-                            let nameStr = String(data: buffer[16..<(16 + nameLength - 1)], encoding: .utf8) ?? ""
-                            let entry = FileInfo(
-                                name: nameStr,
-                                path: path.hasSuffix("/") ? "\(path)\(nameStr)" : "\(path)/\(nameStr)",
-                                mode: mode,
-                                size: UInt64(size),
-                                modifiedTime: Date(timeIntervalSince1970: TimeInterval(time))
-                            )
-                            entries.append(entry)
-                            buffer = buffer.advanced(by: 16 + nameLength)
-                        } else {
-                            break
-                        }
+                        let actualNullIndex = 16 + nullIndex
+                        let nameStr = String(data: buffer[16..<actualNullIndex], encoding: .utf8) ?? ""
+                        let entry = FileInfo(
+                            name: nameStr,
+                            path: path.hasSuffix("/") ? "\(path)\(nameStr)" : "\(path)/\(nameStr)",
+                            mode: mode,
+                            size: UInt64(size),
+                            modifiedTime: Date(timeIntervalSince1970: TimeInterval(time))
+                        )
+                        entries.append(entry)
+                        buffer = buffer.advanced(by: actualNullIndex + 1)
                     } else {
                         break
                     }
