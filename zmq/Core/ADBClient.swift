@@ -277,153 +277,84 @@ class ADBClient: ObservableObject {
     func pairWireless(host: String, port: UInt16, pairingCode: String, completion: @escaping (Bool, String) -> Void) {
         onLog?("[信息] 开始无线配对 \(host):\(port) (TLS)")
 
-        let pairQueue = DispatchQueue(label: "com.zmq.pairing", qos: .userInitiated)
+        let pairingTCPClient = TCPClient()
 
-        pairQueue.async { [weak self] in
-            guard let self = self else { return }
-
-            var readStream: Unmanaged<CFReadStream>?
-            var writeStream: Unmanaged<CFWriteStream>?
-
-            CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault, host as CFString, UInt32(port), &readStream, &writeStream)
-
-            guard let cfRead = readStream?.takeRetainedValue(), let cfWrite = writeStream?.takeRetainedValue() else {
-                self.onLog?("[错误] 无法创建TLS流")
-                completion(false, "无法创建TLS流")
-                return
+        pairingTCPClient.onStateChanged = { [weak self] tcpState in
+            switch tcpState {
+            case .connected:
+                self?.onLog?("[信息] 配对TLS连接成功")
+                self?.sendPairingCNXN(tcpClient: pairingTCPClient, pairingCode: pairingCode, completion: completion)
+            case .disconnected:
+                self?.onLog?("[信息] 配对连接断开")
+                completion(false, "连接断开")
+            case .failed(let error):
+                self?.onLog?("[错误] 配对连接失败: \(error.localizedDescription)")
+                completion(false, error.localizedDescription)
+            case .connecting:
+                break
             }
+        }
 
-            let inputStream: InputStream = cfRead
-            let outputStream: OutputStream = cfWrite
+        pairingTCPClient.onDataReceived = { [weak self] data in
+            self?.handlePairingData(data, tcpClient: pairingTCPClient, pairingCode: pairingCode, completion: completion)
+        }
 
-            let sslSettings: [String: Any] = [
-                kCFStreamSSLValidatesCertificateChain as String: kCFBooleanFalse,
-                kCFStreamSSLPeerName as String: kCFNull
-            ]
-            CFReadStreamSetProperty(inputStream, CFStreamPropertyKey(rawValue: kCFStreamPropertySSLSettings), sslSettings as CFTypeRef)
-            CFWriteStreamSetProperty(outputStream, CFStreamPropertyKey(rawValue: kCFStreamPropertySSLSettings), sslSettings as CFTypeRef)
+        pairingTCPClient.onLog = { [weak self] msg in
+            self?.onLog?("[配对] \(msg)")
+        }
 
-            inputStream.open()
-            outputStream.open()
+        pairingTCPClient.connect(host: host, port: port, useTLS: true)
+    }
 
-            var pairCompleted = false
-            let startTime = Date()
-            let timeout: TimeInterval = 30
+    private func sendPairingCNXN(tcpClient: TCPClient, pairingCode: String, completion: @escaping (Bool, String) -> Void) {
+        let packet = ADBProtocol.packCNXN()
+        onLog?("[信息] 发送配对CNXN握手 (\(packet.count)字节)")
+        tcpClient.send(data: packet)
+    }
 
-            func sendData(_ data: Data) {
-                data.withUnsafeBytes { ptr in
-                    if let baseAddr = ptr.bindMemory(to: UInt8.self).baseAddress {
-                        outputStream.write(baseAddr, maxLength: data.count)
+    private func handlePairingData(_ data: Data, tcpClient: TCPClient, pairingCode: String, completion: @escaping (Bool, String) -> Void) {
+        onLog?("[调试] 收到配对数据(\(data.count)字节): \(data.map { String(format: "%02X", $0) }.joined(separator: " ").prefix(100))")
+
+        let tempBuffer = ADBDataBuffer()
+        tempBuffer.append(data)
+
+        while let message = tempBuffer.tryReadMessage() {
+            switch message.command {
+            case ADBCommand.CNXN:
+                onLog?("[成功] 配对CNXN成功")
+                completion(true, "配对成功")
+            case ADBCommand.AUTH:
+                let authType = message.arg0
+                onLog?("[调试] 配对AUTH类型: \(authType)")
+
+                if authType == ADBAuthType.token.rawValue {
+                    onLog?("[信息] 收到配对TOKEN，准备验证配对码")
+
+                    if let signature = ADBAuth.signPairingCode(pairingCode) {
+                        let packet = ADBProtocol.packAUTH(type: .signature, data: signature)
+                        onLog?("[信息] 发送配对签名响应 (\(signature.count)字节)")
+                        tcpClient.send(data: packet)
+                    } else {
+                        onLog?("[错误] 配对码签名失败")
+                        completion(false, "配对码签名失败")
+                    }
+                } else if authType == ADBAuthType.signature.rawValue {
+                    onLog?("[成功] 配对成功！")
+                    tcpClient.disconnect()
+                    completion(true, "配对成功")
+                } else {
+                    if let keyPair = keyManager.loadOrCreateKeyPair(),
+                       let pemString = ADBAuth.exportPublicKeyPEM(keyPair.publicKey),
+                       var pemData = pemString.data(using: String.Encoding.utf8) {
+                        pemData.append(0)
+                        let packet = ADBProtocol.packAUTH(type: .rsaPublicKey, data: pemData)
+                        onLog?("[信息] 发送配对公钥")
+                        tcpClient.send(data: packet)
                     }
                 }
+            default:
+                onLog?("[调试] 收到其他命令: \(String(format: "0x%08X", message.command))")
             }
-
-            while !pairCompleted && Date().timeIntervalSince(startTime) < timeout {
-                Thread.sleep(forTimeInterval: 0.05)
-                RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.01))
-
-                if inputStream.streamStatus == .open || inputStream.hasBytesAvailable {
-                    if inputStream.hasBytesAvailable {
-                        var buffer = [UInt8](repeating: 0, count: 65536)
-                        let bytesRead = inputStream.read(&buffer, maxLength: buffer.count)
-                        if bytesRead > 0 {
-                            let receivedData = Data(buffer[0..<bytesRead])
-                            self.onLog?("[调试] 收到配对数据(\(bytesRead)字节): \(receivedData.map { String(format: "%02X", $0) }.joined(separator: " ").prefix(100))")
-
-                            let tempBuffer = ADBDataBuffer()
-                            tempBuffer.append(receivedData)
-
-                            while let message = tempBuffer.tryReadMessage() {
-                                switch message.command {
-                                case ADBCommand.CNXN:
-                                    self.onLog?("[成功] 配对CNXN成功")
-                                    pairCompleted = true
-                                    completion(true, "配对成功")
-                                case ADBCommand.AUTH:
-                                    let authType = message.arg0
-                                    self.onLog?("[调试] 配对AUTH类型: \(authType)")
-
-                                    if authType == ADBAuthType.token.rawValue {
-                                        self.onLog?("[信息] 收到配对TOKEN，准备验证配对码")
-
-                                        if let signature = ADBAuth.signPairingCode(pairingCode) {
-                                            let packet = ADBProtocol.packAUTH(type: .signature, data: signature)
-                                            self.onLog?("[信息] 发送配对签名响应")
-                                            sendData(packet)
-                                        } else {
-                                            self.onLog?("[错误] 配对码签名失败")
-                                            pairCompleted = true
-                                            completion(false, "配对码签名失败")
-                                        }
-                                    } else if authType == ADBAuthType.signature.rawValue {
-                                        self.onLog?("[成功] 配对成功！")
-                                        pairCompleted = true
-                                        completion(true, "配对成功")
-                                    } else {
-                                        if let keyPair = self.keyManager.loadOrCreateKeyPair(),
-                                           let pemString = ADBAuth.exportPublicKeyPEM(keyPair.publicKey),
-                                           var pemData = pemString.data(using: String.Encoding.utf8) {
-                                            pemData.append(0)
-                                            let packet = ADBProtocol.packAUTH(type: .rsaPublicKey, data: pemData)
-                                            self.onLog?("[信息] 发送配对公钥")
-                                            sendData(packet)
-                                        }
-                                    }
-                                default:
-                                    self.onLog?("[调试] 收到其他命令: \(String(format: "0x%08X", message.command))")
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if outputStream.streamStatus == .open && !outputStream.hasSpaceAvailable {
-                    continue
-                }
-
-                if outputStream.streamStatus == .open && (inputStream.streamStatus == .open || inputStream.streamStatus == .reading) {
-                    if !pairCompleted {
-                        self.onLog?("[信息] TLS连接就绪，发送CNXN")
-                        let packet = ADBProtocol.packCNXN()
-                        sendData(packet)
-                        self.onLog?("[信息] 已发送配对CNXN握手 (\(packet.count)字节)")
-                        Thread.sleep(forTimeInterval: 0.2)
-                    }
-                }
-
-                if inputStream.streamError != nil {
-                    if let err = inputStream.streamError {
-                        self.onLog?("[错误] 输入流错误: \(err.localizedDescription)")
-                    }
-                    pairCompleted = true
-                    completion(false, "输入流错误")
-                    break
-                }
-
-                if outputStream.streamError != nil {
-                    if let err = outputStream.streamError {
-                        self.onLog?("[错误] 输出流错误: \(err.localizedDescription)")
-                    }
-                    pairCompleted = true
-                    completion(false, "输出流错误")
-                    break
-                }
-
-                if inputStream.streamStatus == .atEnd || outputStream.streamStatus == .atEnd || inputStream.streamStatus == .closed || outputStream.streamStatus == .closed {
-                    self.onLog?("[信息] 流已关闭/结束")
-                    pairCompleted = true
-                    completion(false, "连接关闭")
-                    break
-                }
-            }
-
-            if !pairCompleted {
-                self.onLog?("[错误] 配对超时")
-                completion(false, "配对超时")
-            }
-
-            inputStream.close()
-            outputStream.close()
         }
     }
 }

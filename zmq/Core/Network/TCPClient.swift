@@ -48,14 +48,19 @@ class TCPClient {
         parameters.defaultProtocolStack.transportProtocol = tcpOptions
 
         if useTLS {
-            let tlsOptions = NWProtocolTLS.Options()
-            sec_protocol_options_set_verify_block(tlsOptions.securityProtocolOptions, { _, _, completionHandler in
-                completionHandler(true)
-            }, queue)
-            parameters.defaultProtocolStack.applicationProtocols.insert(tlsOptions, at: 0)
-        }
+            let tlsParameters = NWParameters(tls: NWProtocolTLS.Options())
+            tlsParameters.defaultProtocolStack.transportProtocol = tcpOptions
 
-        connection = NWConnection(host: endpointHost, port: endpointPort, using: parameters)
+            if let tlsOpts = tlsParameters.defaultProtocolStack.applicationProtocols.first as? NWProtocolTLS.Options {
+                sec_protocol_options_set_verify_block(tlsOpts.securityProtocolOptions, { _, _, completionHandler in
+                    completionHandler(true)
+                }, queue)
+            }
+
+            connection = NWConnection(host: endpointHost, port: endpointPort, using: tlsParameters)
+        } else {
+            connection = NWConnection(host: endpointHost, port: endpointPort, using: parameters)
+        }
         connection?.stateUpdateHandler = { [weak self] newState in
             self?.handleStateUpdate(newState)
         }
