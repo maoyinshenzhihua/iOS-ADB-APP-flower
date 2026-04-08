@@ -318,7 +318,7 @@ class ADBClient: ObservableObject {
 
             self.onLog?("[信息] TCP连接成功，建立TLS")
 
-            guard let sslCtx = SSLCreateContext(kCFAllocatorDefault, .clientSide, kSSLStreamType) else {
+            guard let sslCtx = SSLCreateContext(kCFAllocatorDefault, .clientSide, "" as CFString) else {
                 self.onLog?("[错误] 创建SSL上下文失败")
                 close(sockFd)
                 completion(false, "创建SSL上下文失败")
