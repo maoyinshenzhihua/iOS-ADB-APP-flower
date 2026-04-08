@@ -19,6 +19,7 @@ class ADBClient: ObservableObject {
     var onTCPLog: ((String) -> Void)?
     
     private var authLoopCount = 0
+    private var authTokenReceived = false
 
     private let tcpClient = TCPClient()
     private let dataBuffer = ADBDataBuffer()
@@ -48,6 +49,7 @@ class ADBClient: ObservableObject {
     func connect(host: String, port: UInt16 = 5555) {
         guard canConnect else { return }
         authLoopCount = 0
+        authTokenReceived = false
         onLog?("[信息] 开始连接 \(host):\(port)")
         updateState(.connecting)
         tcpClient.connect(host: host, port: port)
@@ -171,7 +173,7 @@ class ADBClient: ObservableObject {
 
     private func handleAUTH(_ message: ADBMessage) {
         authLoopCount += 1
-        onLog?("[调试] handleAUTH被调用, authType=\(message.arg0), 循环次数=\(authLoopCount)")
+        onLog?("[调试] handleAUTH被调用, authType=\(message.arg0), 循环次数=\(authLoopCount), 已收到TOKEN=\(authTokenReceived)")
         
         if authLoopCount > 10 {
             onLog?("[错误] 检测到AUTH循环超过10次，强制断开")
@@ -183,18 +185,15 @@ class ADBClient: ObservableObject {
 
         switch authType {
         case ADBAuthType.token.rawValue:
-            // 设备发送TOKEN，要求我们对TOKEN进行签名
-            // 但如果这是第一次连接（没有已保存的签名），我们应该直接发送公钥
-            // 让设备显示授权对话框
-            onLog?("[信息] 收到AUTH TOKEN，发送公钥让设备保存")
-            sendPublicKey()
-        case ADBAuthType.signature.rawValue:
-            // 设备发送SIGNATURE，这是设备验证我们公钥失败后发送的
-            // 应该直接发送我们的公钥给设备
-            onLog?("[信息] 收到AUTH SIGNATURE，发送公钥")
-            sendPublicKey()
+            if !authTokenReceived {
+                authTokenReceived = true
+                onLog?("[信息] 收到AUTH TOKEN(第1次)，尝试签名")
+                handleAuthToken(message.data)
+            } else {
+                onLog?("[信息] 收到AUTH TOKEN(第2次+)，签名被拒绝，发送公钥")
+                sendPublicKey()
+            }
         default:
-            // 其他情况（包括rsaPublicKey），发送公钥
             onLog?("[信息] 收到AUTH未知类型(\(authType))，发送公钥")
             sendPublicKey()
         }
