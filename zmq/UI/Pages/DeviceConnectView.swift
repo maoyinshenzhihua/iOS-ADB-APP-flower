@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct DeviceConnectView: View {
     @EnvironmentObject var adbClient: ADBClient
@@ -132,10 +133,15 @@ struct DeviceConnectView: View {
                 }
                 
                 // 日志显示
-                if showLog && !connectionLog.isEmpty {
+                if showLog {
                     Section(header: HStack {
                         Text("连接日志")
                         Spacer()
+                        Button("复制") {
+                            let logText = connectionLog.joined(separator: "\n")
+                            UIPasteboard.general.string = logText
+                        }
+                        .font(.caption)
                         Button("清空") {
                             connectionLog.removeAll()
                         }
