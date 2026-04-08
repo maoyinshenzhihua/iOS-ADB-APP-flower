@@ -327,7 +327,8 @@ class ADBClient: ObservableObject {
             }
 
             SSLSetSessionOption(sslCtx, .breakOnServerAuth, true)
-            SSLSetEnableCertVerify(sslCtx, false)
+            SSLSetSessionOption(sslCtx, .breakOnCertRequested, true)
+            SSLSetSessionOption(sslCtx, .breakOnClientAuth, true)
 
             SSLSetIOFuncs(sslCtx,
                           { connection, data, dataLength in
@@ -352,8 +353,14 @@ class ADBClient: ObservableObject {
             SSLSetConnection(sslCtx, UnsafeMutableRawPointer(bitPattern: UInt(sockFd)))
 
             var handshakeResult = SSLHandshake(sslCtx)
-            while handshakeResult == -9841 {
-                self.onLog?("[信息] 服务器认证完成，继续握手")
+            while handshakeResult == -9841 || handshakeResult == -9842 || handshakeResult == -9843 {
+                if handshakeResult == -9841 {
+                    self.onLog?("[信息] 服务器认证完成，跳过验证，继续握手")
+                } else if handshakeResult == -9842 {
+                    self.onLog?("[信息] 证书请求完成，继续握手")
+                } else if handshakeResult == -9843 {
+                    self.onLog?("[信息] 客户端认证完成，继续握手")
+                }
                 handshakeResult = SSLHandshake(sslCtx)
             }
 

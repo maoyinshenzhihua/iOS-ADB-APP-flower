@@ -19,23 +19,23 @@ ExecuteExternalTool /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/X
 ExecuteExternalTool /Applications/Xcode_15.4.app/Contents/Developer/usr/bin/actool --version --output-format xml1
 ExecuteExternalTool /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -v
 ExecuteExternalTool /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
-Build description signature: 5df9f892e827c9c4d617649a33f121f3
-Build description path: /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/XCBuildData/5df9f892e827c9c4d617649a33f121f3.xcbuilddata
-CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products
-    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
-    builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products
+Build description signature: bda381a873b47b5e0a71c9811a7095b3
+Build description path: /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/XCBuildData/bda381a873b47b5e0a71c9811a7095b3.xcbuilddata
 ClangStatCache /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_15.4.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/SDKStatCaches.noindex/iphoneos17.5-21F77-f0fa7969d082b13145125136a829df3a.sdkstatcache
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
     /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_15.4.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk -o /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/SDKStatCaches.noindex/iphoneos17.5-21F77-f0fa7969d082b13145125136a829df3a.sdkstatcache
+CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
+    builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products
 CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
     builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex
-CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos
-    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
-    builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos
 CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
     builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos
+CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
+    builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos
 MkDir /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.app (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /bin/mkdir -p /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.app
@@ -60,12 +60,12 @@ WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/buil
 WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/all-product-headers.yaml (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/all-product-headers.yaml
-WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq_const_extract_protocols.json (in target 'zmq' from project 'zmq')
-    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
-    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq_const_extract_protocols.json
 WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq.LinkFileList (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq.LinkFileList
+WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq_const_extract_protocols.json (in target 'zmq' from project 'zmq')
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq_const_extract_protocols.json
 WriteAuxiliaryFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq.SwiftFileList (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     write-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq.SwiftFileList
@@ -129,9 +129,9 @@ SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flow
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/z
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:354:38: error: cannot find 'errSSLServerAuthCompleted' in scope
-            while handshakeResult == errSSLServerAuthCompleted {
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~
+/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:330:13: error: cannot find 'SSLSetEnableCertVerify' in scope
+            SSLSetEnableCertVerify(sslCtx, false)
+            ^~~~~~~~~~~~~~~~~~~~~~
 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:322:32: warning: 'SSLCreateContext' was deprecated in iOS 13.0: No longer supported. Use Network.framework.
             guard let sslCtx = SSLCreateContext(kCFAllocatorDefault, .clientSide, .streamType) else {
                                ^
@@ -141,7 +141,7 @@ SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flow
 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:322:84: warning: 'streamType' was deprecated in iOS 13.0
             guard let sslCtx = SSLCreateContext(kCFAllocatorDefault, .clientSide, .streamType) else {
                                                                                    ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:353:35: warning: 'SSLHandshake' was deprecated in iOS 13.0: No longer supported. Use Network.framework.
+/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:354:35: warning: 'SSLHandshake' was deprecated in iOS 13.0: No longer supported. Use Network.framework.
             var handshakeResult = SSLHandshake(sslCtx)
                                   ^
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBKeyManager.swift (in target 'zmq' from project 'zmq')
