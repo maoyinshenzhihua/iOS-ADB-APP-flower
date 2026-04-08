@@ -148,15 +148,14 @@ class ADBClient: ObservableObject {
 
         switch authType {
         case ADBAuthType.token.rawValue:
+            // 设备发送TOKEN，要求我们对TOKEN进行签名
             handleAuthToken(message.data)
         case ADBAuthType.signature.rawValue:
-            authRetries += 1
-            if authRetries < maxAuthRetries {
-                handleAuthToken(message.data)
-            } else {
-                sendPublicKey()
-            }
+            // 设备发送SIGNATURE，这是设备验证我们公钥失败后发送的
+            // 应该直接发送我们的公钥给设备
+            sendPublicKey()
         default:
+            // 其他情况（包括rsaPublicKey），发送公钥
             sendPublicKey()
         }
     }
