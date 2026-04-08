@@ -37,6 +37,7 @@
 		A10028 /* DeviceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20028; };
 		A10029 /* FileListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20029; };
 		A10030 /* TouchOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20030; };
+		A10039 /* DismissKeyboardTap.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20039; };
 		A10031 /* ADBDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20031; };
 		A10032 /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20032; };
 		A10033 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20033; };
@@ -78,6 +79,7 @@
 		A20028 /* DeviceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCard.swift; sourceTree = "<group>"; };
 		A20029 /* FileListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileListItem.swift; sourceTree = "<group>"; };
 		A20030 /* TouchOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchOverlay.swift; sourceTree = "<group>"; };
+		A20039 /* DismissKeyboardTap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissKeyboardTap.swift; sourceTree = "<group>"; };
 		A20031 /* ADBDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBDevice.swift; sourceTree = "<group>"; };
 		A20032 /* FileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileInfo.swift; sourceTree = "<group>"; };
 		A20033 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				A20028 /* DeviceCard.swift */,
 				A20029 /* FileListItem.swift */,
 				A20030 /* TouchOverlay.swift */,
+				A20039 /* DismissKeyboardTap.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -395,6 +398,7 @@
 				A10028 /* DeviceCard.swift in Sources */,
 				A10029 /* FileListItem.swift in Sources */,
 				A10030 /* TouchOverlay.swift in Sources */,
+				A10039 /* DismissKeyboardTap.swift in Sources */,
 				A10031 /* ADBDevice.swift in Sources */,
 				A10032 /* FileInfo.swift in Sources */,
 				A10033 /* AppInfo.swift in Sources */,
