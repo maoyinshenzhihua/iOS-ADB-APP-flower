@@ -25,6 +25,7 @@ struct DeviceConnectView: View {
                     }
 
                     if adbClient.isConnected {
+                        // 已连接：显示"断开连接"
                         Button(action: adbClient.disconnect) {
                             HStack {
                                 Spacer()
@@ -32,20 +33,25 @@ struct DeviceConnectView: View {
                                 Spacer()
                             }
                         }
-                        .disabled(isConnecting)
-                    } else {
-                        Button(action: connectToDevice) {
+                    } else if case .connecting = adbClient.state {
+                        // 正在连接：显示"取消连接"
+                        Button(action: adbClient.disconnect) {
                             HStack {
                                 Spacer()
-                                if case .connecting = adbClient.state {
-                                    ProgressView()
-                                } else {
-                                    Text("连接")
-                                }
+                                Text("取消连接")
                                 Spacer()
                             }
                         }
-                        .disabled(host.isEmpty || isConnecting)
+                    } else {
+                        // 未连接：显示"连接"
+                        Button(action: connectToDevice) {
+                            HStack {
+                                Spacer()
+                                Text("连接")
+                                Spacer()
+                            }
+                        }
+                        .disabled(host.isEmpty)
                     }
                 }
 
