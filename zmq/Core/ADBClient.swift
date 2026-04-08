@@ -330,7 +330,7 @@ class ADBClient: ObservableObject {
 
             SSLSetIOFuncs(sslCtx,
                           { connection, data, dataLength in
-                              let fd = Int32(bitPattern: UInt(UInt(bitPattern: connection)))
+                              let fd = Int32(bitPattern: UInt32(UInt(bitPattern: connection)))
                               let bytesRead = Darwin.read(fd, data, dataLength.pointee)
                               if bytesRead >= 0 {
                                   dataLength.pointee = bytesRead
@@ -339,7 +339,7 @@ class ADBClient: ObservableObject {
                               return OSStatus(errno)
                           },
                           { connection, data, dataLength in
-                              let fd = Int32(bitPattern: UInt(UInt(bitPattern: connection)))
+                              let fd = Int32(bitPattern: UInt32(UInt(bitPattern: connection)))
                               let bytesWritten = Darwin.write(fd, data, dataLength.pointee)
                               if bytesWritten >= 0 {
                                   dataLength.pointee = bytesWritten
