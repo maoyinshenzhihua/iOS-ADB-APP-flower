@@ -1,5 +1,4 @@
 Run xcodebuild build \
-  
 Command line invocation:
     /Applications/Xcode_15.4.app/Contents/Developer/usr/bin/xcodebuild build -project zmq.xcodeproj -scheme zmq -configuration Debug -destination generic/platform=iOS -derivedDataPath ./build CODE_SIGNING_ALLOWED=NO IPHONEOS_DEPLOYMENT_TARGET=16.0
 User defaults from command line:
@@ -20,23 +19,23 @@ ExecuteExternalTool /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/X
 ExecuteExternalTool /Applications/Xcode_15.4.app/Contents/Developer/usr/bin/actool --version --output-format xml1
 ExecuteExternalTool /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -v
 ExecuteExternalTool /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
-Build description signature: 5c7fd3e1c55f215abb76e78e5706bd91
-Build description path: /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/XCBuildData/5c7fd3e1c55f215abb76e78e5706bd91.xcbuilddata
+Build description signature: a0f7941e4b33183d8b4715b22759cd9c
+Build description path: /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/XCBuildData/a0f7941e4b33183d8b4715b22759cd9c.xcbuilddata
 ClangStatCache /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_15.4.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/SDKStatCaches.noindex/iphoneos17.5-21F77-f0fa7969d082b13145125136a829df3a.sdkstatcache
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
     /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_15.4.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk -o /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/SDKStatCaches.noindex/iphoneos17.5-21F77-f0fa7969d082b13145125136a829df3a.sdkstatcache
-CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex
-    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
-    builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex
 CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
     builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products
-CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos
+CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
-    builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos
+    builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex
 CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
     builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos
+CreateBuildDirectory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq.xcodeproj
+    builtin-create-build-directory /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos
 MkDir /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.app (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /bin/mkdir -p /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.app
@@ -124,11 +123,6 @@ SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flow
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Utils/LittleEndian.swift (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DataBuffer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DeviceScanner.swift
-** BUILD FAILED **
-The following build commands failed:
-	SwiftCompile normal arm64 Compiling\ zmqApp.swift,\ ContentView.swift,\ ADBConstants.swift,\ ADBMessage.swift,\ ADBProtocol.swift,\ ADBAuth.swift,\ ADBChannel.swift,\ TCPClient.swift,\ DataBuffer.swift,\ DeviceScanner.swift,\ ADBClient.swift,\ ADBKeyManager.swift,\ ADBShell.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/wo
-	SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift (in target 'zmq' from project 'zmq')
-(2 failures)
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Utils/CRC32.swift (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DataBuffer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DeviceScanner.swift
@@ -174,18 +168,15 @@ SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flow
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift -primary-file /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/z
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:333:41: error: initializer 'init(truncatingIfNeeded:)' requires that 'UnsafeMutablePointer<Int>' conform to 'BinaryInteger'
-                              let len = Int(truncatingIfNeeded: dataLength)
-                                        ^
-Swift.FixedWidthInteger:6:23: note: where 'T' = 'UnsafeMutablePointer<Int>'
-    @inlinable public init<T>(truncatingIfNeeded source: T) where T : BinaryInteger
-                      ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:337:41: error: initializer 'init(truncatingIfNeeded:)' requires that 'UnsafeMutablePointer<Int>' conform to 'BinaryInteger'
-                              let len = Int(truncatingIfNeeded: dataLength)
-                                        ^
-Swift.FixedWidthInteger:6:23: note: where 'T' = 'UnsafeMutablePointer<Int>'
-    @inlinable public init<T>(truncatingIfNeeded source: T) where T : BinaryInteger
-                      ^
+/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:349:38: error: no exact matches in call to initializer 
+            SSLSetConnection(sslCtx, UnsafeMutableRawPointer(bitPattern: fd))
+                                     ^
+Swift._Pointer:4:12: note: candidate expects value of type 'Int' for parameter #1 (got 'Int32')
+    public init?(bitPattern: Int)
+           ^
+Swift._Pointer:5:12: note: candidate expects value of type 'UInt' for parameter #1 (got 'Int32')
+    public init?(bitPattern: UInt)
+           ^
 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:321:32: warning: 'SSLCreateContext' was deprecated in iOS 13.0: No longer supported. Use Network.framework.
             guard let sslCtx = SSLCreateContext(kCFAllocatorDefault, .clientSide, .streamType) else {
                                ^
@@ -195,7 +186,7 @@ Swift.FixedWidthInteger:6:23: note: where 'T' = 'UnsafeMutablePointer<Int>'
 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:321:84: warning: 'streamType' was deprecated in iOS 13.0
             guard let sslCtx = SSLCreateContext(kCFAllocatorDefault, .clientSide, .streamType) else {
                                                                                    ^
-/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:342:35: warning: 'SSLHandshake' was deprecated in iOS 13.0: No longer supported. Use Network.framework.
+/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift:350:35: warning: 'SSLHandshake' was deprecated in iOS 13.0: No longer supported. Use Network.framework.
             let handshakeResult = SSLHandshake(sslCtx)
                                   ^
 SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBKeyManager.swift (in target 'zmq' from project 'zmq')
@@ -211,4 +202,14 @@ ProcessInfoPlistFile /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/bu
 SwiftDriver\ Compilation\ Requirements zmq normal arm64 com.apple.xcode.tools.swift.compiler (in target 'zmq' from project 'zmq')
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     builtin-Swift-Compilation-Requirements -- /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name zmq -Onone -enforce-exclusivity\=checked @/Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq.SwiftFileList -DDEBUG -sdk /Applications/Xcode_15.4.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk -target arm64-apple-ios16.0 -enable-bare-slash-regex -g -module-cache-path /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Index.noindex/DataStore -swift-version 5 -I /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos -F /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos -emit-loca
+SwiftCompile normal arm64 Compiling\ ADBDeviceInfo.swift,\ ADBAppManager.swift,\ ADBRemoteControl.swift,\ ADBFileSync.swift,\ ADBFileTransfer.swift,\ ScrcpyServer.swift,\ H264Decoder.swift,\ ScreenRenderer.swift,\ TouchMapper.swift,\ DeviceConnectView.swift,\ DeviceInfoView.swift,\ ScreenMirrorView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/DeviceInfo/ADBDeviceInfo.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/AppManager/ADBAppManager.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/RemoteControl/ADBRemoteControl.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileTransfer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/ScrcpyServer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/H264Decoder.swift /Users/r
+    cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
+    builtin-swiftTaskExecution -- /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -c /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/DataBuffer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flo
+Command SwiftCompile failed with a nonzero exit code
+** BUILD FAILED **
+The following build commands failed:
+	SwiftCompile normal arm64 Compiling\ zmqApp.swift,\ ContentView.swift,\ ADBConstants.swift,\ ADBMessage.swift,\ ADBProtocol.swift,\ ADBAuth.swift,\ ADBChannel.swift,\ TCPClient.swift,\ DataBuffer.swift,\ DeviceScanner.swift,\ ADBClient.swift,\ ADBKeyManager.swift,\ ADBShell.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/wo
+	SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift (in target 'zmq' from project 'zmq')
+	SwiftCompile normal arm64 Compiling\ ADBDeviceInfo.swift,\ ADBAppManager.swift,\ ADBRemoteControl.swift,\ ADBFileSync.swift,\ ADBFileTransfer.swift,\ ScrcpyServer.swift,\ H264Decoder.swift,\ ScreenRenderer.swift,\ TouchMapper.swift,\ DeviceConnectView.swift,\ DeviceInfoView.swift,\ ScreenMirrorView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/DeviceInfo/ADBDeviceInfo.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/AppManager/ADBAppManager.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/RemoteControl/ADBRemoteControl.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileSync.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/FileSync/ADBFileTransfer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/ScrcpyServer.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Features/ScreenMirror/H264Decoder.swift /Users/
+(3 failures)
 Error: Process completed with exit code 65.

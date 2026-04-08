@@ -346,7 +346,7 @@ class ADBClient: ObservableObject {
                               return OSStatus(errno)
                           })
 
-            SSLSetConnection(sslCtx, UnsafeMutableRawPointer(bitPattern: fd))
+            SSLSetConnection(sslCtx, UnsafeMutableRawPointer(bitPattern: UInt(fd)))
             let handshakeResult = SSLHandshake(sslCtx)
             if handshakeResult != errSecSuccess {
                 self.onLog?("[错误] TLS握手失败")
