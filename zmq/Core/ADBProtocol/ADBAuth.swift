@@ -5,9 +5,11 @@ enum ADBAuth {
 
     static func signToken(token: Data, privateKey: SecKey) -> Data? {
         var error: Unmanaged<CFError>?
+        // Android ADB 使用的是 kSecKeyAlgorithmRsaSignatureRaw，即直接对原始数据进行 RSA 签名
+        // 而不是 rsaSignatureMessagePKCS1v15SHA1（这个会先对数据进行 SHA1 哈希）
         guard let signature = SecKeyCreateSignature(
             privateKey,
-            .rsaSignatureMessagePKCS1v15SHA1,
+            .rsaSignatureRaw,
             token as CFData,
             &error
         ) else {
