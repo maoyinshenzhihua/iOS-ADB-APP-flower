@@ -19,75 +19,69 @@ struct ConsoleView: View {
 
     var body: some View {
         NavigationView {
-            ZStack {
-                VStack {
-                    ScrollViewReader { proxy in
-                        ScrollView {
-                            LazyVStack(alignment: .leading, spacing: 2) {
-                                ForEach(Array(output.enumerated()), id: \.offset) { index, line in
-                                    Text(line)
-                                        .font(.system(.caption, design: .monospaced))
-                                        .textSelection(.enabled)
-                                        .id(index)
-                                }
+            VStack {
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        LazyVStack(alignment: .leading, spacing: 2) {
+                            ForEach(Array(output.enumerated()), id: \.offset) { index, line in
+                                Text(line)
+                                    .font(.system(.caption, design: .monospaced))
+                                    .textSelection(.enabled)
+                                    .id(index)
                             }
-                            .padding(.horizontal, 8)
                         }
-                        .onChange(of: output.count) { _ in
-                            proxy.scrollTo(output.count - 1, anchor: .bottom)
-                        }
+                        .padding(.horizontal, 8)
                     }
+                    .onChange(of: output.count) { _ in
+                        proxy.scrollTo(output.count - 1, anchor: .bottom)
+                    }
+                }
 
-                    Divider()
+                Divider()
 
-                    VStack(spacing: 8) {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 8) {
-                                ForEach(quickCommands, id: \.0) { name, cmd in
-                                    Button(name) {
-                                        executeCommand(cmd)
-                                    }
-                                    .buttonStyle(.bordered)
-                                    .controlSize(.small)
+                VStack(spacing: 8) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 8) {
+                            ForEach(quickCommands, id: \.0) { name, cmd in
+                                Button(name) {
+                                    executeCommand(cmd)
                                 }
+                                .buttonStyle(.bordered)
+                                .controlSize(.small)
                             }
-                            .padding(.horizontal)
-                        }
-
-                        HStack {
-                            TextField("输入ADB命令", text: $command)
-                                .textInputAutocapitalization(.never)
-                                .autocorrectionDisabled()
-                                .font(.system(.body, design: .monospaced))
-                                .onSubmit { executeCurrentCommand() }
-
-                            Button(action: executeCurrentCommand) {
-                                Image(systemName: "arrow.right.circle.fill")
-                            }
-                            .disabled(command.isEmpty || isExecuting)
                         }
                         .padding(.horizontal)
-                        .padding(.bottom, 4)
                     }
+
+                    HStack {
+                        TextField("输入ADB命令", text: $command)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                            .font(.system(.body, design: .monospaced))
+                            .onSubmit { executeCurrentCommand() }
+
+                        Button(action: executeCurrentCommand) {
+                            Image(systemName: "arrow.right.circle.fill")
+                        }
+                        .disabled(command.isEmpty || isExecuting)
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 4)
                 }
-                .navigationTitle("控制台")
-                .toolbar {
-                    Button("清空") {
-                        output.removeAll()
-                    }
+            }
+            .navigationTitle("控制台")
+            .toolbar {
+                Button("清空") {
+                    output.removeAll()
                 }
-                
-                // 透明覆盖层，用于捕获点击事件
-                Color.clear
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    }
             }
         }
     }
 
     private func executeCurrentCommand() {
+        // 收起键盘
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        
         guard !command.isEmpty else { return }
         let cmd = command
         command = ""
@@ -95,6 +89,9 @@ struct ConsoleView: View {
     }
 
     private func executeCommand(_ cmd: String) {
+        // 收起键盘
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        
         guard adbClient.isConnected else {
             output.append("[错误] 未连接设备")
             return

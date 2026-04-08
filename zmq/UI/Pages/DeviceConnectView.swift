@@ -11,87 +11,78 @@ struct DeviceConnectView: View {
 
     var body: some View {
         NavigationView {
-            ZStack {
-                Form {
-                    Section(header: Text("手动连接")) {
-                        HStack {
-                            TextField("IP地址", text: $host)
-                                .textInputAutocapitalization(.never)
-                                .autocorrectionDisabled()
-                                .keyboardType(.decimalPad)
+            Form {
+                Section(header: Text("手动连接")) {
+                    HStack {
+                        TextField("IP地址", text: $host)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                            .keyboardType(.decimalPad)
 
-                            TextField("端口", text: $port)
-                                .frame(width: 70)
-                                .keyboardType(.numberPad)
-                        }
-
-                        Button(action: connectToDevice) {
-                            HStack {
-                                Spacer()
-                                if case .connecting = adbClient.state {
-                                    ProgressView()
-                                } else {
-                                    Text("连接")
-                                }
-                                Spacer()
-                            }
-                        }
-                        .disabled(host.isEmpty || isConnecting)
+                        TextField("端口", text: $port)
+                            .frame(width: 70)
+                            .keyboardType(.numberPad)
                     }
 
-                    Section(header: Text("局域网扫描")) {
-                        Button(action: startScan) {
-                            HStack {
-                                Text(isScanning ? "扫描中..." : "扫描设备")
-                                if isScanning {
-                                    Spacer()
-                                    ProgressView()
-                                }
+                    Button(action: connectToDevice) {
+                        HStack {
+                            Spacer()
+                            if case .connecting = adbClient.state {
+                                ProgressView()
+                            } else {
+                                Text("连接")
                             }
+                            Spacer()
                         }
-                        .disabled(isScanning)
+                    }
+                    .disabled(host.isEmpty || isConnecting)
+                }
 
-                        ForEach(discoveredDevices, id: \.0) { ip, name in
-                            Button(action: { connectTo(ip: ip) }) {
-                                HStack {
-                                    Image(systemName: "iphone.and.arrow.forward")
-                                    VStack(alignment: .leading) {
-                                        Text(name)
-                                        Text(ip)
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
-                                    }
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                }
+                Section(header: Text("局域网扫描")) {
+                    Button(action: startScan) {
+                        HStack {
+                            Text(isScanning ? "扫描中..." : "扫描设备")
+                            if isScanning {
+                                Spacer()
+                                ProgressView()
                             }
                         }
                     }
+                    .disabled(isScanning)
 
-                    Section(header: Text("连接状态")) {
-                        HStack {
-                            Circle()
-                                .fill(statusColor)
-                                .frame(width: 12, height: 12)
-                            Text(statusText)
-                        }
-
-                        if adbClient.isConnected {
-                            Button("断开连接", role: .destructive) {
-                                adbClient.disconnect()
+                    ForEach(discoveredDevices, id: \.0) { ip, name in
+                        Button(action: { connectTo(ip: ip) }) {
+                            HStack {
+                                Image(systemName: "iphone.and.arrow.forward")
+                                VStack(alignment: .leading) {
+                                    Text(name)
+                                    Text(ip)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right")
                             }
                         }
                     }
                 }
-                .navigationTitle("设备连接")
-                
-                // 透明覆盖层，用于捕获点击事件
-                Color.clear
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+
+                Section(header: Text("连接状态")) {
+                    HStack {
+                        Circle()
+                            .fill(statusColor)
+                            .frame(width: 12, height: 12)
+                        Text(statusText)
                     }
+
+                    if adbClient.isConnected {
+                        Button("断开连接", role: .destructive) {
+                            adbClient.disconnect()
+                        }
+                    }
+                }
             }
+            .navigationTitle("设备连接")
         }
     }
 
@@ -120,17 +111,26 @@ struct DeviceConnectView: View {
     }
 
     private func connectToDevice() {
+        // 收起键盘
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        
         guard let portNum = UInt16(port) else { return }
         adbClient.connect(host: host, port: portNum)
     }
 
     private func connectTo(ip: String) {
+        // 收起键盘
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        
         host = ip
         port = "5555"
         adbClient.connect(host: ip, port: 5555)
     }
 
     private func startScan() {
+        // 收起键盘
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        
         discoveredDevices.removeAll()
         isScanning = true
 
