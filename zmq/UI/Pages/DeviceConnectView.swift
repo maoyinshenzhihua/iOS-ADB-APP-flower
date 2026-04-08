@@ -83,6 +83,11 @@ struct DeviceConnectView: View {
                 }
             }
             .navigationTitle("设备连接")
+            .simultaneousGesture(
+                TapGesture().onEnded { _ in
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
+            )
         }
     }
 
