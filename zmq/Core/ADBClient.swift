@@ -184,8 +184,10 @@ class ADBClient: ObservableObject {
         switch authType {
         case ADBAuthType.token.rawValue:
             // 设备发送TOKEN，要求我们对TOKEN进行签名
-            onLog?("[信息] 收到AUTH TOKEN，开始签名")
-            handleAuthToken(message.data)
+            // 但如果这是第一次连接（没有已保存的签名），我们应该直接发送公钥
+            // 让设备显示授权对话框
+            onLog?("[信息] 收到AUTH TOKEN，发送公钥让设备保存")
+            sendPublicKey()
         case ADBAuthType.signature.rawValue:
             // 设备发送SIGNATURE，这是设备验证我们公钥失败后发送的
             // 应该直接发送我们的公钥给设备

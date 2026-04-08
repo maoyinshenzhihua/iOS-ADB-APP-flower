@@ -57,7 +57,9 @@ enum ADBAuth {
         let data = cfData as Data
 
         let base64 = data.base64EncodedString(options: [.lineLength64Characters, .endLineWithLineFeed])
-        return "-----BEGIN PUBLIC KEY-----\n\(base64)\n-----END PUBLIC KEY-----\n"
+        // Android ADB 使用的公钥格式是 "user@host:BASE64DATA\n"
+        // 而不是标准的 PEM 格式
+        return "ADBKEY@\(base64)\n"
     }
 
     static func deleteKeyPair() {
