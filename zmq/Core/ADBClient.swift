@@ -275,7 +275,7 @@ class ADBClient: ObservableObject {
     }
 
     func pairWireless(host: String, port: UInt16, pairingCode: String, completion: @escaping (Bool, String) -> Void) {
-        onLog?("[信息] 开始无线配对 \(host):\(port) (TLS)")
+        onLog?("[信息] 开始无线配对 \(host):\(port)")
 
         let pairQueue = DispatchQueue(label: "com.zmq.pairing", qos: .userInitiated)
 
@@ -284,14 +284,14 @@ class ADBClient: ObservableObject {
 
             var addr = sockaddr_in()
             addr.sin_family = sa_family_t(AF_INET)
-            addr.sin_port = UInt16(port).bigEndian
+            addr.sin_port = port.bigEndian
 
-            guard let hostAddr = host.withCString({ inet_addr($0) }) else {
+            guard let hostAddr = host.withCString({ inet_addr($0) }), hostAddr != UInt32.max else {
                 self.onLog?("[错误] 无效的IP地址")
                 completion(false, "无效的IP地址")
                 return
             }
-            addr.s_addr = hostAddr
+            addr.sin_addr.s_addr = hostAddr
 
             let sockFd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)
             guard sockFd >= 0 else {
@@ -300,23 +300,23 @@ class ADBClient: ObservableObject {
                 return
             }
 
-            var optval: Int32 = 1
+            var optVal: Int32 = 1
             setsockopt(sockFd, SOL_SOCKET, SO_REUSEADDR, &optVal, socklen_t(MemoryLayout<Int32>.size))
 
             let connectResult = withUnsafePointer(to: &addr) { ptr in
                 ptr.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockPtr in
-                    connect(sockFd, sockPtr, socklen_t(MemoryLayout<sockaddr_in>.size))
+                    Darwin.connect(sockFd, sockPtr, socklen_t(MemoryLayout<sockaddr_in>.size))
                 }
             }
 
             if connectResult < 0 {
-                self.onLog?("[错误] 连接失败: \(String(cString: strerror(errno)))")
+                self.onLog?("[错误] 连接失败")
                 close(sockFd)
                 completion(false, "连接失败")
                 return
             }
 
-            self.onLog?("[信息] TCP连接成功，建立SSL上下文")
+            self.onLog?("[信息] TCP连接成功，建立TLS")
 
             guard let sslCtx = SSLCreateContext(kCFAllocatorDefault, .clientSide, nil) else {
                 self.onLog?("[错误] 创建SSL上下文失败")
@@ -326,43 +326,32 @@ class ADBClient: ObservableObject {
             }
 
             SSLSetSessionOption(sslCtx, .breakOnServerAuth, true)
+            SSLSetIOFuncs(sslCtx,
+                          { _, data, dataLength in
+                              Int32(read(sockFd, data, Int(dataLength)))
+                          },
+                          { _, data, dataLength in
+                              Int32(write(sockFd, data, Int(dataLength)))
+                          })
 
-            guard let sslConn = SSLCreateConnection(sslCtx, .clientSide, false) else {
-                self.onLog?("[错误] 创建SSL连接失败")
-                close(sockFd)
-                completion(false, "创建SSL连接失败")
-                return
-            }
-
-            SSLSetIOFuncs(sslConn, { connectionRef, data, dataLength in
-                let fd = SSLGetConnectionFD(connectionRef)
-                let bytesRead = read(fd, data, Int(dataLength))
-                return Int32(bytesRead)
-            }, { connectionRef, data, dataLength in
-                let fd = SSLGetConnectionFD(connectionRef)
-                let bytesWritten = write(fd, data, Int(dataLength))
-                return Int32(bytesWritten)
-            })
-
-            SSLSetConnection(sslConn, UnsafeMutableRawPointer(bitPattern: sockFd))
-
-            let handshakeResult = SSLHandshake(sslConn)
+            SSLSetConnection(sslCtx, UnsafeMutableRawPointer(bitPattern: sockFd))
+            let handshakeResult = SSLHandshake(sslCtx)
             if handshakeResult != errSecSuccess {
-                let sslError = SSLErrorCode(sslConn)
-                self.onLog?("[错误] SSL握手失败: \(sslError)")
+                self.onLog?("[错误] TLS握手失败")
                 close(sockFd)
-                completion(false, "SSL握手失败: \(sslError)")
+                completion(false, "TLS握手失败")
                 return
             }
 
-            self.onLog?("[信息] SSL握手成功，发送CNXN")
+            self.onLog?("[信息] TLS握手成功，发送CNXN")
 
             func sendRaw(_ data: Data) -> Bool {
                 var processed: size_t = 0
                 let result = data.withUnsafeBytes { ptr in
-                    ptr.baseAddress.map { baseAddr in
-                        SSLWrite(sslConn, baseAddr, data.count, &processed)
-                    } ?? errSecParam
+                    if let baseAddr = ptr.baseAddress {
+                        return SSLWrite(sslCtx, baseAddr, data.count, &processed)
+                    }
+                    return errSecParam
                 }
                 return result == errSecSuccess
             }
@@ -370,7 +359,7 @@ class ADBClient: ObservableObject {
             func recvRaw() -> Data? {
                 var buffer = [UInt8](repeating: 0, count: 65536)
                 var processed: size_t = 0
-                let result = SSLRead(sslConn, &buffer, buffer.count, &processed)
+                let result = SSLRead(sslCtx, &buffer, buffer.count, &processed)
                 if result == errSecSuccess && processed > 0 {
                     return Data(buffer[0..<processed])
                 }
@@ -395,7 +384,7 @@ class ADBClient: ObservableObject {
                         switch message.command {
                         case ADBCommand.CNXN:
                             self.onLog?("[成功] 配对CNXN成功")
-                            SSLClose(sslConn)
+                            SSLClose(sslCtx)
                             close(sockFd)
                             completion(true, "配对成功")
                             return
@@ -410,14 +399,14 @@ class ADBClient: ObservableObject {
                                     _ = sendRaw(packet)
                                     self.onLog?("[信息] 发送签名响应")
                                 } else {
-                                    SSLClose(sslConn)
+                                    SSLClose(sslCtx)
                                     close(sockFd)
                                     completion(false, "签名失败")
                                     return
                                 }
                             } else if authType == ADBAuthType.signature.rawValue {
                                 self.onLog?("[成功] 配对成功！")
-                                SSLClose(sslConn)
+                                SSLClose(sslCtx)
                                 close(sockFd)
                                 completion(true, "配对成功")
                                 return
@@ -439,7 +428,7 @@ class ADBClient: ObservableObject {
             }
 
             self.onLog?("[错误] 配对超时")
-            SSLClose(sslConn)
+            SSLClose(sslCtx)
             close(sockFd)
             completion(false, "配对超时")
         }
