@@ -24,18 +24,29 @@ struct DeviceConnectView: View {
                             .keyboardType(.numberPad)
                     }
 
-                    Button(action: adbClient.isConnected ? adbClient.disconnect : connectToDevice) {
-                        HStack {
-                            Spacer()
-                            if case .connecting = adbClient.state {
-                                ProgressView()
-                            } else {
-                                Text(adbClient.isConnected ? "断开连接" : "连接")
+                    if adbClient.isConnected {
+                        Button(action: adbClient.disconnect) {
+                            HStack {
+                                Spacer()
+                                Text("断开连接")
+                                Spacer()
                             }
-                            Spacer()
                         }
+                        .disabled(isConnecting)
+                    } else {
+                        Button(action: connectToDevice) {
+                            HStack {
+                                Spacer()
+                                if case .connecting = adbClient.state {
+                                    ProgressView()
+                                } else {
+                                    Text("连接")
+                                }
+                                Spacer()
+                            }
+                        }
+                        .disabled(host.isEmpty || isConnecting)
                     }
-                    .disabled((host.isEmpty && !adbClient.isConnected) || isConnecting)
                 }
 
                 Section(header: Text("局域网扫描")) {
