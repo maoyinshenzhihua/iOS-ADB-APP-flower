@@ -330,9 +330,12 @@ class ADBClient: ObservableObject {
             SSLSetSessionOption(sslCtx, .breakOnCertRequested, true)
             SSLSetSessionOption(sslCtx, .breakOnClientAuth, true)
 
+            let fdPtr = UnsafeMutablePointer<Int32>.allocate(capacity: 1)
+            fdPtr.pointee = sockFd
+
             SSLSetIOFuncs(sslCtx,
                           { connection, data, dataLength in
-                              let fd = Int32(bitPattern: UInt32(UInt(bitPattern: connection)))
+                              let fd = connection.assumingMemoryBound(to: Int32.self).pointee
                               let bytesRead = Darwin.read(fd, data, dataLength.pointee)
                               if bytesRead >= 0 {
                                   dataLength.pointee = bytesRead
@@ -341,7 +344,7 @@ class ADBClient: ObservableObject {
                               return OSStatus(errno)
                           },
                           { connection, data, dataLength in
-                              let fd = Int32(bitPattern: UInt32(UInt(bitPattern: connection)))
+                              let fd = connection.assumingMemoryBound(to: Int32.self).pointee
                               let bytesWritten = Darwin.write(fd, data, dataLength.pointee)
                               if bytesWritten >= 0 {
                                   dataLength.pointee = bytesWritten
@@ -350,7 +353,7 @@ class ADBClient: ObservableObject {
                               return OSStatus(errno)
                           })
 
-            SSLSetConnection(sslCtx, UnsafeMutableRawPointer(bitPattern: UInt(sockFd)))
+            SSLSetConnection(sslCtx, fdPtr)
 
             var handshakeResult = SSLHandshake(sslCtx)
             while handshakeResult == -9841 || handshakeResult == -9842 || handshakeResult == -9843 {
@@ -366,7 +369,9 @@ class ADBClient: ObservableObject {
 
             if handshakeResult != errSecSuccess {
                 self.onLog?("[错误] TLS握手失败: \(handshakeResult)")
+                SSLClose(sslCtx)
                 close(sockFd)
+                fdPtr.deallocate()
                 completion(false, "TLS握手失败")
                 return
             }
@@ -414,6 +419,7 @@ class ADBClient: ObservableObject {
                             self.onLog?("[成功] 配对CNXN成功")
                             SSLClose(sslCtx)
                             close(sockFd)
+                            fdPtr.deallocate()
                             completion(true, "配对成功")
                             return
                         case ADBCommand.AUTH:
@@ -429,6 +435,7 @@ class ADBClient: ObservableObject {
                                 } else {
                                     SSLClose(sslCtx)
                                     close(sockFd)
+                                    fdPtr.deallocate()
                                     completion(false, "签名失败")
                                     return
                                 }
@@ -436,6 +443,7 @@ class ADBClient: ObservableObject {
                                 self.onLog?("[成功] 配对成功！")
                                 SSLClose(sslCtx)
                                 close(sockFd)
+                                fdPtr.deallocate()
                                 completion(true, "配对成功")
                                 return
                             } else {
@@ -458,6 +466,7 @@ class ADBClient: ObservableObject {
             self.onLog?("[错误] 配对超时")
             SSLClose(sslCtx)
             close(sockFd)
+            fdPtr.deallocate()
             completion(false, "配对超时")
         }
     }
