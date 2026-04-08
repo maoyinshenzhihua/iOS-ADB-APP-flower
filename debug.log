@@ -199,3 +199,9 @@ Error: Process completed with exit code 65.
 [18284:4684:0408/205211.327:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v3.filemap.sogouime
 [18284:4684:0408/205211.327:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
 [18284:4684:0408/205211.327:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:3
+[4452:7416:0408/205955.356:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v3.filemap.sogouime
+[4452:7416:0408/205955.356:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
+[4452:7416:0408/205955.356:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:3
+[10680:4976:0408/205957.610:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v3.filemap.sogouime
+[10680:4976:0408/205957.610:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
+[10680:4976:0408/205957.610:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:3
