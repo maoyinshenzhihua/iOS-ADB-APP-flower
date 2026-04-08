@@ -7,36 +7,40 @@ class ADBShell {
         self.client = client
     }
 
-    func executeCommand(_ command: String, timeout: TimeInterval = 30) -> String? {
-        let destination = "shell:\(command)\0"
-        guard let channel = client.openChannel(destination: destination) else { return nil }
+    func executeCommand(_ command: String) async -> String? {
+        var receivedData = Data()
+        let commandData = "\(command)\n".data(using: .utf8)!
 
-        var output = Data()
-        var result: String?
-        let lock = NSLock()
-
-        channel.onDataReceived = { data in
-            lock.lock()
-            output.append(data)
-            lock.unlock()
+        let channel = client.openChannel(destination: "shell: \(command)") { data in
+            receivedData.append(data)
         }
 
-        channel.onClosed = {
-            lock.lock()
-            result = String(data: output, encoding: .utf8)
-            lock.unlock()
+        guard let channel = channel else {
+            Logger.error("无法打开shell通道", category: "ADBShell")
+            return nil
         }
 
-        DispatchQueue.global().asyncAfter(deadline: .now() + timeout) {
-            if !channel.isClosed {
-                self.client.closeChannel(channel)
-                lock.lock()
-                result = String(data: output, encoding: .utf8)
-                lock.unlock()
-            }
+        // 等待通道建立
+        let opened = await channel.waitForOpen()
+        if !opened {
+            Logger.error("shell通道建立超时", category: "ADBShell")
+            return nil
         }
 
-        return result
+        // 等待数据接收完成（等待1秒让数据到达）
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+
+        // 关闭通道
+        channel.close()
+
+        if receivedData.isEmpty {
+            Logger.warning("shell命令无输出", category: "ADBShell")
+            return nil
+        }
+
+        let output = String(data: receivedData, encoding: .utf8) ?? ""
+        Logger.info("shell输出: \(output.prefix(100))", category: "ADBShell")
+        return output
     }
 
     func openInteractiveShell() -> ADBChannel? {

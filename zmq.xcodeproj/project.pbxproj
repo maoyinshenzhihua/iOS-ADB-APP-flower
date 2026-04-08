@@ -86,6 +86,7 @@
 		A20036 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		A20037 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A20038 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A20040 /* scrcpy-server.jar */ = {isa = PBXFileReference; lastKnownFileType = file.unknown; path = scrcpy-server.jar; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +120,7 @@
 				A50020_3 /* Utils */,
 				A20037 /* Info.plist */,
 				A20038 /* Assets.xcassets */,
+				A20040 /* scrcpy-server.jar */,
 			);
 			path = zmq;
 			sourceTree = "<group>";
@@ -355,6 +357,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10037 /* Assets.xcassets in Resources */,
+				A10040 /* scrcpy-server.jar in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
