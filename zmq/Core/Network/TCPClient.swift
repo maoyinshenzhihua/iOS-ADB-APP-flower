@@ -108,17 +108,23 @@ class TCPClient {
             if let data = data, !data.isEmpty {
                 let hexString = data.map { String(format: "%02X", $0) }.joined(separator: " ")
                 Logger.info("收到 \(data.count) 字节: \(hexString.prefix(100))...", category: "TCPClient")
+                self?.onLog?("收到 \(data.count) 字节: \(hexString.prefix(200))")
                 self?.onDataReceived?(data)
+            } else {
+                Logger.info("收到空数据", category: "TCPClient")
+                self?.onLog?("收到空数据")
             }
 
             if let error = error {
                 Logger.error("接收数据错误: \(error)", category: "TCPClient")
+                self?.onLog?("[错误] 接收数据错误: \(error.localizedDescription)")
                 self?.updateState(.failed(error))
                 return
             }
 
             if isComplete {
                 Logger.info("连接已关闭", category: "TCPClient")
+                self?.onLog?("连接已关闭")
                 self?.updateState(.disconnected)
                 self?.reconnect()
                 return
