@@ -172,4 +172,9 @@ The following build commands failed:
 	SwiftCompile normal arm64 /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBClient.swift (in target 'zmq' from project 'zmq')
 	SwiftCompile normal arm64 Compiling\ zmqApp.swift,\ ContentView.swift,\ ADBConstants.swift,\ ADBMessage.swift,\ ADBProtocol.swift,\ ADBAuth.swift,\ ADBChannel.swift,\ TCPClient.swift,\ DataBuffer.swift,\ DeviceScanner.swift,\ ADBClient.swift,\ ADBKeyManager.swift,\ ADBShell.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/zmqApp.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/App/ContentView.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBConstants.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBMessage.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBProtocol.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBAuth.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/ADBProtocol/ADBChannel.swift /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/zmq/Core/Network/TCPClient.swift /Users/runner/wo
 (2 failures)
-Error: Process completed with exit code 65.
+Error: Process completed with exit code 65.[4936:18100:0409/043335.764:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
+[4936:18100:0409/043335.764:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
+[4936:18100:0409/043335.764:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
+[8832:2176:0409/043338.006:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
+[8832:2176:0409/043338.006:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
+[8832:2176:0409/043338.006:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
