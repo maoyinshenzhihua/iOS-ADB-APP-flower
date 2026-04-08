@@ -366,4 +366,9 @@ Copy /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Produc
     cd /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower
     builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Intermediates.noindex/zmq.build/Debug-iphoneos/zmq.build/Objects-normal/arm64/zmq.swiftsourceinfo /Users/runner/work/iOS-ADB-APP-flower/iOS-ADB-APP-flower/build/Build/Products/Debug-iphoneos/zmq.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo
 
-Error: Process completed with exit code 65.
+Error: Process completed with exit code 65.[3316:1768:0409/054140.843:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
+[3316:1768:0409/054140.843:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
+[3316:1768:0409/054140.843:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2
+[18300:3616:0409/054143.132:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.v2.filemap.sogouime
+[18300:3616:0409/054143.132:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
+[18300:3616:0409/054143.132:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:2

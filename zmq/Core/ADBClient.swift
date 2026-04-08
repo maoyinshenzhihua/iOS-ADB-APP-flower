@@ -349,9 +349,15 @@ class ADBClient: ObservableObject {
                           })
 
             SSLSetConnection(sslCtx, UnsafeMutableRawPointer(bitPattern: UInt(sockFd)))
-            let handshakeResult = SSLHandshake(sslCtx)
+
+            var handshakeResult = SSLHandshake(sslCtx)
+            while handshakeResult == errSSLServerAuthCompleted {
+                self.onLog?("[信息] 服务器认证完成，继续握手")
+                handshakeResult = SSLHandshake(sslCtx)
+            }
+
             if handshakeResult != errSecSuccess {
-                self.onLog?("[错误] TLS握手失败")
+                self.onLog?("[错误] TLS握手失败: \(handshakeResult)")
                 close(sockFd)
                 completion(false, "TLS握手失败")
                 return
