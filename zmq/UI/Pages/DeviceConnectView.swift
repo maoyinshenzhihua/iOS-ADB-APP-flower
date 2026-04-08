@@ -162,9 +162,9 @@ struct DeviceConnectView: View {
                 }
             }
             .onAppear {
-                adbClient.onLog = { [weak self] message in
+                adbClient.onLog = { [self] message in
                     DispatchQueue.main.async {
-                        self?.addLog(message)
+                        self.addLog(message)
                     }
                 }
             }
