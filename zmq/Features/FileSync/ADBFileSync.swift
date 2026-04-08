@@ -7,81 +7,57 @@ class ADBFileSync {
         self.client = client
     }
 
-    func openSyncChannel() -> ADBChannel? {
-        client.openChannel(destination: "sync:\0")
+    func openSyncChannel() async -> ADBChannel? {
+        Logger.info("打开sync通道...", category: "ADBFileSync")
+        guard let channel = client.openChannel(destination: "sync:") else {
+            Logger.error("无法创建sync通道", category: "ADBFileSync")
+            return nil
+        }
+        
+        let opened = await channel.waitForOpen()
+        if opened {
+            Logger.info("sync通道已打开", category: "ADBFileSync")
+        } else {
+            Logger.error("sync通道等待打开超时", category: "ADBFileSync")
+        }
+        return opened ? channel : nil
     }
 
-    func stat(path: String, timeout: TimeInterval = 10) -> FileInfo? {
-        guard let channel = openSyncChannel() else { return nil }
-
-        var pathData = path.data(using: .utf8) ?? Data()
-        let header = ADBProtocol.packSyncHeader(id: ADBSyncCommand.STAT, size: UInt32(pathData.count))
-        client.writeChannel(channel, data: header + pathData)
-
-        var result: FileInfo?
-        var buffer = Data()
-        let lock = NSLock()
-
-        channel.onDataReceived = { data in
-            lock.lock()
-            buffer.append(data)
-
-            if buffer.count >= 16 {
-                let id = buffer.readLittleEndianUInt32(at: 0)
-                guard id == ADBSyncCommand.STAT else {
-                    lock.unlock()
-                    return
-                }
-                let mode = buffer.readLittleEndianUInt32(at: 4)
-                let size = buffer.readLittleEndianUInt32(at: 8)
-                let time = buffer.readLittleEndianUInt32(at: 12)
-
-                let fileName = URL(fileURLWithPath: path).lastPathComponent
-                result = FileInfo(
-                    name: fileName,
-                    path: path,
-                    mode: mode,
-                    size: UInt64(size),
-                    modifiedTime: Date(timeIntervalSince1970: TimeInterval(time))
-                )
-            }
-            lock.unlock()
+    func listDirectory(path: String, timeout: TimeInterval = 15) async -> [FileInfo] {
+        Logger.info("列出目录: \(path)", category: "ADBFileSync")
+        
+        guard let channel = await openSyncChannel() else {
+            Logger.error("无法打开sync通道", category: "ADBFileSync")
+            return []
         }
-
-        DispatchQueue.global().asyncAfter(deadline: .now() + timeout) {
-            if !channel.isClosed {
-                self.client.closeChannel(channel)
-            }
-        }
-
-        return result
-    }
-
-    func listDirectory(path: String, timeout: TimeInterval = 15) -> [FileInfo] {
-        guard let channel = openSyncChannel() else { return [] }
 
         var pathData = path.data(using: .utf8) ?? Data()
         let header = ADBProtocol.packSyncHeader(id: ADBSyncCommand.LIST, size: UInt32(pathData.count))
         client.writeChannel(channel, data: header + pathData)
+        Logger.info("已发送LIST命令", category: "ADBFileSync")
 
         var entries: [FileInfo] = []
         var buffer = Data()
-        let lock = NSLock()
         var done = false
+        var receivedCount = 0
 
         channel.onDataReceived = { data in
-            lock.lock()
+            receivedCount += 1
             buffer.append(data)
 
             while buffer.count >= 16 && !done {
                 let id = buffer.readLittleEndianUInt32(at: 0)
+                
                 if id == ADBSyncCommand.DONE {
+                    Logger.info("收到DONE，目录列表完成，收到\(receivedCount)个数据包", category: "ADBFileSync")
                     done = true
-                    lock.unlock()
                     return
                 }
 
-                guard id == ADBSyncCommand.DENT else { break }
+                guard id == ADBSyncCommand.DENT else { 
+                    Logger.warning("收到未知SYNC命令: \(String(format: "0x%08X", id))", category: "ADBFileSync")
+                    break 
+                }
 
                 let mode = buffer.readLittleEndianUInt32(at: 4)
                 let size = buffer.readLittleEndianUInt32(at: 8)
@@ -112,124 +88,13 @@ class ADBFileSync {
                     break
                 }
             }
-            lock.unlock()
         }
 
-        DispatchQueue.global().asyncAfter(deadline: .now() + timeout) {
-            if !channel.isClosed {
-                self.client.closeChannel(channel)
-            }
-        }
+        try? await Task.sleep(nanoseconds: UInt64(timeout * 1_000_000_000))
+        channel.close()
+        
+        Logger.info("列出目录完成，找到 \(entries.count) 个文件", category: "ADBFileSync")
 
         return entries
-    }
-
-    func push(localURL: URL, remotePath: String, mode: String = "0666", progress: ((Float) -> Void)? = nil, timeout: TimeInterval = 60) -> Bool {
-        guard let channel = openSyncChannel() else { return false }
-        guard let fileData = try? Data(contentsOf: localURL) else { return false }
-
-        let sendPath = "\(remotePath),\(mode)\0"
-        guard let sendPathData = sendPath.data(using: .utf8) else { return false }
-
-        let sendHeader = ADBProtocol.packSyncHeader(id: ADBSyncCommand.SEND, size: UInt32(sendPathData.count))
-        client.writeChannel(channel, data: sendHeader + sendPathData)
-
-        var offset = 0
-        let totalSize = fileData.count
-        let blockSize = Int(ADB_SYNC_MAX_BLOCK_SIZE)
-
-        while offset < totalSize {
-            let end = min(offset + blockSize, totalSize)
-            let chunk = fileData[offset..<end]
-            let dataHeader = ADBProtocol.packSyncHeader(id: ADBSyncCommand.DATA, size: UInt32(chunk.count))
-            client.writeChannel(channel, data: dataHeader + Data(chunk))
-            offset = end
-            progress?(Float(offset) / Float(totalSize))
-        }
-
-        let mtime = UInt32(Date().timeIntervalSince1970)
-        var doneData = Data(capacity: 4)
-        doneData.appendLittleEndian(mtime)
-        let doneHeader = ADBProtocol.packSyncHeader(id: ADBSyncCommand.DONE, size: UInt32(doneData.count))
-        client.writeChannel(channel, data: doneHeader + doneData)
-
-        var result = false
-        let lock = NSLock()
-
-        channel.onDataReceived = { data in
-            guard data.count >= 4 else { return }
-            let id = data.readLittleEndianUInt32(at: 0)
-            lock.lock()
-            result = (id == ADBSyncCommand.OKAY)
-            lock.unlock()
-        }
-
-        DispatchQueue.global().asyncAfter(deadline: .now() + timeout) {
-            if !channel.isClosed {
-                self.client.closeChannel(channel)
-            }
-        }
-
-        return result
-    }
-
-    func pull(remotePath: String, localURL: URL, progress: ((Float) -> Void)? = nil, timeout: TimeInterval = 60) -> Bool {
-        guard let channel = openSyncChannel() else { return false }
-
-        var pathData = remotePath.data(using: .utf8) ?? Data()
-        let recvHeader = ADBProtocol.packSyncHeader(id: ADBSyncCommand.RECV, size: UInt32(pathData.count))
-        client.writeChannel(channel, data: recvHeader + pathData)
-
-        var fileData = Data()
-        var buffer = Data()
-        var done = false
-        let lock = NSLock()
-
-        channel.onDataReceived = { data in
-            lock.lock()
-            buffer.append(data)
-
-            while buffer.count >= 8 && !done {
-                let id = buffer.readLittleEndianUInt32(at: 0)
-                let size = buffer.readLittleEndianUInt32(at: 4)
-
-                if id == ADBSyncCommand.DONE {
-                    done = true
-                    lock.unlock()
-                    return
-                }
-
-                if id == ADBSyncCommand.FAIL {
-                    done = true
-                    lock.unlock()
-                    return
-                }
-
-                guard id == ADBSyncCommand.DATA else { break }
-
-                if buffer.count >= 8 + Int(size) {
-                    fileData.append(buffer[8..<(8 + Int(size))])
-                    buffer = buffer.advanced(by: 8 + Int(size))
-                } else {
-                    break
-                }
-            }
-            lock.unlock()
-        }
-
-        DispatchQueue.global().asyncAfter(deadline: .now() + timeout) {
-            if !channel.isClosed {
-                self.client.closeChannel(channel)
-            }
-        }
-
-        if fileData.isEmpty { return false }
-        do {
-            try fileData.write(to: localURL)
-            return true
-        } catch {
-            Logger.error("写入文件失败: \(error)", category: "ADBFileSync")
-            return false
-        }
     }
 }
