@@ -97,4 +97,112 @@ class ADBFileSync {
 
         return entries
     }
+
+    func push(localURL: URL, remotePath: String, mode: String = "0666", progress: ((Float) -> Void)? = nil, timeout: TimeInterval = 60) async -> Bool {
+        Logger.info("推送文件: \(localURL) -> \(remotePath)", category: "ADBFileSync")
+        
+        guard let channel = await openSyncChannel() else {
+            Logger.error("无法打开sync通道", category: "ADBFileSync")
+            return false
+        }
+        
+        guard let fileData = try? Data(contentsOf: localURL) else {
+            Logger.error("无法读取本地文件", category: "ADBFileSync")
+            return false
+        }
+
+        let sendPath = "\(remotePath),\(mode)\0"
+        guard let sendPathData = sendPath.data(using: .utf8) else { return false }
+
+        let sendHeader = ADBProtocol.packSyncHeader(id: ADBSyncCommand.SEND, size: UInt32(sendPathData.count))
+        client.writeChannel(channel, data: sendHeader + sendPathData)
+
+        var offset = 0
+        let totalSize = fileData.count
+        let blockSize = Int(ADB_SYNC_MAX_BLOCK_SIZE)
+
+        while offset < totalSize {
+            let end = min(offset + blockSize, totalSize)
+            let chunk = fileData[offset..<end]
+            let dataHeader = ADBProtocol.packSyncHeader(id: ADBSyncCommand.DATA, size: UInt32(chunk.count))
+            client.writeChannel(channel, data: dataHeader + Data(chunk))
+            offset = end
+            progress?(Float(offset) / Float(totalSize))
+        }
+
+        let mtime = UInt32(Date().timeIntervalSince1970)
+        var doneData = Data(capacity: 4)
+        doneData.appendLittleEndian(mtime)
+        let doneHeader = ADBProtocol.packSyncHeader(id: ADBSyncCommand.DONE, size: UInt32(doneData.count))
+        client.writeChannel(channel, data: doneHeader + doneData)
+
+        try? await Task.sleep(nanoseconds: UInt64(timeout * 1_000_000_000))
+        channel.close()
+        
+        Logger.info("推送文件完成", category: "ADBFileSync")
+        return true
+    }
+
+    func pull(remotePath: String, localURL: URL, progress: ((Float) -> Void)? = nil, timeout: TimeInterval = 60) async -> Bool {
+        Logger.info("拉取文件: \(remotePath) -> \(localURL)", category: "ADBFileSync")
+        
+        guard let channel = await openSyncChannel() else {
+            Logger.error("无法打开sync通道", category: "ADBFileSync")
+            return false
+        }
+
+        var pathData = remotePath.data(using: .utf8) ?? Data()
+        let recvHeader = ADBProtocol.packSyncHeader(id: ADBSyncCommand.RECV, size: UInt32(pathData.count))
+        client.writeChannel(channel, data: recvHeader + pathData)
+
+        var fileData = Data()
+        var buffer = Data()
+        var done = false
+
+        channel.onDataReceived = { data in
+            buffer.append(data)
+
+            while buffer.count >= 8 && !done {
+                let id = buffer.readLittleEndianUInt32(at: 0)
+                let size = buffer.readLittleEndianUInt32(at: 4)
+
+                if id == ADBSyncCommand.DONE {
+                    done = true
+                    return
+                }
+
+                if id == ADBSyncCommand.FAIL {
+                    done = true
+                    Logger.error("拉取文件失败", category: "ADBFileSync")
+                    return
+                }
+
+                guard id == ADBSyncCommand.DATA else { break }
+
+                if buffer.count >= 8 + Int(size) {
+                    fileData.append(buffer[8..<(8 + Int(size))])
+                    buffer = buffer.advanced(by: 8 + Int(size))
+                } else {
+                    break
+                }
+            }
+        }
+
+        try? await Task.sleep(nanoseconds: UInt64(timeout * 1_000_000_000))
+        channel.close()
+
+        if fileData.isEmpty { 
+            Logger.warning("拉取文件无数据", category: "ADBFileSync")
+            return false 
+        }
+        
+        do {
+            try fileData.write(to: localURL)
+            Logger.info("拉取文件成功", category: "ADBFileSync")
+            return true
+        } catch {
+            Logger.error("写入文件失败: \(error)", category: "ADBFileSync")
+            return false
+        }
+    }
 }

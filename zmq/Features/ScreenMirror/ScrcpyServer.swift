@@ -44,8 +44,8 @@ class ScrcpyServer {
         self.fileSync = fileSync
     }
 
-    func start(maxSize: UInt32 = 1920, maxFps: UInt32 = 30, bitRate: UInt32 = 8000000) -> Bool {
-        let pushSuccess = pushServerJar()
+    func start(maxSize: UInt32 = 1920, maxFps: UInt32 = 30, bitRate: UInt32 = 8000000) async -> Bool {
+        let pushSuccess = await fileSync.push(localURL: Bundle.main.url(forResource: "scrcpy-server", withExtension: "jar")!, remotePath: "/data/local/tmp/scrcpy-server.jar", mode: "0644")
         guard pushSuccess else {
             Logger.error("推送scrcpy-server失败", category: "ScrcpyServer")
             return false
@@ -108,7 +108,7 @@ class ScrcpyServer {
         data.append(0)
         var p = pressure.bigEndian
         data.append(Data(bytes: &p, count: 2))
-        data.append(Data(count: 8))
+        data.append(Data(repeating: 0, count: 8))
         sendControlEvent(type: .injectTouchEvent, data: data)
     }
 
@@ -153,13 +153,5 @@ class ScrcpyServer {
                 videoBuffer.removeAll()
             }
         }
-    }
-
-    private func pushServerJar() -> Bool {
-        guard let serverURL = Bundle.main.url(forResource: "scrcpy-server", withExtension: "jar") else {
-            Logger.error("未找到scrcpy-server.jar资源", category: "ScrcpyServer")
-            return false
-        }
-        return fileSync.push(localURL: serverURL, remotePath: "/data/local/tmp/scrcpy-server.jar", mode: "0644")
     }
 }

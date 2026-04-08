@@ -9,12 +9,12 @@ class ADBFileTransfer {
         self.shell = shell
     }
 
-    func pushFile(localURL: URL, remotePath: String, progress: ((Float) -> Void)? = nil) -> Bool {
-        return fileSync.push(localURL: localURL, remotePath: remotePath, progress: progress)
+    func pushFile(localURL: URL, remotePath: String, progress: ((Float) -> Void)? = nil) async -> Bool {
+        return await fileSync.push(localURL: localURL, remotePath: remotePath, progress: progress)
     }
 
-    func pullFile(remotePath: String, localURL: URL, progress: ((Float) -> Void)? = nil) -> Bool {
-        return fileSync.pull(remotePath: remotePath, localURL: localURL, progress: progress)
+    func pullFile(remotePath: String, localURL: URL, progress: ((Float) -> Void)? = nil) async -> Bool {
+        return await fileSync.pull(remotePath: remotePath, localURL: localURL, progress: progress)
     }
 
     func deleteFile(path: String) async -> Bool {
@@ -42,16 +42,16 @@ class ADBFileTransfer {
         return docsDir.appendingPathComponent(relativePath)
     }
 
-    func pushToSandbox(localURL: URL, remotePath: String, progress: ((Float) -> Void)? = nil) -> Bool {
-        return fileSync.push(localURL: localURL, remotePath: remotePath, progress: progress)
+    func pushToSandbox(localURL: URL, remotePath: String, progress: ((Float) -> Void)? = nil) async -> Bool {
+        return await fileSync.push(localURL: localURL, remotePath: remotePath, progress: progress)
     }
 
-    func pullFromSandbox(remotePath: String, progress: ((Float) -> Void)? = nil) -> URL? {
+    func pullFromSandbox(remotePath: String, progress: ((Float) -> Void)? = nil) async -> URL? {
         let localURL = localPathForRemote(remotePath)
         let directory = localURL.deletingLastPathComponent()
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 
-        let success = fileSync.pull(remotePath: remotePath, localURL: localURL, progress: progress)
+        let success = await fileSync.pull(remotePath: remotePath, localURL: localURL, progress: progress)
         return success ? localURL : nil
     }
 }
