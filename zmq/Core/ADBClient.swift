@@ -15,6 +15,8 @@ class ADBClient: ObservableObject {
     
     // 日志回调
     var onLog: ((String) -> Void)?
+    // TCP客户端日志回调
+    var onTCPLog: ((String) -> Void)?
 
     private let tcpClient = TCPClient()
     private let dataBuffer = ADBDataBuffer()
@@ -34,6 +36,10 @@ class ADBClient: ObservableObject {
         }
         tcpClient.onDataReceived = { [weak self] data in
             self?.handleIncomingData(data)
+        }
+        // TCP日志
+        tcpClient.onLog = { [weak self] msg in
+            self?.onTCPLog?(msg)
         }
     }
 

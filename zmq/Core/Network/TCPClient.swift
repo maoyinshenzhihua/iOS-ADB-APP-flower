@@ -19,6 +19,7 @@ class TCPClient {
 
     var onStateChanged: ((TCPClientState) -> Void)?
     var onDataReceived: ((Data) -> Void)?
+    var onLog: ((String) -> Void)?
 
     var isConnected: Bool {
         if case .connected = state { return true }
@@ -51,14 +52,7 @@ class TCPClient {
 
         updateState(.connecting)
         Logger.info("正在连接 \(host):\(port)", category: "TCPClient")
-    }
-
-    func disconnect() {
-        reconnectAttempts = -1
-        connection?.cancel()
-        connection = nil
-        updateState(.disconnected)
-        Logger.info("已断开连接", category: "TCPClient")
+        onLog?("正在连接 \(host):\(port)")
     }
 
     func reconnect() {
@@ -66,11 +60,21 @@ class TCPClient {
         let delay = min(pow(2.0, Double(reconnectAttempts)), maxReconnectDelay)
         reconnectAttempts += 1
         Logger.info("将在 \(delay)秒后重连 (第\(reconnectAttempts)次)", category: "TCPClient")
+        onLog?("将在 \(delay)秒后重连 (第\(reconnectAttempts)次)")
 
         DispatchQueue.global().asyncAfter(deadline: .now() + delay) { [weak self] in
             guard let self = self, self.reconnectAttempts >= 0 else { return }
             self.connect(host: self.host, port: self.port)
         }
+    }
+    
+    func disconnect() {
+        reconnectAttempts = -1
+        connection?.cancel()
+        connection = nil
+        updateState(.disconnected)
+        Logger.info("已断开连接", category: "TCPClient")
+        onLog?("已断开连接")
     }
 
     func send(data: Data) {
@@ -78,11 +82,17 @@ class TCPClient {
             Logger.error("发送失败：未连接", category: "TCPClient")
             return
         }
+        
+        // 打印发送的十六进制数据
+        let hexString = data.map { String(format: "%02X", $0) }.joined(separator: " ")
+        Logger.info("发送 \(data.count) 字节: \(hexString.prefix(100))...", category: "TCPClient")
 
         connection.send(content: data, completion: .contentProcessed { [weak self] error in
             if let error = error {
                 Logger.error("发送数据失败: \(error)", category: "TCPClient")
                 self?.updateState(.failed(error))
+            } else {
+                Logger.info("发送完成", category: "TCPClient")
             }
         })
     }
@@ -92,6 +102,8 @@ class TCPClient {
 
         connection.receive(minimumIncompleteLength: 1, maximumLength: 262144 + ADB_HEADER_SIZE) { [weak self] data, _, isComplete, error in
             if let data = data, !data.isEmpty {
+                let hexString = data.map { String(format: "%02X", $0) }.joined(separator: " ")
+                Logger.info("收到 \(data.count) 字节: \(hexString.prefix(100))...", category: "TCPClient")
                 self?.onDataReceived?(data)
             }
 
@@ -118,6 +130,7 @@ class TCPClient {
             reconnectAttempts = 0
             updateState(.connected)
             Logger.info("连接成功 \(host):\(port)", category: "TCPClient")
+            onLog?("TCP连接成功")
             receive()
         case .waiting(let error):
             Logger.warning("连接等待: \(error)", category: "TCPClient")

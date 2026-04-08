@@ -167,6 +167,11 @@ struct DeviceConnectView: View {
                         self.addLog(message)
                     }
                 }
+                adbClient.onTCPLog = { [self] message in
+                    DispatchQueue.main.async {
+                        self.addLog("[TCP] \(message)")
+                    }
+                }
             }
         }
     }
