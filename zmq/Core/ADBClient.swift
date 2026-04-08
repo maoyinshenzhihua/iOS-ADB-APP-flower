@@ -124,11 +124,15 @@ class ADBClient: ObservableObject {
     }
 
     private func handleIncomingData(_ data: Data) {
+        onLog?("[调试] 收到原始数据: \(data.map { String(format: "%02X", $0) }.joined(separator: " "))")
         dataBuffer.append(data)
+        onLog?("[调试] dataBuffer当前大小: \(dataBuffer.count)")
 
         while let message = dataBuffer.tryReadMessage() {
+            onLog?("[调试] 读取到消息, command: \(String(format: "0x%08X", message.command))")
             guard ADBProtocol.validateMessage(message) else {
                 Logger.warning("收到无效ADB消息", category: "ADBClient")
+                onLog?("[警告] 收到无效ADB消息")
                 continue
             }
             processMessage(message)
